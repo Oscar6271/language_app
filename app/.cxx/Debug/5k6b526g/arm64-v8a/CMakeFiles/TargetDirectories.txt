@@ -1,0 +1,3 @@
+/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/ordapp.dir
+/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/edit_cache.dir
+/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/rebuild_cache.dir

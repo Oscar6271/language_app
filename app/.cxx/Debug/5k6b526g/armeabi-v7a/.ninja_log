@@ -1,0 +1,20 @@
+# ninja log v5
+0	208	1760465724045590557	CMakeFiles/ordapp.dir/native-lib.cpp.o	d04797ae18db0f2c
+0	452	1760465724288592215	CMakeFiles/ordapp.dir/main.cc.o	ce9ebbc064380d75
+452	473	1760465724310592365	/home/oscar/AndroidStudioProjects/Ordapp/app/build/intermediates/cxx/Debug/5k6b526g/obj/armeabi-v7a/libordapp.so	d1e9c300fde50f9e
+0	2	0	clean	fe07abd9da0a1030
+4	286	1760469945769506037	CMakeFiles/ordapp.dir/native-lib.cpp.o	d04797ae18db0f2c
+4	628	1760469946108512595	CMakeFiles/ordapp.dir/main.cc.o	ce9ebbc064380d75
+628	652	1760469946136513137	/home/oscar/AndroidStudioProjects/Ordapp/app/build/intermediates/cxx/Debug/5k6b526g/obj/armeabi-v7a/libordapp.so	d1e9c300fde50f9e
+0	2	0	clean	fe07abd9da0a1030
+4	237	1760470737790369994	CMakeFiles/ordapp.dir/native-lib.cpp.o	d04797ae18db0f2c
+4	496	1760470738046374191	CMakeFiles/ordapp.dir/main.cc.o	ce9ebbc064380d75
+496	519	1760470738071374601	/home/oscar/AndroidStudioProjects/Ordapp/app/build/intermediates/cxx/Debug/5k6b526g/obj/armeabi-v7a/libordapp.so	d1e9c300fde50f9e
+0	2	0	clean	fe07abd9da0a1030
+2	333	1760471093004901478	CMakeFiles/ordapp.dir/native-lib.cpp.o	d04797ae18db0f2c
+3	674	1760471093345909667	CMakeFiles/ordapp.dir/main.cc.o	ce9ebbc064380d75
+674	696	1760471093370910268	/home/oscar/AndroidStudioProjects/Ordapp/app/build/intermediates/cxx/Debug/5k6b526g/obj/armeabi-v7a/libordapp.so	d1e9c300fde50f9e
+0	2	0	clean	fe07abd9da0a1030
+3	417	1760649283064312555	CMakeFiles/ordapp.dir/native-lib.cpp.o	d04797ae18db0f2c
+4	625	1760649283269315503	CMakeFiles/ordapp.dir/main.cc.o	ce9ebbc064380d75
+625	680	1760649283321316251	/home/oscar/AndroidStudioProjects/Ordapp/app/build/intermediates/cxx/Debug/5k6b526g/obj/armeabi-v7a/libordapp.so	d1e9c300fde50f9e

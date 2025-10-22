@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/x86",
+  "command": "/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=i686-none-linux-android26 --sysroot=/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dordapp_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -o CMakeFiles/ordapp.dir/native-lib.cpp.o -c /home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp/native-lib.cpp",
+  "file": "/home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp/native-lib.cpp"
+},
+{
+  "directory": "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/x86",
+  "command": "/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=i686-none-linux-android26 --sysroot=/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dordapp_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -o CMakeFiles/ordapp.dir/main.cc.o -c /home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp/main.cc",
+  "file": "/home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp/main.cc"
+}
+]

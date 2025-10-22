@@ -1,0 +1,1 @@
+/home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp/CMakeLists.txt

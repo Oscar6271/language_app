@@ -1,0 +1,27 @@
+{
+  "buildFiles": [
+    "/home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/oscar/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/oscar/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "ordapp::@6890427a1f51a3e7e1df": {
+      "artifactName": "ordapp",
+      "abi": "x86",
+      "output": "/home/oscar/AndroidStudioProjects/Ordapp/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86/libordapp.so",
+      "runtimeFiles": []
+    }
+  }
+}

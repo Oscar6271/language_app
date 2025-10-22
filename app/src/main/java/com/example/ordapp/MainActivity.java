@@ -1,0 +1,43 @@
+package com.example.ordapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import com.example.ordapp.databinding.ActivityMainBinding;
+
+public class MainActivity extends AppCompatActivity {
+
+    // Used to load the 'ordapp' library on application startup.
+    static {
+        System.loadLibrary("ordapp");
+    }
+
+    private ActivityMainBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        binding.addFilesButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AddFiles.class);
+            startActivity(intent);
+        });
+
+        binding.startButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, Practice.class);
+            startActivity(intent);
+        });
+    }
+
+    /**
+     * A native method that is implemented by the 'ordapp' native library,
+     * which is packaged with this application.
+     */
+    public native String stringFromJNI();
+}

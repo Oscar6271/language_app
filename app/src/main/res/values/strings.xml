@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Ord app</string>
+    <string name="title_activity_add_files">AddFiles</string>
+</resources>
