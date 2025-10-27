@@ -20,20 +20,7 @@ import java.io.IOException;
 
 public class SimpleInput extends AppCompatActivity {
     private ActivitySimpleInputBinding binding;
-
-    private void write_to_file(String fileName)
-    {
-        try {
-            File file = new File(getFilesDir(), fileName + ".txt");
-            FileWriter writer = new FileWriter(file);
-            String words = binding.simpleInput.getEditText().getText().toString();
-            writer.write(words + '\n');
-            writer.close();
-        } catch (IOException e) {
-            Log.d("DEBUG", "Unsuccesful write to file " + fileName);
-        }
-
-    }
+    
     private String read_file(String fileName)
     {
         File file = new File(getFilesDir(), fileName + ".txt");
@@ -56,6 +43,8 @@ public class SimpleInput extends AppCompatActivity {
         return result;
     }
 
+    public native boolean writeToFile(String fileName, String contentToWrite);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,32 +54,8 @@ public class SimpleInput extends AppCompatActivity {
 
         binding.createSimpleFileButton.setOnClickListener(v -> {
             String fileName = binding.fileName.getEditText().getText().toString();
-            if(!fileName.isEmpty())
-            {
-                try {
-                    File file = new File(getFilesDir(),fileName + ".txt");
 
-                    if(file.createNewFile())
-                    {
-                        Log.d("DEBUG", "Created");
-                        write_to_file(fileName);
-                    }
-                    else
-                    {
-                        //lägg till text på skärmen med meddelande
-                        Log.d("DEBUG", fileName + " doing nothing");
-                    }
-
-
-                    Log.d("DEBUG", "Fil sparad på: " + file.getAbsolutePath());
-                }
-                catch (IOException e)
-                {
-                    Log.d("DEBUG", "Error when creating file");
-                }
-
-                read_file(fileName);
-            }
+            writeToFile(getFilesDir().getAbsolutePath() + "/" + fileName, binding.simpleInput.getEditText().getText().toString());
         });
     }
 }

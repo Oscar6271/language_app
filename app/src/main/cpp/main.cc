@@ -1,16 +1,17 @@
 #include <fstream>
 #include <iostream>
-#include <string>
-#include <vector>
 #include <algorithm>
 #include <cstdlib>
 #include <limits>
 #include <iomanip>
 #include <random>
+#include <filesystem>
 
 #include "main.h"
 
 using namespace std;
+
+vector<string> wrong_answers{}, wrong_translations{}, phrases_list{}, translation_list{};
 
 void clean_string(string & s)
 {
@@ -146,4 +147,19 @@ pair<string, int> pickWord()
         return make_pair(phrases_list.at(randomIndex), randomIndex);
     }
     return pair<string, int>{};
+}
+
+bool writeToFile(string const& fileName, string const& contentToWrite)
+{
+    string filePath = fileName + ".txt";
+
+    // om filen redan finns - skriv inte till den
+    if(std::filesystem::exists((filePath)))
+    {
+        return false;
+    }
+
+    ofstream file{fileName + ".txt"};
+    file << contentToWrite << endl;
+    return true;
 }

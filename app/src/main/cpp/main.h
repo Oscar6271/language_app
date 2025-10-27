@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string> wrong_answers{}, wrong_translations{}, phrases_list{}, translation_list{};
+extern std::vector<std::string> wrong_answers, wrong_translations, phrases_list, translation_list;
 
 // skickar tillbaka listorna ifall det behövs
 std::pair<std::vector<std::string>, std::vector<std::string>> readFile(std::string const& fileName, std::string const& language_to_write_in);
@@ -21,3 +21,6 @@ std::pair<bool, std::string> check_empty();
 
 // skickar tillbaka ordet och indexet för att man ska hitta rätt översättning till compare
 std::pair<std::string, int> pickWord();
+
+// skickar tillbaka true om man kunde skriva till filen, annars false
+bool writeToFile(std::string const& fileName, std::string const& contentToWrite);
