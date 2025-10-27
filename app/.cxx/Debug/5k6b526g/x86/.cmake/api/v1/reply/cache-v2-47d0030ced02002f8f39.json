@@ -151,7 +151,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/x86"
+			"value" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/x86"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -671,7 +671,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp"
+			"value" : "/home/oscar/code/eget/language_app/app/src/main/cpp"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -707,7 +707,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "/home/oscar/AndroidStudioProjects/Ordapp/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86"
+			"value" : "/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -979,7 +979,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "/home/oscar/AndroidStudioProjects/Ordapp/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86"
+			"value" : "/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1219,10 +1219,10 @@
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
+					"value" : "The CMake toolchain file"
 				}
 			],
-			"type" : "UNINITIALIZED",
+			"type" : "FILEPATH",
 			"value" : "/home/oscar/Android/Sdk/ndk/27.0.12077973/build/cmake/android.toolchain.cmake"
 		},
 		{
@@ -1275,7 +1275,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/x86"
+			"value" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/x86"
 		},
 		{
 			"name" : "ordapp_IS_TOP_LEVEL",
@@ -1299,7 +1299,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp"
+			"value" : "/home/oscar/code/eget/language_app/app/src/main/cpp"
 		}
 	],
 	"kind" : "cache",

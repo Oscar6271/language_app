@@ -8,30 +8,9 @@
 #include <iomanip>
 #include <random>
 
+#include "main.h"
+
 using namespace std;
-
-vector<string> wrong_answers{}, wrong_translations{};
-int wrongCount{}, wordCount{};
-bool firstRound{true}, cleared{false};
-
-// skriver ut hexadecimala ASCII koden för varje tecken
-void debug_string(string const& s) 
-{
-    cout << "[";
-    for (unsigned char c : s) 
-    {
-        cout << hex << (int)c << " ";
-    }
-    cout << "]\n";
-}
-
-void clear_terminal(bool clear)
-{
-    if(clear)
-    {
-        system("clear");
-    }
-}
 
 void clean_string(string & s)
 {
@@ -65,26 +44,15 @@ void trim_white_space(string & phrase, string & translation)
     clean_string(translation);
 }
 
-pair<string, string> readfile(string const& fileName, string const& language_to_write_in,
-              vector<string> & phrases, vector<string> & translations)
+// skickar tillbaka listorna ifall det behövs
+pair<vector<string>, vector<string>> readFile(string const& fileName, string const& language_to_write_in)
 {
-    string filePath{fileName};
-
-    if(fileName.size() <= 3)
-    {
-        filePath += ".txt";
-    }
-    else if(fileName.substr(fileName.size() - 4) != ".txt")
-    {
-        filePath += ".txt";
-    }
-
-    ifstream file{filePath};
-    string line, message{"Skriv översättningen för ordet som skrivs ut"}, redo_message{"Träna på dom ord du hade fel på"};
+    ifstream file{fileName + ".txt"};
+    string line;
 
     if(!file.is_open())
     {
-        throw invalid_argument("Filen finns inte!");
+        throw invalid_argument("File doesn't exist!");
     }
 
     while(getline(file, line))
@@ -94,7 +62,7 @@ pair<string, string> readfile(string const& fileName, string const& language_to_
         {
             string phrase, translation;
 
-            if(language_to_write_in == "spanish" || language_to_write_in == "no_clear")
+            if(language_to_write_in == "translation")
             {
                 phrase = line.substr(0, pos);
                 translation = line.substr(pos + 1);
@@ -107,37 +75,24 @@ pair<string, string> readfile(string const& fileName, string const& language_to_
 
             trim_white_space(phrase, translation);
 
-            phrases.push_back(phrase);
-            translations.push_back(translation);
-        }
-        else
-        {
-            message = line;
-            if(getline(file, line))
-            {
-                redo_message = line;
-            }
+            phrases_list.push_back(phrase);
+            translation_list.push_back(translation);
         }
     }
     file.close();
-
-    return make_pair(message, redo_message);
+    return make_pair(phrases_list, translation_list);
 }
 
-void printfile(string const& fileName, vector<string> const& phrases, vector<string> const& translation)
-{
-    for(size_t i = 0; i < phrases.size(); i++)
-    {
-        cout << left << setw(20) << phrases.at(i)
-             << right << translation.at(i) << "\n"
-             << "￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n";
-    }
-}
-
-void compare(string userInput, int randomIndex, 
-             vector<string> & phrases, vector<string> & translations)
+// skickar true om svaret var rätt, false om det var fel
+// tar även bort ordet om det var rätt svaret och lägger till i wrong containers om man
+// svarade fel
+pair<bool, string> compare(string userInput, int randomIndex)
 {    
-    string correctAnswer = translations.at(randomIndex);
+    string correctAnswer = translation_list.at(randomIndex);
+    string phrase = phrases_list.at(randomIndex);
+
+    phrases_list.erase(phrases_list.begin() + randomIndex);
+    translation_list.erase(translation_list.begin() + randomIndex);
 
     clean_string(userInput);
 
@@ -146,44 +101,28 @@ void compare(string userInput, int randomIndex,
 
     if(userInput != correctAnswer)
     {
-        cout << "Fel svar!\n" 
-             << phrases.at(randomIndex) << " = " 
-             << translations.at(randomIndex) << "\n\n"; 
+        wrong_answers.push_back(phrase);
+        wrong_translations.push_back(correctAnswer);
+        return make_pair(false, "Wrong answer! Correct answer is: " + correctAnswer);
+    }
 
-        wrong_answers.push_back(phrases.at(randomIndex));
-        wrong_translations.push_back(translations.at(randomIndex));
-    }
-    else
-    {
-        cout << "Rätt!\n\n";
-    }
+    return make_pair(true, "Correct!");
 }
 
-
-void check_empty(vector<string> & phrases, vector<string> & translation, string redo_message)
+// skickar true om man är klar och false om det finns ord kvar att öva på
+pair<bool, string> check_empty()
 {
-    if(phrases.empty())
+    if(phrases_list.empty())
     {
-        if(firstRound)
+        phrases_list = std::move(wrong_answers);
+        translation_list = std::move(wrong_translations);
+
+        if(!phrases_list.empty())
         {
-            wrongCount += wrong_answers.size();
-            firstRound = false;
-        }
-
-        phrases = std::move(wrong_answers);
-        translation = std::move(wrong_translations);
-
-        if(!phrases.empty())
-        {            
-            if(!cleared)
-            {
-                cout << "\033[2J\033[H";
-                cleared = true;
-            }
-
-            cout << "_______________________________\n" << redo_message << "\n\n";
+            return make_pair(false, "Practise your mistakes!");
         }
     }
+    return make_pair(true, "No more words to practise!");
 }
 
 long int random(int max)
@@ -195,79 +134,16 @@ long int random(int max)
     return uniform_dist(e1);
 }
 
-void run(vector<string> & phrases, vector<string> & translation, bool clear, string const& redo_message)
+// skickar tillbaka ordet och indexet för att man ska hitta rätt översättning till compare
+pair<string, int> pickWord()
 {
     string userInput;
 
-    while(!phrases.empty())
+    while(!phrases_list.empty())
     {
-        long int randomIndex{random(phrases.size() - 1)};
-        cout << phrases.at(randomIndex) << ": ";
+        long int randomIndex{random(phrases_list.size() - 1)};
 
-        getline(cin, userInput);
-
-        compare(userInput, randomIndex, phrases, translation);
-
-        phrases.erase(phrases.begin() + randomIndex);
-        translation.erase(translation.begin() + randomIndex);        
-
-        check_empty(phrases, translation, redo_message);
+        return make_pair(phrases_list.at(randomIndex), randomIndex);
     }
-}
-
-pair<string, string> initialize(int argc, char* argv[], vector<string> & phrases, vector<string> & translation, bool clear)
-{
-    pair<string, string> messages{};
-
-    if(argc >= 3 && (string(argv[argc - 2]) == "swedish" || string(argv[argc - 1]) == "swedish"))
-    {
-        messages = readfile(argv[1], string(argv[argc - 2]), phrases, translation);  
-    }
-    else 
-    {
-        messages = readfile(argv[1], "spanish", phrases, translation);
-    }
-
-    clear_terminal(clear);
-
-    if(argc >= 3 && string(argv[2]) == "list")
-    {
-        printfile(argv[2], phrases, translation);
-    }
-
-    wordCount = phrases.size();
-
-    return messages;
-}
-
-int main(int argc, char* argv[])
-{
-    vector<string> phrases, translation;
-    string instruction{}, redo_message{};
-    pair<string, string> messages{};
-    
-    bool clear{string(argv[argc - 1]) != "no_clear"};   
-
-    try
-    {
-        messages = initialize(argc, argv, phrases, translation, clear);
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-        return EXIT_FAILURE;
-    }
-
-    instruction = messages.first;
-    redo_message = messages.second;
-    
-    cout << instruction << "\n\n";
-
-    run(phrases, translation, clear, redo_message);
-
-    clear_terminal(clear);
-
-    cout << "Klar!\nTotalt hade du " << wrongCount << " fel av " << wordCount << " ord\n";
-    
-    return 0;
+    return pair<string, int>{};
 }
