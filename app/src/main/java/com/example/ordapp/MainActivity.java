@@ -26,13 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
         binding.addFilesButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddFiles.class);
-            intent.putExtra("FILE_NAME", "words.txt");
-            intent.putExtra("LANGUAGE", "spanish");
+
             startActivity(intent);
         });
 
-        binding.startButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, Practice.class);
+        binding.selectFilesButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, SelectFile.class);
             startActivity(intent);
         });
     }

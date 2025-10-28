@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrdApp">
         <activity
+            android:name=".SelectFile"
+            android:exported="false" />
+        <activity
             android:name=".SimpleInput"
             android:exported="false" />
         <activity

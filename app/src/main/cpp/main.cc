@@ -12,6 +12,7 @@
 using namespace std;
 
 vector<string> wrong_answers{}, wrong_translations{}, phrases_list{}, translation_list{};
+long int randomIndex{};
 
 void clean_string(string & s)
 {
@@ -149,6 +150,7 @@ string pickWord()
 bool writeToFile(string const& fileName, string const& contentToWrite)
 {
     ofstream file{fileName + ".txt", ios::app};
+
     file << contentToWrite << endl;
     return true;
 }

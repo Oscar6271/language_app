@@ -7,7 +7,7 @@
 #include <string>
 
 extern std::vector<std::string> wrong_answers, wrong_translations, phrases_list, translation_list;
-long int randomIndex;
+extern long int randomIndex;
 
 void readFile(std::string const& fileName, std::string const& language_to_write_in);
 

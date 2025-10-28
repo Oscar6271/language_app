@@ -2,31 +2,32 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".SelectFile">
 
-    <Button
-        android:id="@+id/selectFilesButton"
-        android:layout_width="157dp"
-        android:layout_height="106dp"
-        android:text="Select files"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.346"
-        android:layout_marginTop="0dp"/>
-
-    <Button
-        android:id="@+id/addFilesButton"
-        android:layout_width="157dp"
-        android:layout_height="106dp"
-        android:text="Add files"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose a file to practice from"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="60dp"/>
+        android:layout_marginTop="-400dp"/>
+
+    <Button
+        android:id="@+id/WordsFileButton"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:text="words"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="-300dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
