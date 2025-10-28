@@ -46,7 +46,7 @@ void trim_white_space(string & phrase, string & translation)
 }
 
 // skickar tillbaka listorna ifall det behövs
-pair<vector<string>, vector<string>> readFile(string const& fileName, string const& language_to_write_in)
+void readFile(string const& fileName, string const& language_to_write_in)
 {
     ifstream file{fileName + ".txt"};
     string line;
@@ -81,13 +81,12 @@ pair<vector<string>, vector<string>> readFile(string const& fileName, string con
         }
     }
     file.close();
-    return make_pair(phrases_list, translation_list);
 }
 
 // skickar true om svaret var rätt, false om det var fel
 // tar även bort ordet om det var rätt svaret och lägger till i wrong containers om man
 // svarade fel
-pair<bool, string> compare(string userInput, int randomIndex)
+bool compare(string userInput)
 {    
     string correctAnswer = translation_list.at(randomIndex);
     string phrase = phrases_list.at(randomIndex);
@@ -104,14 +103,14 @@ pair<bool, string> compare(string userInput, int randomIndex)
     {
         wrong_answers.push_back(phrase);
         wrong_translations.push_back(correctAnswer);
-        return make_pair(false, "Wrong answer! Correct answer is: " + correctAnswer);
+        return false;
     }
 
-    return make_pair(true, "Correct!");
+    return true;
 }
 
-// skickar true om man är klar och false om det finns ord kvar att öva på
-pair<bool, string> check_empty()
+// skickar true om man är klar, annars false
+bool check_empty()
 {
     if(phrases_list.empty())
     {
@@ -120,10 +119,10 @@ pair<bool, string> check_empty()
 
         if(!phrases_list.empty())
         {
-            return make_pair(false, "Practise your mistakes!");
+            return true;
         }
     }
-    return make_pair(true, "No more words to practise!");
+    return false;
 }
 
 long int random(int max)
@@ -135,31 +134,21 @@ long int random(int max)
     return uniform_dist(e1);
 }
 
-// skickar tillbaka ordet och indexet för att man ska hitta rätt översättning till compare
-pair<string, int> pickWord()
+// skickar tillbaka ordet
+string pickWord()
 {
-    string userInput;
-
     while(!phrases_list.empty())
     {
-        long int randomIndex{random(phrases_list.size() - 1)};
+        randomIndex = random(phrases_list.size() - 1);
 
-        return make_pair(phrases_list.at(randomIndex), randomIndex);
+        return phrases_list.at(randomIndex);
     }
-    return pair<string, int>{};
+    return string{};
 }
 
 bool writeToFile(string const& fileName, string const& contentToWrite)
 {
-    string filePath = fileName + ".txt";
-
-    // om filen redan finns - skriv inte till den
-    if(std::filesystem::exists((filePath)))
-    {
-        return false;
-    }
-
-    ofstream file{fileName + ".txt"};
+    ofstream file{fileName + ".txt", ios::app};
     file << contentToWrite << endl;
     return true;
 }
