@@ -11,8 +11,12 @@
 
 using namespace std;
 
-vector<string> wrong_answers{}, wrong_translations{}, phrases_list{}, translation_list{};
-long int randomIndex{};
+
+std::vector<std::string> wrong_answers;
+std::vector<std::string> wrong_translations;
+std::vector<std::string> phrases_list;
+std::vector<std::string> translation_list;
+long int randomIndex;
 
 void clean_string(string & s)
 {
@@ -46,7 +50,6 @@ void trim_white_space(string & phrase, string & translation)
     clean_string(translation);
 }
 
-// skickar tillbaka listorna ifall det behövs
 void readFile(string const& fileName, string const& language_to_write_in)
 {
     ifstream file{fileName + ".txt"};
@@ -59,7 +62,7 @@ void readFile(string const& fileName, string const& language_to_write_in)
 
     while(getline(file, line))
     {
-        auto pos = line.find(':');
+        auto pos = line.find(',');
         if(pos != string::npos)
         {
             string phrase, translation;
@@ -138,7 +141,7 @@ long int random(int max)
 // skickar tillbaka ordet
 string pickWord()
 {
-    while(!phrases_list.empty())
+    if(!phrases_list.empty())
     {
         randomIndex = random(phrases_list.size() - 1);
 
@@ -147,7 +150,8 @@ string pickWord()
     return string{};
 }
 
-bool writeToFile(string const& fileName, string const& contentToWrite)
+bool writeToFile(string const& fileName,
+                 string const& contentToWrite)
 {
     ofstream file{fileName + ".txt", ios::app};
 

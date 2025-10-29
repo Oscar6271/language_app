@@ -20,28 +20,6 @@ import java.io.IOException;
 
 public class SimpleInput extends AppCompatActivity {
     private ActivitySimpleInputBinding binding;
-    
-    private String read_file(String fileName)
-    {
-        File file = new File(getFilesDir(), fileName + ".txt");
-        String result = "";
-        if (file.exists()) {
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(file));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    result += line + '\n';
-                    Log.d("DEBUG", "Filinnehåll: " + line);
-                }
-                reader.close();
-            } catch (IOException e) {
-                Log.e("DEBUG", "Fel vid läsning av fil", e);
-            }
-        } else {
-            Log.d("DEBUG", "Filen finns inte");
-        }
-        return result;
-    }
 
     public native boolean writeToFile(String fileName, String contentToWrite);
 

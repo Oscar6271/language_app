@@ -6,7 +6,10 @@
 #include <vector>
 #include <string>
 
-extern std::vector<std::string> wrong_answers, wrong_translations, phrases_list, translation_list;
+extern std::vector<std::string> wrong_answers;
+extern std::vector<std::string> wrong_translations;
+extern std::vector<std::string> phrases_list;
+extern std::vector<std::string> translation_list;
 extern long int randomIndex;
 
 void readFile(std::string const& fileName, std::string const& language_to_write_in);
@@ -14,7 +17,7 @@ void readFile(std::string const& fileName, std::string const& language_to_write_
 // skickar true om svaret var rätt, false om det var fel
 // tar även bort ordet om det var rätt svaret och lägger till i wrong containers om man
 // svarade fel
-bool compare(std::string userInput, int randomIndex);
+bool compare(std::string userInput);
 
 // skickar true om man är klar, annars false
 bool check_empty();
@@ -23,4 +26,5 @@ bool check_empty();
 std::string pickWord();
 
 // skickar tillbaka true om man kunde skriva till filen, annars false
-bool writeToFile(std::string const& fileName, std::string const& contentToWrite);
+bool writeToFile(std::string const& fileName,
+                 std::string const& contentToWrite);
