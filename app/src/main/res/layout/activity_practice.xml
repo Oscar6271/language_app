@@ -23,7 +23,7 @@
         android:id="@+id/WordToTranslateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Temp text"
+        android:text=""
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/infoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Write the translation of the word presented"

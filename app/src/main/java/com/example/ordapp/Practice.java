@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ordapp.databinding.ActivityPracticeBinding;
 import com.example.ordapp.databinding.ActivitySimpleInputBinding;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -68,33 +71,58 @@ public class Practice extends AppCompatActivity {
 
     public native void readFile(String fileName, String language_to_write_in);
     public native String pickWord();
-    public native boolean compare(String userInput);
+    public native String compare(String userInput);
+    public native boolean checkEmpty();
 
     private String wordToTranslate;
+    private boolean hasBeenCorrected = false, running = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActivityPracticeBinding binding;
+        TextView ResponseTextBox, infoTextBox;
+        Button compareButtonVariable;
+
 
         super.onCreate(savedInstanceState);
         binding = ActivityPracticeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        TextView ResponseTextBox;
         ResponseTextBox = (TextView)findViewById(R.id.responseText);
+        ResponseTextBox.setText("");
+        infoTextBox = (TextView) findViewById(R.id.infoText);
+        compareButtonVariable = (Button)findViewById(R.id.compareButton);
 
         init_file();
         set_text();
-        binding.compareButton.setOnClickListener(view -> {
-            boolean correct = compare(binding.TranslationInputField.getEditText().getText().toString());
-            if(correct)
-            {
-                ResponseTextBox.setText("Correct");
-            }
-            else
-            {
-                ResponseTextBox.setText("Wrong");
-            }
-        });
+
+        if(running)
+        {
+            binding.compareButton.setOnClickListener(view -> {
+                if(hasBeenCorrected)
+                {
+                    hasBeenCorrected = false;
+                    wordToTranslate = pickWord();
+                    set_text();
+                    binding.TranslationInputField.getEditText().setText("");
+                    compareButtonVariable.setText("Correct");
+                    ResponseTextBox.setText("");
+                }
+                else
+                {
+                    String response = compare(binding.TranslationInputField.getEditText().getText().toString());
+                    ResponseTextBox.setText(response);
+                    hasBeenCorrected = true;
+                    compareButtonVariable.setText("Next word");
+                }
+
+                if(checkEmpty())
+                {
+                    infoTextBox.setText("Wordset completed!");
+                    running = false;
+                }
+            });
+        }
+
     }
 }

@@ -58,7 +58,7 @@ Java_com_example_ordapp_Practice_pickWord(
     return env->NewStringUTF(word.c_str());
 }
 
-extern "C" JNIEXPORT jboolean JNICALL
+extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_ordapp_Practice_compare(
         JNIEnv* env,
         jobject,
@@ -67,5 +67,14 @@ Java_com_example_ordapp_Practice_compare(
     std::string userInputParameter(userInput);
 
     env->ReleaseStringUTFChars(userInputJava, userInput);
-    return compare(userInputParameter) ? JNI_TRUE : JNI_FALSE;
+    std::string response = compare(userInputParameter);
+
+    return env->NewStringUTF(response.c_str());
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_example_ordapp_Practice_checkEmpty(
+                JNIEnv* env,
+                jobject) {
+    return check_empty() ? JNI_TRUE : JNI_FALSE;
 }

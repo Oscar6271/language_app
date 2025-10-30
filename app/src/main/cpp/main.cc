@@ -90,7 +90,7 @@ void readFile(string const& fileName, string const& language_to_write_in)
 // skickar true om svaret var rätt, false om det var fel
 // tar även bort ordet om det var rätt svaret och lägger till i wrong containers om man
 // svarade fel
-bool compare(string userInput)
+string compare(string userInput)
 {    
     string correctAnswer = translation_list.at(randomIndex);
     string phrase = phrases_list.at(randomIndex);
@@ -107,10 +107,10 @@ bool compare(string userInput)
     {
         wrong_answers.push_back(phrase);
         wrong_translations.push_back(correctAnswer);
-        return false;
+        return "Wrong, " + phrase + " means " + correctAnswer;
     }
 
-    return true;
+    return "Correct!";
 }
 
 // skickar true om man är klar, annars false
@@ -120,13 +120,9 @@ bool check_empty()
     {
         phrases_list = std::move(wrong_answers);
         translation_list = std::move(wrong_translations);
-
-        if(!phrases_list.empty())
-        {
-            return true;
-        }
     }
-    return false;
+
+    return phrases_list.empty();
 }
 
 long int random(int max)

@@ -17,7 +17,7 @@ void readFile(std::string const& fileName, std::string const& language_to_write_
 // skickar true om svaret var rätt, false om det var fel
 // tar även bort ordet om det var rätt svaret och lägger till i wrong containers om man
 // svarade fel
-bool compare(std::string userInput);
+std::string compare(std::string userInput);
 
 // skickar true om man är klar, annars false
 bool check_empty();
