@@ -15,6 +15,7 @@ import com.example.ordapp.databinding.ActivitySelectFileBinding;
 public class SelectFile extends AppCompatActivity {
 
     private ActivitySelectFileBinding binding;
+    public native String printFile();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

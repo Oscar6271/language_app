@@ -26,8 +26,9 @@ Java_com_example_ordapp_SimpleInput_writeToFile(
     // frigör minnet som har allokerats
     env->ReleaseStringUTFChars(fileNameFromJava, fileName);
     env->ReleaseStringUTFChars(contentToWriteFromJava, contentToWrite);
-
-    return writeToFile(fileNameParameter, contentToWriteParameter) ? JNI_TRUE : JNI_FALSE;
+    std::string response = writeToFile(fileNameParameter, contentToWriteParameter);
+    LOGD("%s", response.c_str());
+    return JNI_TRUE;
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -45,7 +46,6 @@ Java_com_example_ordapp_Practice_readFile(
     // frigör minnet som har allokerats
     env->ReleaseStringUTFChars(fileNameJava, fileName);
     env->ReleaseStringUTFChars(languageWriteJava, language_to_write_in);
-
     readFile(fileNameParameter, languageParameter);
 }
 
@@ -77,4 +77,12 @@ Java_com_example_ordapp_Practice_checkEmpty(
                 JNIEnv* env,
                 jobject) {
     return check_empty() ? JNI_TRUE : JNI_FALSE;
+}
+
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_example_ordapp_SelectFile_printFile(
+        JNIEnv* env,
+        jobject) {
+    std::string response = printFile();
+    return env->NewStringUTF(response.c_str());
 }

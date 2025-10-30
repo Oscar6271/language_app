@@ -26,5 +26,7 @@ bool check_empty();
 std::string pickWord();
 
 // skickar tillbaka true om man kunde skriva till filen, annars false
-bool writeToFile(std::string const& fileName,
+std::string writeToFile(std::string const& fileName,
                  std::string const& contentToWrite);
+
+std::string printFile();

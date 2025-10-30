@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.addFilesButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AddFiles.class);
+            Intent intent = new Intent(MainActivity.this, SimpleInput.class);
 
             startActivity(intent);
         });

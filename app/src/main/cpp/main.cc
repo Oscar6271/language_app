@@ -55,10 +55,10 @@ void readFile(string const& fileName, string const& language_to_write_in)
     ifstream file{fileName + ".txt"};
     string line;
 
-    if(!file.is_open())
+    /*if(!file.is_open())
     {
         throw invalid_argument("File doesn't exist!");
-    }
+    }*/
 
     while(getline(file, line))
     {
@@ -146,11 +146,23 @@ string pickWord()
     return string{};
 }
 
-bool writeToFile(string const& fileName,
+string writeToFile(string const& fileName,
                  string const& contentToWrite)
 {
     ofstream file{fileName + ".txt", ios::app};
 
     file << contentToWrite << endl;
-    return true;
+    return fileName + ".txt";
+}
+
+string printFile()
+{
+    string result{};
+
+    for(size_t i = 0; i < phrases_list.size(); i++)
+    {
+        result += phrases_list.at(i) + " = " + translation_list.at(i) + "\n";
+    }
+
+    return result;
 }
