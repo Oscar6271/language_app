@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.example.ordapp.databinding.ActivityMainBinding;
 
@@ -26,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.addFilesButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, SimpleInput.class);
+            intent.putExtra("APPEND", true);
 
             startActivity(intent);
         });
@@ -35,10 +35,4 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
-    /**
-     * A native method that is implemented by the 'ordapp' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
 }

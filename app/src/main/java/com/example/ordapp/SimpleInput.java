@@ -1,27 +1,19 @@
 package com.example.ordapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.ordapp.databinding.ActivitySimpleInputBinding;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class SimpleInput extends AppCompatActivity {
     private ActivitySimpleInputBinding binding;
 
-    public native boolean writeToFile(String fileName, String contentToWrite);
+    public native void writeToFile(String fileName, String contentToWrite, boolean append);
+    private String fileName;
+    private boolean append;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +22,22 @@ public class SimpleInput extends AppCompatActivity {
         binding = ActivitySimpleInputBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.createSimpleFileButton.setOnClickListener(v -> {
-            String fileName = binding.fileName.getEditText().getText().toString();
+        Intent intent = getIntent();
+        fileName = intent.getStringExtra("FILE_NAME");
+        String content = intent.getStringExtra("CONTENT");
+        append = intent.getBooleanExtra("APPEND", true);
 
-            writeToFile(getFilesDir().getAbsolutePath() + "/" + fileName, binding.simpleInput.getEditText().getText().toString());
+        TextInputEditText fileNameInput = findViewById(R.id.fileNameInput);
+        TextInputEditText contentInput = findViewById(R.id.SimpleInputText);
+
+        fileNameInput.setText(fileName);
+        contentInput.setText(content);
+
+        binding.createSimpleFileButton.setOnClickListener(v -> {
+            fileName = binding.fileName.getEditText().getText().toString();
+
+            writeToFile(getFilesDir().getAbsolutePath() + "/" + fileName, binding.simpleInput.getEditText().getText().toString(), append);
+            finish();
         });
     }
 }

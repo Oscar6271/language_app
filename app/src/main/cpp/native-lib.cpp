@@ -10,25 +10,25 @@
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
 
-extern "C" JNIEXPORT jboolean JNICALL
+extern "C" JNIEXPORT void JNICALL
 Java_com_example_ordapp_SimpleInput_writeToFile(
         JNIEnv* env,
         jobject,
         jstring fileNameFromJava,
-        jstring contentToWriteFromJava
-        ) {
+        jstring contentToWriteFromJava,
+        jboolean append) {
     const char* fileName = env->GetStringUTFChars(fileNameFromJava, nullptr);
     std::string fileNameParameter(fileName);
 
     const char* contentToWrite = env->GetStringUTFChars(contentToWriteFromJava, nullptr);
     std::string contentToWriteParameter(contentToWrite);
 
+    bool appendParameter = (append == JNI_TRUE);
+
     // frigör minnet som har allokerats
     env->ReleaseStringUTFChars(fileNameFromJava, fileName);
     env->ReleaseStringUTFChars(contentToWriteFromJava, contentToWrite);
-    std::string response = writeToFile(fileNameParameter, contentToWriteParameter);
-    LOGD("%s", response.c_str());
-    return JNI_TRUE;
+     writeToFile(fileNameParameter, contentToWriteParameter, appendParameter);
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -74,15 +74,21 @@ Java_com_example_ordapp_Practice_compare(
 
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_example_ordapp_Practice_checkEmpty(
-                JNIEnv* env,
-                jobject) {
+        JNIEnv* env,
+        jobject) {
     return check_empty() ? JNI_TRUE : JNI_FALSE;
 }
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_ordapp_SelectFile_printFile(
         JNIEnv* env,
-        jobject) {
-    std::string response = printFile();
+        jobject,
+        jstring fileNameJava) {
+    const char* fileName = env->GetStringUTFChars(fileNameJava, nullptr);
+    std::string fileNameParameter(fileName);
+
+    env->ReleaseStringUTFChars(fileNameJava, fileName);
+    std::string response = printFile(fileNameParameter);
+
     return env->NewStringUTF(response.c_str());
 }

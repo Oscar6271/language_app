@@ -29,6 +29,14 @@ void clean_string(string & s)
     }, L' ');
 }
 
+void clear_lists()
+{
+    wrong_translations.clear();
+    wrong_answers.clear();
+    phrases_list.clear();
+    translation_list.clear();
+}
+
 string to_lower(string & word)
 {
     transform(word.begin(), word.end(), word.begin(),
@@ -54,11 +62,7 @@ void readFile(string const& fileName, string const& language_to_write_in)
 {
     ifstream file{fileName + ".txt"};
     string line;
-
-    /*if(!file.is_open())
-    {
-        throw invalid_argument("File doesn't exist!");
-    }*/
+    clear_lists();
 
     while(getline(file, line))
     {
@@ -146,23 +150,40 @@ string pickWord()
     return string{};
 }
 
-string writeToFile(string const& fileName,
-                 string const& contentToWrite)
+void writeToFile(string const& fileName,
+                 string const& contentToWrite, bool append)
 {
-    ofstream file{fileName + ".txt", ios::app};
+    ofstream file;
+
+    if(append)
+    {
+        file.open(fileName + ".txt", ios::app);
+    }
+    else
+    {
+        file.open(fileName + ".txt");
+    }
 
     file << contentToWrite << endl;
-    return fileName + ".txt";
 }
 
-string printFile()
+string printFile(string const& fileName)
 {
-    string result{};
+    string result{}, line{};
+    ifstream file{fileName + ".txt"};
 
-    for(size_t i = 0; i < phrases_list.size(); i++)
+    if(!file.is_open())
     {
-        result += phrases_list.at(i) + " = " + translation_list.at(i) + "\n";
+        return "Couldn't open file " + fileName + ".txt";
     }
+
+    while(getline(file, line))
+    {
+        result += line + "\n";
+    }
+    result = result.substr(0, result.size() - 1);
+
+    file.close();
 
     return result;
 }
