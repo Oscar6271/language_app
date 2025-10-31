@@ -4,19 +4,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.ordapp.databinding.ActivitySelectFileBinding;
 
+import java.util.ArrayList;
+
+class DropDownMenu {
+    ConstraintLayout layout;
+    Button PracticeTranslation;
+    Button PracticeOriginal;
+    Button EditWordSet;
+}
+
 public class SelectFile extends AppCompatActivity {
-    private ActivitySelectFileBinding binding;
+    private ArrayList<Button> buttons;
+    private ArrayList<DropDownMenu> dropDownButtons;
+    private ArrayList<String> fileNames;
     public native String printFile(String fileName);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivitySelectFileBinding.inflate(getLayoutInflater());
+        ActivitySelectFileBinding binding = ActivitySelectFileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         ConstraintLayout dropdownMenu = (ConstraintLayout)findViewById(R.id.dropdownMenu);

@@ -2,6 +2,8 @@ package com.example.ordapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +12,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class SimpleInput extends AppCompatActivity {
     private ActivitySimpleInputBinding binding;
+    private TextView errormessage;
 
     public native void writeToFile(String fileName, String contentToWrite, boolean append);
     private String fileName;
@@ -29,6 +32,7 @@ public class SimpleInput extends AppCompatActivity {
 
         TextInputEditText fileNameInput = findViewById(R.id.fileNameInput);
         TextInputEditText contentInput = findViewById(R.id.SimpleInputText);
+        errormessage = findViewById(R.id.errorMessageText);
 
         fileNameInput.setText(fileName);
         contentInput.setText(content);
@@ -36,8 +40,13 @@ public class SimpleInput extends AppCompatActivity {
         binding.createSimpleFileButton.setOnClickListener(v -> {
             fileName = binding.fileName.getEditText().getText().toString();
 
-            writeToFile(getFilesDir().getAbsolutePath() + "/" + fileName, binding.simpleInput.getEditText().getText().toString(), append);
-            finish();
+            if(!fileName.isEmpty()) {
+                errormessage.setText("");
+                writeToFile(getFilesDir().getAbsolutePath() + "/" + fileName, binding.simpleInput.getEditText().getText().toString(), append);
+                finish();
+            } else {
+                errormessage.setText("Input a filename to save wordset");
+            }
         });
     }
 }
