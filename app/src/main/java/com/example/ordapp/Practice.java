@@ -96,9 +96,13 @@ public class Practice extends AppCompatActivity {
         init_file();
         set_text();
 
-        if(running)
-        {
             binding.compareButton.setOnClickListener(view -> {
+                if(!running)
+                {
+                    Intent intent = new Intent(Practice.this, SelectFile.class);
+                    startActivity(intent);
+                }
+
                 if(hasBeenCorrected)
                 {
                     hasBeenCorrected = false;
@@ -115,14 +119,14 @@ public class Practice extends AppCompatActivity {
                     hasBeenCorrected = true;
                     compareButtonVariable.setText("Next word");
                 }
-
+                
                 if(checkEmpty())
                 {
                     infoTextBox.setText("Wordset completed!");
                     running = false;
+                    compareButtonVariable.setText("Practice other sets");
+                    set_text();
                 }
             });
-        }
-
     }
 }
