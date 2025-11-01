@@ -5,12 +5,11 @@
 #include <limits>
 #include <iomanip>
 #include <random>
-#include <filesystem>
+#include <cstdio>
 
 #include "main.h"
 
 using namespace std;
-
 
 std::vector<std::string> wrong_answers;
 std::vector<std::string> wrong_translations;
@@ -60,7 +59,7 @@ void trim_white_space(string & phrase, string & translation)
 
 void readFile(string const& fileName, string const& language_to_write_in)
 {
-    ifstream file{fileName + ".txt"};
+    ifstream file{fileName};
     string line;
     clear_lists();
 
@@ -157,11 +156,11 @@ void writeToFile(string const& fileName,
 
     if(append)
     {
-        file.open(fileName + ".txt", ios::app);
+        file.open(fileName, ios::app);
     }
     else
     {
-        file.open(fileName + ".txt");
+        file.open(fileName);
     }
 
     file << contentToWrite << endl;
@@ -170,11 +169,11 @@ void writeToFile(string const& fileName,
 string printFile(string const& fileName)
 {
     string result{}, line{};
-    ifstream file{fileName + ".txt"};
+    ifstream file{fileName};
 
     if(!file.is_open())
     {
-        return "Couldn't open file " + fileName + ".txt";
+        return "Couldn't open file " + fileName;
     }
 
     while(getline(file, line))
@@ -186,4 +185,9 @@ string printFile(string const& fileName)
     file.close();
 
     return result;
+}
+
+void deleteFile(string const& fileName)
+{
+    remove(fileName.c_str());
 }

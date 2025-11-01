@@ -92,3 +92,15 @@ Java_com_example_ordapp_SelectFile_printFile(
 
     return env->NewStringUTF(response.c_str());
 }
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_ordapp_SelectFile_DeleteFile(
+        JNIEnv* env,
+        jobject,
+        jstring fileNameJava) {
+    const char* fileName = env->GetStringUTFChars(fileNameJava, nullptr);
+    std::string fileNameParameter(fileName);
+
+    env->ReleaseStringUTFChars(fileNameJava, fileName);
+    deleteFile(fileNameParameter);
+}

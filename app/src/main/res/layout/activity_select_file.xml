@@ -43,7 +43,7 @@
         <Button
             android:id="@+id/WriteTranslationButton"
             android:text="Write translation"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -51,7 +51,7 @@
         <Button
             android:id="@+id/WriteOriginalButton"
             android:text="Write original"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/WriteTranslationButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,9 +60,17 @@
         <Button
             android:id="@+id/EditSetButton"
             android:text="Edit wordset"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/WriteOriginalButton"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp" />
+        <Button
+            android:id="@+id/DeleteSetButton"
+            android:text="Delete wordset"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/EditSetButton"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="8dp" />
 
