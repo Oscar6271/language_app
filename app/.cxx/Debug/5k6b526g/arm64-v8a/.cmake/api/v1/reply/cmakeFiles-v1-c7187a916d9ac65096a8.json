@@ -41,7 +41,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeSystem.cmake"
+			"path" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeSystem.cmake"
 		},
 		{
 			"isExternal" : true,
@@ -307,7 +307,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeCCompiler.cmake"
+			"path" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeCCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -541,7 +541,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeCXXCompiler.cmake"
+			"path" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeCXXCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -692,7 +692,7 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeCCompiler.cmake"
+			"path" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeCCompiler.cmake"
 		},
 		{
 			"isCMake" : true,
@@ -786,14 +786,14 @@
 		},
 		{
 			"isGenerated" : true,
-			"path" : "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeCXXCompiler.cmake"
+			"path" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a/CMakeFiles/3.22.1-g37088a8/CMakeCXXCompiler.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a",
-		"source" : "/home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp"
+		"build" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a",
+		"source" : "/home/oscar/code/eget/language_app/app/src/main/cpp"
 	},
 	"version" : 
 	{

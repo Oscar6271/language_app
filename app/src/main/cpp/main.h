@@ -30,5 +30,3 @@ void writeToFile(std::string const& fileName,
                  std::string const& contentToWrite, bool append);
 
 std::string printFile(std::string const& fileName);
-
-void deleteFile(std::string const& fileName);

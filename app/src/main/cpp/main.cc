@@ -186,8 +186,3 @@ string printFile(string const& fileName)
 
     return result;
 }
-
-void deleteFile(string const& fileName)
-{
-    remove(fileName.c_str());
-}

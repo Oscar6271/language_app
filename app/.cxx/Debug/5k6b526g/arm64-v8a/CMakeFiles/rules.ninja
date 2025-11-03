@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /home/oscar/Android/Sdk/cmake/3.22.1/bin/cmake --regenerate-during-build -S/home/oscar/AndroidStudioProjects/Ordapp/app/src/main/cpp -B/home/oscar/AndroidStudioProjects/Ordapp/app/.cxx/Debug/5k6b526g/arm64-v8a
+  command = /home/oscar/Android/Sdk/cmake/3.22.1/bin/cmake --regenerate-during-build -S/home/oscar/code/eget/language_app/app/src/main/cpp -B/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a
   description = Re-running CMake...
   generator = 1
 

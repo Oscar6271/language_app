@@ -1,1 +1,1 @@
-/home/oscar/AndroidStudioProjects/Ordapp/app/build/intermediates/cxx/Debug/5k6b526g/obj/arm64-v8a
+/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/arm64-v8a
