@@ -37,7 +37,7 @@ public class SelectFile extends AppCompatActivity {
         ConstraintSet mainSet = new ConstraintSet();
         mainSet.clone(layout);
 
-        int topMargin = dpToPx(100 + buttonCount * 120);
+        int topMargin = dpToPx(100 + buttonCount * 150);
         mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
         mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0);
         mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);

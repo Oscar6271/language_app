@@ -28,7 +28,7 @@ Java_com_example_ordapp_SimpleInput_writeToFile(
     // frigör minnet som har allokerats
     env->ReleaseStringUTFChars(fileNameFromJava, fileName);
     env->ReleaseStringUTFChars(contentToWriteFromJava, contentToWrite);
-     writeToFile(fileNameParameter, contentToWriteParameter, appendParameter);
+    writeToFile(fileNameParameter, contentToWriteParameter, appendParameter);
 }
 
 extern "C" JNIEXPORT void JNICALL

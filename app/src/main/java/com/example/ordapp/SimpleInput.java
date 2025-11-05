@@ -11,6 +11,9 @@ import com.example.ordapp.databinding.ActivitySimpleInputBinding;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class SimpleInput extends AppCompatActivity {
+    static {
+        System.loadLibrary("ordapp"); // namnet på din .so-fil (utan 'lib' och '.so')
+    }
     private ActivitySimpleInputBinding binding;
     private TextView errormessage;
 
@@ -42,7 +45,8 @@ public class SimpleInput extends AppCompatActivity {
 
             if(!fileName.isEmpty()) {
                 errormessage.setText("");
-                writeToFile(getFilesDir().getAbsolutePath() + "/" + fileName, binding.simpleInput.getEditText().getText().toString(), append);
+                writeToFile(getFilesDir().getAbsolutePath() + "/" + fileName + ".txt", binding.simpleInput.getEditText().getText().toString(), append);
+                Log.d("WRITE", "written: " + getFilesDir().getAbsolutePath() + "/" + fileName);
                 finish();
             } else {
                 errormessage.setText("Input a filename to save wordset");
