@@ -59,7 +59,7 @@ void trim_white_space(string & phrase, string & translation)
 
 void readFile(string const& fileName, string const& language_to_write_in)
 {
-    ifstream file{fileName};
+    ifstream file{fileName + ".txt"};
     string line;
     clear_lists();
 
@@ -156,11 +156,11 @@ void writeToFile(string const& fileName,
 
     if(append)
     {
-        file.open(fileName, ios::app);
+        file.open(fileName + ".txt", ios::app);
     }
     else
     {
-        file.open(fileName);
+        file.open(fileName + ".txt");
     }
 
     file << contentToWrite << endl;
@@ -169,7 +169,7 @@ void writeToFile(string const& fileName,
 string printFile(string const& fileName)
 {
     string result{}, line{};
-    ifstream file{fileName};
+    ifstream file{fileName + ".txt"};
 
     if(!file.is_open())
     {

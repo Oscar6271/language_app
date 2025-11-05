@@ -26,7 +26,9 @@ public class SelectFile extends AppCompatActivity {
 
         // 1. Skapa huvudknapp
         Button choose = new Button(this);
-        choose.setText(file.getName());
+        String fileName = file.getName();
+        choose.setText(fileName.substring(0, fileName.length() - 4));
+
         choose.setId(View.generateViewId());
         ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
                 dpToPx(150), dpToPx(70)

@@ -45,7 +45,7 @@ public class SimpleInput extends AppCompatActivity {
 
             if(!fileName.isEmpty()) {
                 errormessage.setText("");
-                writeToFile(getFilesDir().getAbsolutePath() + "/" + fileName + ".txt", binding.simpleInput.getEditText().getText().toString(), append);
+                writeToFile(getFilesDir().getAbsolutePath() + "/" + fileName, binding.simpleInput.getEditText().getText().toString(), append);
                 Log.d("WRITE", "written: " + getFilesDir().getAbsolutePath() + "/" + fileName);
                 finish();
             } else {

@@ -2,3 +2,6 @@
 0	277	1762207381695610833	CMakeFiles/ordapp.dir/native-lib.cpp.o	295a5e56bba8937c
 0	449	1762207381865615121	CMakeFiles/ordapp.dir/main.cc.o	b5161196a2022453
 449	495	1762207381912616306	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/arm64-v8a/libordapp.so	dc34cb6f759afe3a
+5	269	1762377311845225517	CMakeFiles/ordapp.dir/native-lib.cpp.o	295a5e56bba8937c
+5	455	1762377312029229852	CMakeFiles/ordapp.dir/main.cc.o	b5161196a2022453
+456	480	1762377312055230464	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/arm64-v8a/libordapp.so	dc34cb6f759afe3a

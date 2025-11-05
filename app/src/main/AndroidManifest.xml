@@ -13,24 +13,24 @@
         android:theme="@style/Theme.OrdApp">
         <activity
             android:name=".ChooseFileMode"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Choose action"/>
         <activity
             android:name=".SelectFile"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Choose File" />
         <activity
             android:name=".SimpleInput"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Edit files"/>
         <activity
             android:name=".Practice"
-            android:exported="false" />
-        <activity
-            android:name=".AddFiles"
             android:exported="false"
-            android:label="@string/title_activity_add_files"
-            android:theme="@style/Theme.OrdApp" />
+            android:label="Practice wordset"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:label="Start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
