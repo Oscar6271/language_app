@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrdApp">
         <activity
+            android:name=".ChooseFileMode"
+            android:exported="false" />
+        <activity
             android:name=".SelectFile"
             android:exported="false" />
         <activity

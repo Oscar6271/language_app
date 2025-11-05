@@ -58,7 +58,6 @@ public class Practice extends AppCompatActivity {
         TextView ResponseTextBox, infoTextBox;
         Button compareButtonVariable;
 
-
         super.onCreate(savedInstanceState);
         binding = ActivityPracticeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

@@ -80,7 +80,7 @@ Java_com_example_ordapp_Practice_checkEmpty(
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_ordapp_SelectFile_printFile(
+Java_com_example_ordapp_ChooseFileMode_printFile(
         JNIEnv* env,
         jobject,
         jstring fileNameJava) {
