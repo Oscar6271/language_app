@@ -2,6 +2,7 @@ package com.example.ordapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -34,6 +35,9 @@ public class SimpleInput extends AppCompatActivity {
         append = intent.getBooleanExtra("APPEND", true);
 
         TextInputEditText fileNameInput = findViewById(R.id.fileNameInput);
+        fileNameInput.setHorizontallyScrolling(true);
+        fileNameInput.setMovementMethod(new ScrollingMovementMethod());
+
         TextInputEditText contentInput = findViewById(R.id.SimpleInputText);
         errormessage = findViewById(R.id.errorMessageText);
 
