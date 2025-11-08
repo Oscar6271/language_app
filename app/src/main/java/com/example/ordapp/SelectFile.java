@@ -22,6 +22,21 @@ public class SelectFile extends AppCompatActivity {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
+    private void DeleteFile(String fileName)
+    {
+        // Hämta filen
+        File file = new File(getFilesDir(), fileName + ".txt");
+
+        // Kontrollera om filen finns och ta bort den
+        if(file.exists()){
+            boolean deleted = file.delete();
+            if(deleted){
+                Log.d("FILE_DELETE", "Filen togs bort!");
+            } else {
+                Log.d("FILE_DELETE", "Kunde inte ta bort filen.");
+            }
+        }
+    }
     private void createButtons(File file) {
 
         // 1. Skapa huvudknapp
@@ -60,7 +75,7 @@ public class SelectFile extends AppCompatActivity {
         Log.d("FILES", "finding files");
         for (File file : files) {
             if (file.isFile() && !file.getName().equals("profileInstalled")) {
-                Log.d("FILES", file.getName());
+                Log.d("FILES", file.getName() + " Deleted");
                 createButtons(file);
             }
         }

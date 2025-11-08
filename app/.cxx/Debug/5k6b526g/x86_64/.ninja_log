@@ -1,6 +1,4 @@
 # ninja log v5
-1	330	1762375498478877542	CMakeFiles/ordapp.dir/native-lib.cpp.o	3d38eb567c67290c
-1	529	1762375498676879903	CMakeFiles/ordapp.dir/main.cc.o	d01beca0d2220e84
-529	547	1762375498697880153	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	35f0b93560747b19
-2	508	1762375933470244400	CMakeFiles/ordapp.dir/main.cc.o	d01beca0d2220e84
-508	526	1762375933490244670	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	35f0b93560747b19
+1	1085	1762601353730397657	CMakeFiles/ordapp.dir/native-lib.cpp.o	3d38eb567c67290c
+0	1380	1762601354023353123	CMakeFiles/ordapp.dir/main.cc.o	d01beca0d2220e84
+1381	1413	1762601354061347461	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	35f0b93560747b19
