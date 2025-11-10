@@ -12,9 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrdApp">
         <activity
+            android:name=".ChooseFolder"
+            android:exported="false"
+            android:label="Choose a folder"/>
+        <activity
             android:name=".ChooseFileMode"
             android:exported="false"
-            android:label="Choose action"/>
+            android:label="Choose action" />
         <activity
             android:name=".SelectFile"
             android:exported="false"
@@ -22,11 +26,11 @@
         <activity
             android:name=".SimpleInput"
             android:exported="false"
-            android:label="Edit files"/>
+            android:label="Edit files" />
         <activity
             android:name=".Practice"
             android:exported="false"
-            android:label="Practice wordset"/>
+            android:label="Practice wordset" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
