@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        binding.selectFilesButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, ChooseF.class);
+        binding.selectFolderButton.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, ChooseFolder.class);
             startActivity(intent);
         });
     }

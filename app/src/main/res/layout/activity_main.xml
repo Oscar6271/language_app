@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/selectFilesButton"
+        android:id="@+id/selectFolderButton"
         android:layout_width="157dp"
         android:layout_height="106dp"
         android:text="Select files"

@@ -2,6 +2,7 @@ package com.example.ordapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,11 +27,13 @@ public class ChooseFolder extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityChooseFolderBinding binding = ActivityChooseFolderBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         layout = findViewById(R.id.main);
 
         File[] files = getFilesDir().listFiles();
 
         for(File file : files) {
+            Log.d("DEBUG", "File: " + file.getName());
             if(file.isDirectory()) {
                 Button choose = new Button(this);
                 choose.setText(file.getName());

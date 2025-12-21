@@ -22,10 +22,12 @@ public class SelectFile extends AppCompatActivity {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
-    private void DeleteFile(String fileName)
+    private void DeleteFile(String folder, String fileName)
     {
         // Hämta filen
-        File file = new File(getFilesDir(), fileName + ".txt");
+        File file = new File(getFilesDir() + "/" + folder, fileName);
+        Log.d("DEBUG", "tar bort " + fileName);
+        Log.d("DEBUG", file.exists() ? "finns" : "finns inte");
 
         // Kontrollera om filen finns och ta bort den
         if(file.exists()){
@@ -54,7 +56,7 @@ public class SelectFile extends AppCompatActivity {
         ConstraintSet mainSet = new ConstraintSet();
         mainSet.clone(layout);
 
-        int topMargin = dpToPx(buttonCount * 150);
+        int topMargin = dpToPx(100 + buttonCount * 150);
         mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
         mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0);
         mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
@@ -62,20 +64,29 @@ public class SelectFile extends AppCompatActivity {
 
         mainSet.applyTo(layout);
         buttonCount++;
+        Intent intent = getIntent();
+        String folder = intent.getStringExtra("FOLDER_NAME");
 
         choose.setOnClickListener(view -> {
-            Intent intent = new Intent(SelectFile.this, ChooseFileMode.class);
-            intent.putExtra("FILE_NAME", file.getName());
-            startActivity(intent);
+            Intent intent2 = new Intent(SelectFile.this, ChooseFileMode.class);
+            Log.d("DEBUG", folder + "/" + file.getName());
+            intent2.putExtra("FILE_NAME", file.getName());
+            intent2.putExtra("FOLDER_NAME", folder);
+            startActivity(intent2);
         });
     }
 
     private void createDropDowns() {
-        File[] files = getFilesDir().listFiles();
         Log.d("FILES", "finding files");
+        Intent intent = getIntent();
+        String folderName = intent.getStringExtra("FOLDER_NAME");
+        Log.d("FOLDER", folderName);
+
+        File folder = new File(getFilesDir(), folderName);
+        File[] files = folder.listFiles();
+
         for (File file : files) {
             if (file.isFile() && !file.getName().equals("profileInstalled")) {
-                Log.d("FILES", file.getName() + " Deleted");
                 createButtons(file);
             }
         }
