@@ -15,7 +15,7 @@ import java.io.File;
 
 public class SimpleInput extends AppCompatActivity {
     static {
-        System.loadLibrary("ordapp"); // namnet på din .so-fil (utan 'lib' och '.so')
+        System.loadLibrary("ordapp");
     }
     private ActivitySimpleInputBinding binding;
     private TextView errormessage;
@@ -38,42 +38,29 @@ public class SimpleInput extends AppCompatActivity {
         append = intent.getBooleanExtra("APPEND", true);
         folderName = intent.getStringExtra("FOLDER_NAME");
 
-        TextInputEditText fileNameInput = findViewById(R.id.fileNameInput);
-        fileNameInput.setHorizontallyScrolling(true);
-        fileNameInput.setMovementMethod(new ScrollingMovementMethod());
+        TextInputEditText folderEdit  = findViewById(R.id.folderNameInput);
+        TextInputEditText fileEdit    = findViewById(R.id.fileNameInput);
+        TextInputEditText contentEdit = findViewById(R.id.SimpleInputText);
 
-        TextInputEditText folderInput = findViewById(R.id.folderNameInput);
-        folderInput.setHorizontallyScrolling(true);
-        folderInput.setMovementMethod(new ScrollingMovementMethod());
-
-        TextInputEditText contentInput = findViewById(R.id.SimpleInputText);
         errormessage = findViewById(R.id.errorMessageText);
 
-        fileNameInput.setText(fileName);
-        contentInput.setText(content);
-        folderInput.setText(folderName);
+        folderEdit.setText(folderName);
+        contentEdit.setText(content);
+        fileEdit.setText(fileName);
 
         binding.createSimpleFileButton.setOnClickListener(v -> {
-            folderName = binding.folderInput.getEditText().getText().toString();
-            fileName = binding.fileName.getEditText().getText().toString();
+            folderName = folderEdit.getText().toString().trim();
+            fileName   = fileEdit.getText().toString().trim();
 
-            File folder = new File(getFilesDir(), folderName);
+            File folderFile = new File(getFilesDir(), folderName);
+            if (!folderFile.exists()) folderFile.mkdirs();
 
-            if (!folder.exists()) {
-                boolean success = folder.mkdirs();
-                if (success) {
-                    errormessage.setText( "Mapp skapad!");
-                } else {
-                    errormessage.setText("Kunde inte skapa mappen");
-                }
-            } else {
-                errormessage.setText("Mappen finns redan");
-            }
+            File file = new File(folderFile, fileName);
 
             if(!fileName.isEmpty()) {
                 errormessage.setText("");
-                writeToFile(getFilesDir().getAbsolutePath() + "/" + folderName + "/" + fileName, binding.simpleInput.getEditText().getText().toString(), append);
-                Log.d("WRITE", "written: " + getFilesDir().getAbsolutePath() + "/" + folderName + "/" + fileName);
+                String contentText = contentEdit.getText().toString();
+                writeToFile(file.getAbsolutePath(), contentText, append);                Log.d("WRITE", "written: " + getFilesDir().getAbsolutePath() + "/" + folderName + "/" + fileName);
                 finish();
             } else {
                 errormessage.setText("Input a filename to save wordset");
