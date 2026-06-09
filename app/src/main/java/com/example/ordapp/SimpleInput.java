@@ -25,7 +25,7 @@ public class SimpleInput extends AppCompatActivity {
     private String fileName, folderName;
     private boolean append;
 
-    private String setIntent()
+    private String GetIntent()
     {
         Intent intent = getIntent();
         fileName = intent.getStringExtra("FILE_NAME");
@@ -56,7 +56,7 @@ public class SimpleInput extends AppCompatActivity {
         binding = ActivitySimpleInputBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String content = setIntent();
+        String content = GetIntent();
 
         setText(content);
 
@@ -79,6 +79,7 @@ public class SimpleInput extends AppCompatActivity {
                 String contentText = contentEdit.getText().toString();
                 writeToFile(file.getAbsolutePath(), contentText, append);                Log.d("WRITE", "written: " + getFilesDir().getAbsolutePath() + "/" + folderName + "/" + fileName);
                 finish();
+
             } else {
                 errormessage.setText("Input a filename to save wordset");
             }

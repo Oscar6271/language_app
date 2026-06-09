@@ -56,11 +56,10 @@ public class SelectFile extends AppCompatActivity {
         ConstraintSet mainSet = new ConstraintSet();
         mainSet.clone(layout);
 
-        int topMargin = dpToPx(100 + buttonCount * 150);
+        int topMargin = dpToPx(80 + buttonCount * 150);
         mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
         mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0);
         mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
-        mainSet.connect(choose.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
 
         mainSet.applyTo(layout);
     }
@@ -127,6 +126,17 @@ public class SelectFile extends AppCompatActivity {
 
         // ScrollView finns i XML, ConstraintLayout som child
         layout = findViewById(R.id.main);
+
+        addExtraButton("Add file");
+
+        createDropDowns();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        layout.removeAllViews();
+        buttonCount = 0;
 
         addExtraButton("Add file");
 

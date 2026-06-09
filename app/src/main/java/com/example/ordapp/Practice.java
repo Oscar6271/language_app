@@ -66,8 +66,6 @@ public class Practice extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ActivityPracticeBinding binding;
 
-
-
         super.onCreate(savedInstanceState);
         binding = ActivityPracticeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
