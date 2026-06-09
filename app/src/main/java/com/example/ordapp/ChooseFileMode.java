@@ -64,7 +64,7 @@ public class ChooseFileMode extends AppCompatActivity {
         binding.EditWordSet.setOnClickListener(view -> {
             Intent editIntent = new Intent(ChooseFileMode.this, SimpleInput.class);
             editIntent.putExtra("FILE_NAME", fileWOextension);
-            editIntent.putExtra("CONTENT", printFile(getFilesDir() + "/" + filePath));
+            editIntent.putExtra("CONTENT", printFile(getFilesDir() + "/" + fileWOextension));
             editIntent.putExtra("APPEND", false);
             editIntent.putExtra("FOLDER_NAME", folder);
             startActivity(editIntent);
