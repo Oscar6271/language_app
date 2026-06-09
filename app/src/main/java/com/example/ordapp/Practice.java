@@ -78,8 +78,7 @@ public class Practice extends AppCompatActivity {
         binding.compareButton.setOnClickListener(view -> {
             if(!running)
             {
-                Intent intent = new Intent(Practice.this, SelectFile.class);
-                startActivity(intent);
+                finish();
             }
 
             if(hasBeenCorrected)
