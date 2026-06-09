@@ -102,6 +102,35 @@ public class SelectFile extends AppCompatActivity {
         // ScrollView finns i XML, ConstraintLayout som child
         layout = findViewById(R.id.main);
 
+        Button choose = new Button(this);
+        choose.setText("Add file");
+
+        choose.setId(View.generateViewId());
+        ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
+                dpToPx(150), dpToPx(70)
+        );
+        choose.setLayoutParams(btnParams);
+        layout.addView(choose);
+
+        ConstraintSet mainSet = new ConstraintSet();
+        mainSet.clone(layout);
+
+        int topMargin = dpToPx(100 + buttonCount * 150);
+        mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
+        mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0);
+        mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
+        mainSet.connect(choose.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
+
+        mainSet.applyTo(layout);
+        buttonCount++;
+        Intent intent = getIntent();
+        choose.setOnClickListener(view -> {
+            // gå till simple_input
+            Intent intent2 = new Intent(SelectFile.this, SimpleInput.class);
+            intent2.putExtra("FOLDER_NAME", intent.getStringExtra("FOLDER_NAME"));
+            startActivity(intent2);
+        });
+
         createDropDowns();
     }
 }

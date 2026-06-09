@@ -11,10 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OrdApp">
-        <activity
-            android:name=".ChooseFolder"
-            android:exported="false"
-            android:label="Choose a folder"/>
+
         <activity
             android:name=".ChooseFileMode"
             android:exported="false"
@@ -32,9 +29,9 @@
             android:exported="false"
             android:label="Practice wordset" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ChooseFolder"
             android:exported="true"
-            android:label="Start">
+            android:label="Choose a folder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
