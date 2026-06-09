@@ -27,33 +27,32 @@ public class SelectFile extends AppCompatActivity {
     {
         // Hämta filen
         File file = new File(getFilesDir() + "/" + folder, fileName);
-        Log.d("DEBUG", "tar bort " + fileName);
-        Log.d("DEBUG", file.exists() ? "finns" : "finns inte");
+        // Log.d("DEBUG", "tar bort " + fileName);
+        // Log.d("DEBUG", file.exists() ? "finns" : "finns inte");
 
         // Kontrollera om filen finns och ta bort den
         if(file.exists()){
             boolean deleted = file.delete();
-            if(deleted){
+            /*if(deleted){
                 Log.d("FILE_DELETE", "Filen togs bort!");
             } else {
                 Log.d("FILE_DELETE", "Kunde inte ta bort filen.");
-            }
+            }*/
         }
     }
-    private void createButtons(File file) {
 
-        // 1. Skapa huvudknapp
-        Button choose = new Button(this);
-        String fileName = file.getName();
-        choose.setText(fileName.substring(0, fileName.length() - 4));
-
+    private void addView(Button choose)
+    {
         choose.setId(View.generateViewId());
         ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
                 dpToPx(150), dpToPx(70)
         );
         choose.setLayoutParams(btnParams);
         layout.addView(choose);
+    }
 
+    private void addConstraintSet(Button choose)
+    {
         ConstraintSet mainSet = new ConstraintSet();
         mainSet.clone(layout);
 
@@ -64,16 +63,43 @@ public class SelectFile extends AppCompatActivity {
         mainSet.connect(choose.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
 
         mainSet.applyTo(layout);
+    }
+
+    private void addExtraButton(String buttonTitle)
+    {
+        Button choose = new Button(this);
+        choose.setText(buttonTitle);
+
+        addView(choose);
+        addConstraintSet(choose);
+
         buttonCount++;
         Intent intent = getIntent();
-        String folder = intent.getStringExtra("FOLDER_NAME");
+        choose.setOnClickListener(view -> {
+            // gå till simple_input
+            Intent intent2 = new Intent(SelectFile.this, SimpleInput.class);
+            intent2.putExtra("FOLDER_NAME", intent.getStringExtra("FOLDER_NAME"));
+            startActivity(intent2);
+        });
+    }
+    private void createButtons(File file) {
+
+        // 1. Skapa huvudknapp
+        Button choose = new Button(this);
+        String fileName = file.getName();
+        choose.setText(fileName.substring(0, fileName.length() - 4));
+
+        addView(choose);
+        addConstraintSet(choose);
+
+        buttonCount++;
 
         choose.setOnClickListener(view -> {
-            Intent intent2 = new Intent(SelectFile.this, ChooseFileMode.class);
-            Log.d("DEBUG", folder + "/" + file.getName());
-            intent2.putExtra("FILE_NAME", file.getName());
-            intent2.putExtra("FOLDER_NAME", folder);
-            startActivity(intent2);
+            Intent ChooseFileModeIntent = new Intent(SelectFile.this, ChooseFileMode.class);
+            // Log.d("DEBUG", folder + "/" + file.getName());
+            ChooseFileModeIntent.putExtra("FILE_NAME", fileName);
+            ChooseFileModeIntent.putExtra("FOLDER_NAME", getIntent().getStringExtra("FOLDER_NAME"));
+            startActivity(ChooseFileModeIntent);
         });
     }
 
@@ -81,7 +107,7 @@ public class SelectFile extends AppCompatActivity {
         Log.d("FILES", "finding files");
         Intent intent = getIntent();
         String folderName = intent.getStringExtra("FOLDER_NAME");
-        Log.d("FOLDER", folderName);
+        // Log.d("FOLDER", folderName);
 
         File folder = new File(getFilesDir(), folderName);
         File[] files = folder.listFiles();
@@ -102,34 +128,7 @@ public class SelectFile extends AppCompatActivity {
         // ScrollView finns i XML, ConstraintLayout som child
         layout = findViewById(R.id.main);
 
-        Button choose = new Button(this);
-        choose.setText("Add file");
-
-        choose.setId(View.generateViewId());
-        ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
-                dpToPx(150), dpToPx(70)
-        );
-        choose.setLayoutParams(btnParams);
-        layout.addView(choose);
-
-        ConstraintSet mainSet = new ConstraintSet();
-        mainSet.clone(layout);
-
-        int topMargin = dpToPx(100 + buttonCount * 150);
-        mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
-        mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0);
-        mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
-        mainSet.connect(choose.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
-
-        mainSet.applyTo(layout);
-        buttonCount++;
-        Intent intent = getIntent();
-        choose.setOnClickListener(view -> {
-            // gå till simple_input
-            Intent intent2 = new Intent(SelectFile.this, SimpleInput.class);
-            intent2.putExtra("FOLDER_NAME", intent.getStringExtra("FOLDER_NAME"));
-            startActivity(intent2);
-        });
+        addExtraButton("Add file");
 
         createDropDowns();
     }
