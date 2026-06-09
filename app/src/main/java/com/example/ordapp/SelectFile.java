@@ -51,7 +51,7 @@ public class SelectFile extends AppCompatActivity {
         layout.addView(choose);
     }
 
-    private void addConstraintSet(Button choose)
+    public void addConstraintSet(Button choose)
     {
         ConstraintSet mainSet = new ConstraintSet();
         mainSet.clone(layout);
@@ -77,9 +77,9 @@ public class SelectFile extends AppCompatActivity {
         Intent intent = getIntent();
         choose.setOnClickListener(view -> {
             // gå till simple_input
-            Intent intent2 = new Intent(SelectFile.this, SimpleInput.class);
-            intent2.putExtra("FOLDER_NAME", intent.getStringExtra("FOLDER_NAME"));
-            startActivity(intent2);
+            Intent simple_input_intent = new Intent(SelectFile.this, SimpleInput.class);
+            simple_input_intent.putExtra("FOLDER_NAME", intent.getStringExtra("FOLDER_NAME"));
+            startActivity(simple_input_intent);
         });
     }
     private void createButtons(File file) {

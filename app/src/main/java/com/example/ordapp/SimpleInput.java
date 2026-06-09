@@ -19,11 +19,35 @@ public class SimpleInput extends AppCompatActivity {
     }
     private ActivitySimpleInputBinding binding;
     private TextView errormessage;
+    private TextInputEditText folderEdit, fileEdit, contentEdit;
 
     public native void writeToFile(String fileName, String contentToWrite, boolean append);
-    private String fileName;
-    private String folderName;
+    private String fileName, folderName;
     private boolean append;
+
+    private String setIntent()
+    {
+        Intent intent = getIntent();
+        fileName = intent.getStringExtra("FILE_NAME");
+        String content = intent.getStringExtra("CONTENT");
+        append = intent.getBooleanExtra("APPEND", true);
+        folderName = intent.getStringExtra("FOLDER_NAME");
+
+        return content;
+    }
+
+    private void setText(String content)
+    {
+        folderEdit  = findViewById(R.id.folderNameInput);
+        fileEdit    = findViewById(R.id.fileNameInput);
+        contentEdit = findViewById(R.id.SimpleInputText);
+
+        errormessage = findViewById(R.id.errorMessageText);
+
+        folderEdit.setText(folderName);
+        contentEdit.setText(content);
+        fileEdit.setText(fileName);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,28 +56,21 @@ public class SimpleInput extends AppCompatActivity {
         binding = ActivitySimpleInputBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Intent intent = getIntent();
-        fileName = intent.getStringExtra("FILE_NAME");
-        String content = intent.getStringExtra("CONTENT");
-        append = intent.getBooleanExtra("APPEND", true);
-        folderName = intent.getStringExtra("FOLDER_NAME");
+        String content = setIntent();
 
-        TextInputEditText folderEdit  = findViewById(R.id.folderNameInput);
-        TextInputEditText fileEdit    = findViewById(R.id.fileNameInput);
-        TextInputEditText contentEdit = findViewById(R.id.SimpleInputText);
-
-        errormessage = findViewById(R.id.errorMessageText);
-
-        folderEdit.setText(folderName);
-        contentEdit.setText(content);
-        fileEdit.setText(fileName);
+        setText(content);
 
         binding.createSimpleFileButton.setOnClickListener(v -> {
             folderName = folderEdit.getText().toString().trim();
             fileName   = fileEdit.getText().toString().trim();
 
             File folderFile = new File(getFilesDir(), folderName);
-            if (!folderFile.exists()) folderFile.mkdirs();
+
+            // Skapar en folder
+            if (!folderFile.exists())
+            {
+                folderFile.mkdirs();
+            }
 
             File file = new File(folderFile, fileName);
 

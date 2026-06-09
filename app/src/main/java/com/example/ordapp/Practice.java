@@ -48,24 +48,31 @@ public class Practice extends AppCompatActivity {
     public native String pickWord();
     public native String compare(String userInput);
     public native boolean checkEmpty();
+    public Button compareButtonVariable;
 
     private String wordToTranslate;
     private boolean hasBeenCorrected = false, running = true;
+    private TextView ResponseTextBox, infoTextBox;
+
+    private void setupButtons()
+    {
+        ResponseTextBox = (TextView)findViewById(R.id.responseText);
+        ResponseTextBox.setText("");
+        infoTextBox = (TextView) findViewById(R.id.infoText);
+        compareButtonVariable = (Button)findViewById(R.id.compareButton);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActivityPracticeBinding binding;
-        TextView ResponseTextBox, infoTextBox;
-        Button compareButtonVariable;
+
+
 
         super.onCreate(savedInstanceState);
         binding = ActivityPracticeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ResponseTextBox = (TextView)findViewById(R.id.responseText);
-        ResponseTextBox.setText("");
-        infoTextBox = (TextView) findViewById(R.id.infoText);
-        compareButtonVariable = (Button)findViewById(R.id.compareButton);
+        setupButtons();
 
         init_file();
         set_text();

@@ -16,12 +16,37 @@ import java.io.File;
 
 public class ChooseFolder extends AppCompatActivity {
 
-    int dpToPx(int dp) {
+    int dpToPx(int dp)
+    {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
     int buttonCount = 0;
     ConstraintLayout layout;
+
+    private void addView(Button choose)
+    {
+        choose.setId(View.generateViewId());
+        ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
+                dpToPx(150), dpToPx(70)
+        );
+        choose.setLayoutParams(btnParams);
+        layout.addView(choose);
+    }
+
+    private void addConstraintSet(Button choose)
+    {
+        ConstraintSet mainSet = new ConstraintSet();
+        mainSet.clone(layout);
+
+        int topMargin = dpToPx(buttonCount * 150);
+        mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
+        mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0);
+        mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
+        mainSet.connect(choose.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
+
+        mainSet.applyTo(layout);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,23 +63,9 @@ public class ChooseFolder extends AppCompatActivity {
                 Button choose = new Button(this);
                 choose.setText(file.getName());
 
-                choose.setId(View.generateViewId());
-                ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
-                        dpToPx(150), dpToPx(70)
-                );
-                choose.setLayoutParams(btnParams);
-                layout.addView(choose);
+                addView(choose);
+                addConstraintSet(choose);
 
-                ConstraintSet mainSet = new ConstraintSet();
-                mainSet.clone(layout);
-
-                int topMargin = dpToPx(buttonCount * 150);
-                mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
-                mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0);
-                mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
-                mainSet.connect(choose.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
-
-                mainSet.applyTo(layout);
                 buttonCount++;
 
                 choose.setOnClickListener(view -> {
