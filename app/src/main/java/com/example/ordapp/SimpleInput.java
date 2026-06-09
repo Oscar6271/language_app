@@ -22,21 +22,20 @@ public class SimpleInput extends AppCompatActivity {
     private TextInputEditText fileEdit, contentEdit;
 
     public native void writeToFile(String fileName, String contentToWrite, boolean append);
-    private String fileName, folderName;
+    private String fileName, folderName, content;
     private boolean append;
 
-    private String GetIntent()
+    private void GetIntent()
     {
         Intent intent = getIntent();
         fileName = intent.getStringExtra("FILE_NAME");
-        String content = intent.getStringExtra("CONTENT");
+        content = intent.getStringExtra("CONTENT");
         append = intent.getBooleanExtra("APPEND", true);
         folderName = intent.getStringExtra("FOLDER_NAME");
 
-        return content;
     }
 
-    private void setText(String content)
+    private void setText()
     {
         folderText  = findViewById(R.id.folderInput);
         fileEdit    = findViewById(R.id.fileNameInput);
@@ -56,9 +55,9 @@ public class SimpleInput extends AppCompatActivity {
         binding = ActivitySimpleInputBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String content = GetIntent();
+        GetIntent();
 
-        setText(content);
+        setText();
 
         binding.createSimpleFileButton.setOnClickListener(v -> {
             folderName = folderText.getText().toString().substring(8).trim();
