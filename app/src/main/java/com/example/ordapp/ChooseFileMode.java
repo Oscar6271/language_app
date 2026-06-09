@@ -22,11 +22,8 @@ public class ChooseFileMode extends AppCompatActivity {
         System.loadLibrary("ordapp");
     }
 
-    private void DeleteFile(String folder, String fileName)
+    private void DeleteFile(File file)
     {
-        // Hämta filen
-        File file = new File(getFilesDir() + "/" + folder, fileName + ".txt");
-
         // Kontrollera om filen finns och ta bort den
         if(file.exists()){
             boolean deleted = file.delete();
@@ -45,9 +42,9 @@ public class ChooseFileMode extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Intent intent = getIntent();
-        String fileName = intent.getStringExtra("FILE_NAME");
         String folder = intent.getStringExtra("FOLDER_NAME");
-        String fileWOextension = folder + "/" + fileName.substring(0, fileName.length() - 4);
+        String fileName =  folder + "/" + intent.getStringExtra("FILE_NAME");
+        String fileWOextension = fileName.substring(0, fileName.length() - 4);
 
         binding.PracticeTranslation.setOnClickListener(view -> {
             Intent practiceTranslationIntent = new Intent(ChooseFileMode.this, Practice.class);
@@ -73,9 +70,8 @@ public class ChooseFileMode extends AppCompatActivity {
         });
 
         binding.DeleteWordSet.setOnClickListener(view -> {
-            DeleteFile(folder, fileWOextension);
+            DeleteFile(new File(getFilesDir(), fileName));
             finish();
-            startActivity(getIntent());
         });
     }
 }

@@ -65,7 +65,7 @@ public class ChooseFolder extends AppCompatActivity {
         ConstraintSet mainSet = new ConstraintSet();
         mainSet.clone(layout);
 
-        int topMargin = dpToPx(buttonCount * 150);
+        int topMargin = dpToPx(buttonCount * 140);
         mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
         mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0);
         mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
@@ -74,15 +74,8 @@ public class ChooseFolder extends AppCompatActivity {
         buttonCount++;
 
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityChooseFolderBinding binding = ActivityChooseFolderBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        layout = findViewById(R.id.main);
-
-
+    private void createFolder()
+    {
         // skapa en knapp och ett textfält under knappen, knappen ska köra raderna ovanför
         Button addFolder = new Button(this);
         addFolder.setText("New folder");
@@ -111,13 +104,15 @@ public class ChooseFolder extends AppCompatActivity {
             {
                 textField.setText("Folder already exists");
             }
-
         });
+    }
 
+    private void displayFolders()
+    {
         File[] files = getFilesDir().listFiles();
 
         for(File file : files) {
-            Log.d("DEBUG", "File: " + file.getName());
+            // Log.d("DEBUG", "File: " + file.getName());
             if(file.isDirectory()) {
                 Button choose = new Button(this);
                 choose.setText(file.getName());
@@ -133,5 +128,30 @@ public class ChooseFolder extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    private void createUI()
+    {
+        buttonCount = 0;
+        createFolder();
+        displayFolders();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ActivityChooseFolderBinding binding = ActivityChooseFolderBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        layout = findViewById(R.id.main);
+
+        createUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        layout.removeAllViews();
+
+        createUI();
     }
 }

@@ -64,7 +64,7 @@ public class SelectFile extends AppCompatActivity {
         mainSet.applyTo(layout);
     }
 
-    private void addExtraButton(String buttonTitle)
+    private Button addExtraButton(String buttonTitle)
     {
         Button choose = new Button(this);
         choose.setText(buttonTitle);
@@ -73,13 +73,7 @@ public class SelectFile extends AppCompatActivity {
         addConstraintSet(choose);
 
         buttonCount++;
-        Intent intent = getIntent();
-        choose.setOnClickListener(view -> {
-            // gå till simple_input
-            Intent simple_input_intent = new Intent(SelectFile.this, SimpleInput.class);
-            simple_input_intent.putExtra("FOLDER_NAME", intent.getStringExtra("FOLDER_NAME"));
-            startActivity(simple_input_intent);
-        });
+        return choose;
     }
     private void createButtons(File file) {
 
@@ -118,6 +112,76 @@ public class SelectFile extends AppCompatActivity {
         }
     }
 
+    private void deleteAlert(String folderName)
+    {
+        File folder = new File(getFilesDir(), folderName);
+        int filesCount = folder.listFiles().length;
+
+        new androidx.appcompat.app.AlertDialog.Builder(SelectFile.this)
+                .setTitle("Delete folder")
+                .setMessage("Are you sure you want to delete this folder? There are " + filesCount + " files in this folder")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    deleteFolder(folder);
+                    finish();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
+    }
+    private boolean deleteFolder(File folder) {
+        if (folder == null || !folder.exists())
+        {
+            return false;
+        }
+
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteFolder(file);
+                } else {
+                    file.delete();
+                }
+            }
+        }
+
+        return folder.delete();
+    }
+
+    private void createUI()
+    {
+        Intent intent = getIntent();
+
+        String folder = intent.getStringExtra("FOLDER_NAME");
+
+        Button addFileButton = addExtraButton("Add file");
+        addFileButton.setOnClickListener(view -> {
+            // gå till simple_input
+            Intent simple_input_intent = new Intent(SelectFile.this, SimpleInput.class);
+            simple_input_intent.putExtra("FOLDER_NAME", folder);
+            startActivity(simple_input_intent);
+        });
+
+        Button deleteFolderButton = addExtraButton("Delete this folder");
+        deleteFolderButton.setOnClickListener(view -> {
+            deleteAlert(folder);
+        });
+        createDropDowns();
+    }
+
+    /*new androidx.appcompat.app.AlertDialog.Builder(SelectFile.this)
+            .setTitle("Delete folder")
+            .setMessage("Are you sure you want to delete this folder?")
+            .setPositiveButton("Delete", (dialog, which) -> {
+                deleteFolder(new File(getFilesDir(), folder));
+                finish();
+            })
+            .setNegativeButton("Cancel", (dialog, which) -> {
+                dialog.dismiss();
+            })
+            .show();*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,10 +190,8 @@ public class SelectFile extends AppCompatActivity {
 
         // ScrollView finns i XML, ConstraintLayout som child
         layout = findViewById(R.id.main);
+        createUI();
 
-        addExtraButton("Add file");
-
-        createDropDowns();
     }
 
     @Override
@@ -138,8 +200,6 @@ public class SelectFile extends AppCompatActivity {
         layout.removeAllViews();
         buttonCount = 0;
 
-        addExtraButton("Add file");
-
-        createDropDowns();
+        createUI();
     }
 }

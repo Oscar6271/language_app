@@ -18,8 +18,8 @@ public class SimpleInput extends AppCompatActivity {
         System.loadLibrary("ordapp");
     }
     private ActivitySimpleInputBinding binding;
-    private TextView errormessage;
-    private TextInputEditText folderEdit, fileEdit, contentEdit;
+    private TextView errormessage, folderText;
+    private TextInputEditText fileEdit, contentEdit;
 
     public native void writeToFile(String fileName, String contentToWrite, boolean append);
     private String fileName, folderName;
@@ -38,13 +38,13 @@ public class SimpleInput extends AppCompatActivity {
 
     private void setText(String content)
     {
-        folderEdit  = findViewById(R.id.folderNameInput);
+        folderText  = findViewById(R.id.folderInput);
         fileEdit    = findViewById(R.id.fileNameInput);
         contentEdit = findViewById(R.id.SimpleInputText);
 
         errormessage = findViewById(R.id.errorMessageText);
 
-        folderEdit.setText(folderName);
+        folderText.setText("Folder: " + folderName);
         contentEdit.setText(content);
         fileEdit.setText(fileName);
     }
@@ -61,7 +61,7 @@ public class SimpleInput extends AppCompatActivity {
         setText(content);
 
         binding.createSimpleFileButton.setOnClickListener(v -> {
-            folderName = folderEdit.getText().toString().trim();
+            folderName = folderText.getText().toString().substring(8).trim();
             fileName   = fileEdit.getText().toString().trim();
 
             File folderFile = new File(getFilesDir(), folderName);
