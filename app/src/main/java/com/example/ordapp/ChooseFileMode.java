@@ -46,8 +46,8 @@ public class ChooseFileMode extends AppCompatActivity {
 
         Intent intent = getIntent();
         String fileName = intent.getStringExtra("FILE_NAME");
-        String fileWOextension = fileName.substring(0, fileName.length() - 4);
         String folder = intent.getStringExtra("FOLDER_NAME");
+        String fileWOextension = folder + "/" + fileName.substring(0, fileName.length() - 4);
 
         binding.PracticeTranslation.setOnClickListener(view -> {
             Intent practiceTranslationIntent = new Intent(ChooseFileMode.this, Practice.class);

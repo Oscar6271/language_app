@@ -18,7 +18,8 @@ public class SelectFile extends AppCompatActivity {
     private ConstraintLayout layout;  // Huvud-ConstraintLayout inuti ScrollView
     private int buttonCount = 0;     // För att positionera knappar vertikalt
 
-    int dpToPx(int dp) {
+    int dpToPx(int dp)
+    {
         return (int) (dp * getResources().getDisplayMetrics().density);
     }
 
