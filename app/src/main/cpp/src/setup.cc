@@ -7,7 +7,7 @@
 #include <random>
 #include <cstdio>
 
-#include "main.h"
+#include "../headers/setup.h"
 
 using namespace std;
 
@@ -17,44 +17,12 @@ std::vector<std::string> phrases_list;
 std::vector<std::string> translation_list;
 long int randomIndex;
 
-void clean_string(string & s)
-{
-    while (!s.empty() && (s.back() == L'\r' || s.back() == L'\n')) {
-        s.pop_back();
-    }
-
-    std::replace_if(s.begin(), s.end(), [](wchar_t c) {
-        return std::iswspace(c) && c != L' ';
-    }, L' ');
-}
-
 void clear_lists()
 {
     wrong_translations.clear();
     wrong_answers.clear();
     phrases_list.clear();
     translation_list.clear();
-}
-
-string to_lower(string & word)
-{
-    transform(word.begin(), word.end(), word.begin(),
-             [](unsigned char c)
-             {
-                return tolower(c);
-             });
-    return word;
-}
-
-void trim_white_space(string & phrase, string & translation)
-{
-    phrase.erase(0, phrase.find_first_not_of(" \t"));
-    phrase.erase(phrase.find_last_not_of(" \t") + 1);
-    translation.erase(0, translation.find_first_not_of(" \t"));
-    translation.erase(translation.find_last_not_of(" \t") + 1);
-
-    clean_string(phrase);
-    clean_string(translation);
 }
 
 void readFile(string const& fileName, string const& language_to_write_in)
@@ -81,7 +49,8 @@ void readFile(string const& fileName, string const& language_to_write_in)
                 phrase = line.substr(pos + 1);
             }
 
-            trim_white_space(phrase, translation);
+            trim_white_space(phrase);
+            trim_white_space(translation);
 
             phrases_list.push_back(phrase);
             translation_list.push_back(translation);
@@ -94,26 +63,37 @@ void readFile(string const& fileName, string const& language_to_write_in)
 // tar även bort ordet om det var rätt svaret och lägger till i wrong containers om man
 // svarade fel
 string compare(string userInput)
-{    
-    string correctAnswer = translation_list.at(randomIndex);
+{
+    string fullAnswer = translation_list.at(randomIndex);
     string phrase = phrases_list.at(randomIndex);
 
     phrases_list.erase(phrases_list.begin() + randomIndex);
     translation_list.erase(translation_list.begin() + randomIndex);
 
-    clean_string(userInput);
-
+    trim_white_space(userInput);
     to_lower(userInput);
-    to_lower(correctAnswer);
+    to_lower(fullAnswer);
 
-    if(userInput != correctAnswer)
+    string alternative = ignore_explanation(fullAnswer);
+
+    if (userInput == fullAnswer || userInput == alternative)
     {
-        wrong_answers.push_back(phrase);
-        wrong_translations.push_back(correctAnswer);
-        return "Wrong, " + phrase + " means " + correctAnswer;
+        return "Correct!";
+    }
+    vector<string> answers = find_alternatives(fullAnswer);
+
+    for(string answer : answers)
+    {
+        string explanation = ignore_explanation(answer);
+        if(userInput == answer || userInput == explanation)
+        {
+            return "Correct!";
+        }
     }
 
-    return "Correct!";
+    wrong_answers.push_back(phrase);
+    wrong_translations.push_back(fullAnswer);
+    return "Wrong, " + phrase + " means " + fullAnswer;
 }
 
 // skickar true om man är klar, annars false

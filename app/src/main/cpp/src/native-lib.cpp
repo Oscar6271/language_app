@@ -1,7 +1,8 @@
 #include <jni.h>
 #include <string>
 #include <vector>
-#include "main.h"
+#include "../headers/setup.h"
+#include "../headers/library.h"
 
 #include <android/log.h>
 

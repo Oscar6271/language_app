@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+#include "library.h"
+
 extern std::vector<std::string> wrong_answers;
 extern std::vector<std::string> wrong_translations;
 extern std::vector<std::string> phrases_list;

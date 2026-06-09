@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ordapp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ordapp-Debug-6a435226ab66140ef6aa.json",
+					"jsonFile" : "target-ordapp-Debug-f4aa1660827ae1433b0d.json",
 					"name" : "ordapp",
 					"projectIndex" : 0
 				}
@@ -49,7 +49,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/x86_64",
+		"build" : "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/x86",
 		"source" : "/home/oscar/code/eget/language_app/app/src/main/cpp"
 	},
 	"version" : 

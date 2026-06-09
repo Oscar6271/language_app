@@ -43,8 +43,9 @@ public class ChooseFileMode extends AppCompatActivity {
 
         Intent intent = getIntent();
         String folder = intent.getStringExtra("FOLDER_NAME");
-        String fileName =  folder + "/" + intent.getStringExtra("FILE_NAME");
-        String fileWOextension = fileName.substring(0, fileName.length() - 4);
+        String fileName = intent.getStringExtra("FILE_NAME");
+        String filePath =  folder + "/" + fileName;
+        String fileWOextension = filePath.substring(0, filePath.length() - 4);
 
         binding.PracticeTranslation.setOnClickListener(view -> {
             Intent practiceTranslationIntent = new Intent(ChooseFileMode.this, Practice.class);
@@ -63,14 +64,14 @@ public class ChooseFileMode extends AppCompatActivity {
         binding.EditWordSet.setOnClickListener(view -> {
             Intent editIntent = new Intent(ChooseFileMode.this, SimpleInput.class);
             editIntent.putExtra("FILE_NAME", fileWOextension);
-            editIntent.putExtra("CONTENT", printFile(getFilesDir().getAbsolutePath() + "/" + folder + "/" + fileWOextension));
+            editIntent.putExtra("CONTENT", printFile(getFilesDir() + "/" + filePath));
             editIntent.putExtra("APPEND", false);
             editIntent.putExtra("FOLDER_NAME", folder);
             startActivity(editIntent);
         });
 
         binding.DeleteWordSet.setOnClickListener(view -> {
-            DeleteFile(new File(getFilesDir(), fileName));
+            DeleteFile(new File(getFilesDir(), filePath));
             finish();
         });
     }

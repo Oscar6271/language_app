@@ -1,4 +1,20 @@
 # ninja log v5
+15	1779	1781022726269435026	CMakeFiles/ordapp.dir/src/setup.cc.o	4ba6a04323bf211
+14	1062	1781022725573436221	CMakeFiles/ordapp.dir/src/native-lib.cpp.o	5ae8cf9e8bd9a316
 1	1085	1762601353730397657	CMakeFiles/ordapp.dir/native-lib.cpp.o	3d38eb567c67290c
-0	1380	1762601354023353123	CMakeFiles/ordapp.dir/main.cc.o	d01beca0d2220e84
 1381	1413	1762601354061347461	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	35f0b93560747b19
+0	1380	1762601354023353123	CMakeFiles/ordapp.dir/main.cc.o	d01beca0d2220e84
+9	841	1781022978724655031	CMakeFiles/ordapp.dir/src/library.cpp.o	af4fdca398dd4e13
+841	888	1781022978782654784	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	606c4f5ddd4a65dd
+14	1491	1781023570900181815	CMakeFiles/ordapp.dir/src/setup.cc.o	4ba6a04323bf211
+1492	1558	1781023571227179537	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	606c4f5ddd4a65dd
+10	984	1781023914402672360	CMakeFiles/ordapp.dir/src/setup.cc.o	4ba6a04323bf211
+984	1017	1781023914601670852	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	606c4f5ddd4a65dd
+10	1211	1781024470446321695	CMakeFiles/ordapp.dir/src/native-lib.cpp.o	5ae8cf9e8bd9a316
+10	1857	1781024471092316529	CMakeFiles/ordapp.dir/src/setup.cc.o	4ba6a04323bf211
+12	1170	1781024505416041769	CMakeFiles/ordapp.dir/src/library.cpp.o	af4fdca398dd4e13
+1170	1238	1781024505495041137	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	606c4f5ddd4a65dd
+10	1247	1781024650086177151	CMakeFiles/ordapp.dir/src/setup.cc.o	4ba6a04323bf211
+1248	1294	1781024650152177069	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	606c4f5ddd4a65dd
+11	1354	1781024741597017014	CMakeFiles/ordapp.dir/src/setup.cc.o	4ba6a04323bf211
+1354	1397	1781024741679016831	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/x86_64/libordapp.so	606c4f5ddd4a65dd
