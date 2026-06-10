@@ -31,7 +31,7 @@
         <activity
             android:name=".ChooseFolder"
             android:exported="true"
-            android:label="Choose a folder">
+            android:label="Word app">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -75,8 +75,17 @@ public class ChooseFileMode extends AppCompatActivity {
         });
 
         binding.DeleteWordSet.setOnClickListener(view -> {
-            DeleteFile(new File(filePath));
-            finish();
+            new androidx.appcompat.app.AlertDialog.Builder(ChooseFileMode.this)
+                    .setTitle("Delete wordset")
+                    .setMessage("Are you sure you want to delete this wordset?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        DeleteFile(new File(filePath));
+                        finish();
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         });
     }
 }

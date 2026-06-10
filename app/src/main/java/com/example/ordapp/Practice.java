@@ -91,7 +91,7 @@ public class Practice extends AppCompatActivity {
                 wordToTranslate = pickWord();
                 set_text();
                 binding.TranslationInputField.getEditText().setText("");
-                compareButtonVariable.setText("Correct");
+                compareButtonVariable.setText("Check");
                 ResponseTextBox.setText("");
             }
             else
