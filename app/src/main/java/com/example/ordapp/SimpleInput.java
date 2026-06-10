@@ -32,9 +32,6 @@ public class SimpleInput extends AppCompatActivity {
         content = intent.getStringExtra("CONTENT");
         append = intent.getBooleanExtra("APPEND", true);
         folderName = intent.getStringExtra("FOLDER_NAME");
-
-        Log.d("FILE name", fileName);
-
     }
 
     private void setText()
