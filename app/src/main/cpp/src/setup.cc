@@ -15,6 +15,8 @@ std::vector<std::string> wrong_answers;
 std::vector<std::string> wrong_translations;
 std::vector<std::string> phrases_list;
 std::vector<std::string> translation_list;
+std::vector<char> seperators{':', ','};
+
 long int randomIndex;
 
 void clear_lists()
@@ -25,15 +27,20 @@ void clear_lists()
     translation_list.clear();
 }
 
-void readFile(string const& fileName, string const& language_to_write_in)
+/*void readFile(string const& fileName, string const& language_to_write_in)
 {
-    ifstream file{fileName + ".txt"};
+    string fileNameWextention = fileName;
+    if(fileName.size() <= 4 || fileName.substr(fileName.size() - 4) != ".txt")
+    {
+        fileNameWextention = fileName + ".txt";
+    }
+    ifstream file{fileNameWextention};
     string line;
     clear_lists();
 
     while(getline(file, line))
     {
-        auto pos = line.find(',');
+        auto pos = line.find(':');
         if(pos != string::npos)
         {
             string phrase, translation;
@@ -56,6 +63,87 @@ void readFile(string const& fileName, string const& language_to_write_in)
             translation_list.push_back(translation);
         }
     }
+    file.close();
+}*/
+
+void split_string(vector<string> & phrases, vector<string> & translations,
+                  size_t pos, bool const write_in_swedish, string const& line)
+{
+    string phrase, translation;
+
+    if(!write_in_swedish)
+    {
+        phrase = line.substr(0, pos);
+        translation = line.substr(pos + 1);
+    }
+    else
+    {
+        translation = line.substr(0, pos);
+        phrase = line.substr(pos + 1);
+    }
+
+    trim_white_space(phrase);
+    trim_white_space(translation);
+
+    phrases.push_back(phrase);
+    translations.push_back(translation);
+}
+
+string make_filePath(string const& fileName)
+{
+    string filePath{fileName};
+
+    if(fileName.size() <= 3)
+    {
+        filePath += ".txt";
+    }
+    else if(fileName.substr(fileName.size() - 4) != ".txt")
+    {
+        filePath += ".txt";
+    }
+
+    return filePath;
+}
+
+void readFile(string const& fileName, string const& write_in_swedish)
+{
+    ifstream file{make_filePath(fileName)};
+    bool write_in_original {write_in_swedish == "original"};
+
+    if(!file.is_open())
+    {
+        throw invalid_argument("Filen finns inte!");
+    }
+
+    clear_lists();
+    string line;
+
+    while(getline(file, line))
+    {
+        if(line == "")
+        {
+            continue;
+        }
+        int current_seperator = 0;
+
+        split_string:
+        auto pos = line.find(seperators.at(current_seperator));
+
+        if(pos != string::npos)
+        {
+            split_string(phrases_list, translation_list, pos, write_in_original, line);
+        }
+        else if(end_of_file(pos, current_seperator, seperators.size()))
+        {
+            break;
+        }
+        else
+        {
+            current_seperator++;
+            goto split_string;
+        }
+    }
+
     file.close();
 }
 

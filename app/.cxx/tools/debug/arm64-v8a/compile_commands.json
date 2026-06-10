@@ -1,12 +1,17 @@
 [
 {
   "directory": "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a",
-  "command": "/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dordapp_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -o CMakeFiles/ordapp.dir/native-lib.cpp.o -c /home/oscar/code/eget/language_app/app/src/main/cpp/native-lib.cpp",
-  "file": "/home/oscar/code/eget/language_app/app/src/main/cpp/native-lib.cpp"
+  "command": "/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dordapp_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -o CMakeFiles/ordapp.dir/src/native-lib.cpp.o -c /home/oscar/code/eget/language_app/app/src/main/cpp/src/native-lib.cpp",
+  "file": "/home/oscar/code/eget/language_app/app/src/main/cpp/src/native-lib.cpp"
 },
 {
   "directory": "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a",
-  "command": "/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dordapp_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -o CMakeFiles/ordapp.dir/main.cc.o -c /home/oscar/code/eget/language_app/app/src/main/cpp/main.cc",
-  "file": "/home/oscar/code/eget/language_app/app/src/main/cpp/main.cc"
+  "command": "/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dordapp_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -o CMakeFiles/ordapp.dir/src/setup.cc.o -c /home/oscar/code/eget/language_app/app/src/main/cpp/src/setup.cc",
+  "file": "/home/oscar/code/eget/language_app/app/src/main/cpp/src/setup.cc"
+},
+{
+  "directory": "/home/oscar/code/eget/language_app/app/.cxx/Debug/5k6b526g/arm64-v8a",
+  "command": "/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/home/oscar/Android/Sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/sysroot -Dordapp_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -o CMakeFiles/ordapp.dir/src/library.cpp.o -c /home/oscar/code/eget/language_app/app/src/main/cpp/src/library.cpp",
+  "file": "/home/oscar/code/eget/language_app/app/src/main/cpp/src/library.cpp"
 }
 ]

@@ -16,4 +16,6 @@ std::string ignore_explanation(std::string const& word);
 
 std::vector<std::string> find_alternatives(std::string translations);
 
+bool end_of_file(size_t pos, int seperator, size_t max_seperator);
+
 #endif //ORD_APP_LIBRARY_H

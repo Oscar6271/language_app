@@ -25,10 +25,11 @@ public class Practice extends AppCompatActivity {
     private void init_file()
     {
         Intent intent = getIntent();
-        String fileName = intent.getStringExtra("FILE_NAME");
+        String filePath = intent.getStringExtra("FILE_PATH");
         String language_to_write_in = intent.getStringExtra("LANGUAGE");
+        Log.d("FILE PATH", filePath);
 
-        readFile(getFilesDir().getAbsolutePath() + "/" + fileName, language_to_write_in);
+        readFile(filePath, language_to_write_in);
         wordToTranslate = pickWord();
     }
 
@@ -74,12 +75,15 @@ public class Practice extends AppCompatActivity {
 
         init_file();
         set_text();
+        Log.d("WORD", wordToTranslate);
 
         binding.compareButton.setOnClickListener(view -> {
+
             if(!running)
             {
                 finish();
             }
+
 
             if(hasBeenCorrected)
             {

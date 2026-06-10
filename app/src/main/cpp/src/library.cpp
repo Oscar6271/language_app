@@ -37,11 +37,6 @@ void trim_white_space(string & phrase)
     clean_string(phrase);
 }
 
-bool end_of_file(size_t pos, int seperator, size_t max_seperator)
-{
-    return pos == string::npos && seperator == max_seperator;
-}
-
 string ignore_explanation(string const& word)
 {
     auto start = word.find('(');
@@ -85,4 +80,9 @@ vector<string> find_alternatives(string translation)
     } while (true);
 
     return alternatives;
+}
+
+bool end_of_file(size_t pos, int seperator, size_t max_seperator)
+{
+    return pos == string::npos && seperator == max_seperator;
 }
