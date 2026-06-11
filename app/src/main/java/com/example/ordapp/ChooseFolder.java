@@ -84,7 +84,6 @@ public class ChooseFolder extends AppCompatActivity {
 
         mainSet.applyTo(layout);
         buttonCount++;
-
     }
 
     private void importFile(DocumentFile file, File targetFolder)

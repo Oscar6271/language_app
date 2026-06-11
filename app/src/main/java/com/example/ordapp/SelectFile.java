@@ -42,11 +42,11 @@ public class SelectFile extends AppCompatActivity {
         }
     }
 
-    private void addView(Button choose)
+    private void addView(Button choose, int size)
     {
         choose.setId(View.generateViewId());
         ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
-                dpToPx(150), dpToPx(70)
+                dpToPx(size), dpToPx(70)
         );
         choose.setLayoutParams(btnParams);
         layout.addView(choose);
@@ -70,7 +70,7 @@ public class SelectFile extends AppCompatActivity {
         Button choose = new Button(this);
         choose.setText(buttonTitle);
 
-        addView(choose);
+        addView(choose, 150);
         addConstraintSet(choose, startMargin);
 
         return choose;
@@ -82,7 +82,7 @@ public class SelectFile extends AppCompatActivity {
         String fileName = file.getName();
         choose.setText(fileName.substring(0, fileName.length() - 4));
 
-        addView(choose);
+        addView(choose, 180);
         addConstraintSet(choose, 0);
 
         buttonCount++;

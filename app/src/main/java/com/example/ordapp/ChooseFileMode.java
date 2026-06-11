@@ -27,11 +27,11 @@ public class ChooseFileMode extends AppCompatActivity {
         // Kontrollera om filen finns och ta bort den
         if(file.exists()){
             boolean deleted = file.delete();
-            if(deleted){
-                Log.d("FILE_DELETE", "Filen togs bort!");
-            } else {
-                Log.d("FILE_DELETE", "Kunde inte ta bort filen.");
-            }
+//            if(deleted){
+//                Log.d("FILE_DELETE", "Filen togs bort!");
+//            } else {
+//                Log.d("FILE_DELETE", "Kunde inte ta bort filen.");
+//            }
         }
     }
 

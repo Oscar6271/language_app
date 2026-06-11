@@ -32,6 +32,20 @@ Java_com_example_ordapp_SimpleInput_writeToFile(
     writeToFile(fileNameParameter, contentToWriteParameter, appendParameter);
 }
 
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_example_ordapp_SimpleInput_printFile(
+        JNIEnv* env,
+        jobject,
+        jstring fileNameJava) {
+    const char* fileName = env->GetStringUTFChars(fileNameJava, nullptr);
+    std::string fileNameParameter(fileName);
+
+    env->ReleaseStringUTFChars(fileNameJava, fileName);
+    std::string response = printFile(fileNameParameter);
+
+    return env->NewStringUTF(response.c_str());
+}
+
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_ordapp_Practice_readFile(
         JNIEnv* env,

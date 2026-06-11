@@ -22,6 +22,7 @@ public class SimpleInput extends AppCompatActivity {
     private TextInputEditText fileEdit, contentEdit;
 
     public native void writeToFile(String fileName, String contentToWrite, boolean append);
+    public native String printFile(String fileName);
     private String fileName, folderName, content;
     private boolean append;
 
@@ -45,6 +46,26 @@ public class SimpleInput extends AppCompatActivity {
         folderText.setText("Folder: " + folderName);
         contentEdit.setText(content);
         fileEdit.setText(fileName);
+    }
+
+    public void createSummaryFile()
+    {
+        File folder = new File(getFilesDir(), folderName);
+        File[] files = folder.listFiles();
+
+        String summaryFile = new File(getFilesDir(), folderName + "/" + folderName + "_summary.txt").getAbsolutePath();
+        String fileWOextension = summaryFile.substring(0, summaryFile.length() - 4);
+
+        for(File file : files)
+        {
+            if(file.isFile() && !file.getName().equals("profileInstalled"))
+            {
+                // läs in varje fil med printFile till en String
+                String filePath = new File(getFilesDir(), folderName + "/" + file.getName()).getAbsolutePath();
+                String filePathWOextension = filePath.substring(0, filePath.length() - 4);
+                writeToFile(fileWOextension, printFile(filePathWOextension), true);
+            }
+        }
     }
 
     @Override
@@ -75,7 +96,9 @@ public class SimpleInput extends AppCompatActivity {
             if(!fileName.isEmpty()) {
                 errormessage.setText("");
                 String contentText = contentEdit.getText().toString();
-                writeToFile(file.getAbsolutePath(), contentText, append);                Log.d("WRITE", "written: " + getFilesDir().getAbsolutePath() + "/" + folderName + "/" + fileName);
+                writeToFile(file.getAbsolutePath(), contentText, append);
+                createSummaryFile();
+                // Log.d("WRITE", "written: " + getFilesDir().getAbsolutePath() + "/" + folderName + "/" + fileName);
                 finish();
 
             } else {

@@ -37,9 +37,9 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fileName"
-            android:layout_width="150dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="110dp"
+            android:layout_marginStart="80dp"
             android:layout_marginTop="270dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -48,12 +48,12 @@
                 android:id="@+id/fileNameInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Filename"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:overScrollMode="always"
                 android:ellipsize="none"
-                android:inputType="textMultiLine" />
+                android:hint="Filename"
+                android:inputType="textMultiLine"
+                android:overScrollMode="always"
+                android:scrollHorizontally="true"
+                android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
