@@ -10,9 +10,8 @@
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
-
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_ordapp_SimpleInput_writeToFile(
+Java_com_example_ordapp_Library_writeToFile(
         JNIEnv* env,
         jobject,
         jstring fileNameFromJava,
@@ -33,7 +32,7 @@ Java_com_example_ordapp_SimpleInput_writeToFile(
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_ordapp_SimpleInput_printFile(
+Java_com_example_ordapp_Library_printFile(
         JNIEnv* env,
         jobject,
         jstring fileNameJava) {
@@ -47,7 +46,7 @@ Java_com_example_ordapp_SimpleInput_printFile(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_ordapp_Practice_readFile(
+Java_com_example_ordapp_Library_readFile(
         JNIEnv* env,
         jobject /* this */,
         jstring fileNameJava,
@@ -65,16 +64,15 @@ Java_com_example_ordapp_Practice_readFile(
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_ordapp_Practice_pickWord(
+Java_com_example_ordapp_Library_pickWord(
         JNIEnv* env,
-        jobject
-        ) {
+        jobject) {
     std::string word = pickWord();
     return env->NewStringUTF(word.c_str());
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_ordapp_Practice_compare(
+Java_com_example_ordapp_Library_compare(
         JNIEnv* env,
         jobject,
         jstring userInputJava) {
@@ -88,22 +86,8 @@ Java_com_example_ordapp_Practice_compare(
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_example_ordapp_Practice_checkEmpty(
+Java_com_example_ordapp_Library_checkEmpty(
         JNIEnv* env,
         jobject) {
     return check_empty() ? JNI_TRUE : JNI_FALSE;
-}
-
-extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_ordapp_ChooseFileMode_printFile(
-        JNIEnv* env,
-        jobject,
-        jstring fileNameJava) {
-    const char* fileName = env->GetStringUTFChars(fileNameJava, nullptr);
-    std::string fileNameParameter(fileName);
-
-    env->ReleaseStringUTFChars(fileNameJava, fileName);
-    std::string response = printFile(fileNameParameter);
-
-    return env->NewStringUTF(response.c_str());
 }

@@ -21,6 +21,14 @@ import java.io.IOException;
 
 
 public class Practice extends AppCompatActivity {
+    public Button compareButtonVariable;
+    private String wordToTranslate;
+
+    private boolean hasBeenCorrected = false, running = true;
+    private TextView ResponseTextBox, infoTextBox;
+    static {
+        System.loadLibrary("ordapp");
+    }
 
     private void init_file()
     {
@@ -29,8 +37,8 @@ public class Practice extends AppCompatActivity {
         String language_to_write_in = intent.getStringExtra("LANGUAGE");
         Log.d("FILE PATH", filePath);
 
-        readFile(filePath, language_to_write_in);
-        wordToTranslate = pickWord();
+        Library.readFile(filePath, language_to_write_in);
+        wordToTranslate = Library.pickWord();
     }
 
     private void set_text()
@@ -40,20 +48,6 @@ public class Practice extends AppCompatActivity {
         wordToTranslateTextBox = (TextView)findViewById(R.id.WordToTranslateText);
         wordToTranslateTextBox.setText(wordToTranslate);
     }
-
-    static {
-        System.loadLibrary("ordapp");
-    }
-
-    public native void readFile(String fileName, String language_to_write_in);
-    public native String pickWord();
-    public native String compare(String userInput);
-    public native boolean checkEmpty();
-    public Button compareButtonVariable;
-
-    private String wordToTranslate;
-    private boolean hasBeenCorrected = false, running = true;
-    private TextView ResponseTextBox, infoTextBox;
 
     private void setupButtons()
     {
@@ -84,11 +78,10 @@ public class Practice extends AppCompatActivity {
                 finish();
             }
 
-
             if(hasBeenCorrected)
             {
                 hasBeenCorrected = false;
-                wordToTranslate = pickWord();
+                wordToTranslate = Library.pickWord();
                 set_text();
                 binding.TranslationInputField.getEditText().setText("");
                 compareButtonVariable.setText("Check");
@@ -96,13 +89,13 @@ public class Practice extends AppCompatActivity {
             }
             else
             {
-                String response = compare(binding.TranslationInputField.getEditText().getText().toString());
+                String response = Library.compare(binding.TranslationInputField.getEditText().getText().toString());
                 ResponseTextBox.setText(response);
                 hasBeenCorrected = true;
                 compareButtonVariable.setText("Next word");
             }
 
-            if(checkEmpty())
+            if(Library.checkEmpty())
             {
                 infoTextBox.setText("Wordset completed!");
                 running = false;

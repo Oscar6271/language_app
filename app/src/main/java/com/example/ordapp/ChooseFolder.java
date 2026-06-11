@@ -3,112 +3,26 @@ package com.example.ordapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.example.ordapp.databinding.ActivityChooseFolderBinding;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 public class ChooseFolder extends AppCompatActivity {
 
-    int dpToPx(int dp)
-    {
-        return (int) (dp * getResources().getDisplayMetrics().density);
-    }
-
+    float density;
     int buttonCount = 0;
     ConstraintLayout layout;
+    String folderName;
 
-    private void addView(Button choose)
-    {
-        choose.setId(View.generateViewId());
-        ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
-                dpToPx(150), dpToPx(70)
-        );
-        choose.setLayoutParams(btnParams);
-        layout.addView(choose);
-    }
-
-    private void addConstraintSet(Button choose, int startMargin)
-    {
-        ConstraintSet mainSet = new ConstraintSet();
-        mainSet.clone(layout);
-
-        int topMargin = dpToPx(80 + buttonCount * 80);
-        mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
-        mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin);
-        mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
-
-        mainSet.applyTo(layout);
-        buttonCount++;
-
-    }
-
-    private void addView(EditText choose)
-    {
-        choose.setId(View.generateViewId());
-        ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
-                dpToPx(150), dpToPx(70)
-        );
-        choose.setLayoutParams(btnParams);
-        layout.addView(choose);
-    }
-
-    private void addConstraintSet(EditText choose, int startMarging)
-    {
-        ConstraintSet mainSet = new ConstraintSet();
-        mainSet.clone(layout);
-
-        int topMargin = dpToPx(buttonCount * 140);
-        mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
-        mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMarging);
-        mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
-
-        mainSet.applyTo(layout);
-        buttonCount++;
-    }
-
-    private void importFile(DocumentFile file, File targetFolder)
-    {
-        if (!file.isFile()) {
-            return;
-        }
-
-        File targetFile = new File(targetFolder, file.getName());
-
-        try (
-                InputStream in = getContentResolver().openInputStream(file.getUri());
-                FileOutputStream out = new FileOutputStream(targetFile)
-        ) {
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-
-            while ((bytesRead = in.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesRead);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     private void importFolder(Uri treeUri)
     {
         DocumentFile folder = DocumentFile.fromTreeUri(this, treeUri);
@@ -117,7 +31,7 @@ public class ChooseFolder extends AppCompatActivity {
             return;
         }
 
-        String folderName = folder.getName();
+        folderName = folder.getName();
 
         File targetFolder = new File(getFilesDir(), folderName);
         if(!targetFolder.exists())
@@ -126,13 +40,13 @@ public class ChooseFolder extends AppCompatActivity {
         }
 
         // Här kan du kopiera filerna till getFilesDir()
-        // eller bara skriva ut vad som finns i mappen.
-
+        // eller bara skriva ut vad som finns i mappen
         for (DocumentFile file : folder.listFiles()) {
             if (file.isFile()) {
-                importFile(file, targetFolder);
+                Library.importFile(file, targetFolder, this);
             }
         }
+        Library.createSummaryFile(getFilesDir(), folderName);
     }
     private final ActivityResultLauncher<Uri> importFolderLauncher =
             registerForActivityResult(
@@ -148,21 +62,21 @@ public class ChooseFolder extends AppCompatActivity {
                         }
                     }
             );
+
     private void createFolder()
     {
         // skapa en knapp och ett textfält under knappen, knappen ska köra raderna ovanför
-        Button addFolder = new Button(this);
-        addFolder.setText("New folder");
-        addView(addFolder);
-        addConstraintSet(addFolder, 500);
+        Button addFolder = Library.addExtraButton("New folder", 500, density, layout, buttonCount, this);
+        buttonCount++;
 
         EditText textField = new EditText(this);
         textField.setHint("Name of folder");
-        addView(textField);
-        addConstraintSet(textField, 500);
+        Library.addView(textField, density, layout);
+        Library.addConstraintSet(textField, 500, layout, buttonCount, density);
+        buttonCount--;
 
         addFolder.setOnClickListener(view -> {
-            String folderName = textField.getText().toString().trim();
+            folderName = textField.getText().toString().trim();
             File folderFile = new File(getFilesDir(), folderName);
 
             // Skapar en folder
@@ -180,20 +94,14 @@ public class ChooseFolder extends AppCompatActivity {
             }
         });
 
-        buttonCount -= 2;
-
-        Button importFolder = new Button(this);
-        importFolder.setText("Import folder");
-        addView(importFolder);
-        addConstraintSet(importFolder, -500);
+        Button importFolder = Library.addExtraButton("Import folder", -500, density, layout, buttonCount, this);
 
         importFolder.setOnClickListener(view -> {
             // importera en mapp
-
             importFolderLauncher.launch(null);
         });
 
-        buttonCount++;
+        buttonCount += 2;
     }
 
     private void displayFolders()
@@ -206,9 +114,9 @@ public class ChooseFolder extends AppCompatActivity {
                 Button choose = new Button(this);
                 choose.setText(file.getName());
 
-                addView(choose);
-                addConstraintSet(choose, 0);
-
+                Library.addView(choose, density, layout, 150);
+                Library.addConstraintSet(choose, 0, layout, buttonCount, density);
+                buttonCount++;
 
                 choose.setOnClickListener(view -> {
                     Intent intent = new Intent(ChooseFolder.this, SelectFile.class);
@@ -232,6 +140,7 @@ public class ChooseFolder extends AppCompatActivity {
         ActivityChooseFolderBinding binding = ActivityChooseFolderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         layout = findViewById(R.id.main);
+        density = getResources().getDisplayMetrics().density;
 
         createUI();
     }

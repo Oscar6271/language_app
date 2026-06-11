@@ -4,77 +4,25 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.example.ordapp.databinding.ActivitySelectFileBinding;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+
 
 public class SelectFile extends AppCompatActivity {
     private ConstraintLayout layout;  // Huvud-ConstraintLayout inuti ScrollView
     private int buttonCount = 0;     // För att positionera knappar vertikalt
     private String folder;
+    float density;
 
-    int dpToPx(int dp)
-    {
-        return (int) (dp * getResources().getDisplayMetrics().density);
-    }
-
-    private void DeleteFile(String folder, String fileName)
-    {
-        // Hämta filen
-        File file = new File(getFilesDir() + "/" + folder, fileName);
-
-        // Kontrollera om filen finns och ta bort den
-        if(file.exists()){
-            boolean deleted = file.delete();
-        }
-    }
-
-    private void addView(Button choose, int size)
-    {
-        choose.setId(View.generateViewId());
-        ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
-                dpToPx(size), dpToPx(70)
-        );
-        choose.setLayoutParams(btnParams);
-        layout.addView(choose);
-    }
-
-    public void addConstraintSet(Button choose, int startMargin)
-    {
-        ConstraintSet mainSet = new ConstraintSet();
-        mainSet.clone(layout);
-
-        int topMargin = dpToPx(80 + buttonCount * 100);
-        mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
-        mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin);
-        mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
-
-        mainSet.applyTo(layout);
-    }
-
-    private Button addExtraButton(String buttonTitle, int startMargin)
-    {
-        Button choose = new Button(this);
-        choose.setText(buttonTitle);
-
-        addView(choose, 150);
-        addConstraintSet(choose, startMargin);
-
-        return choose;
-    }
     private void createButtons(File file) {
 
         // 1. Skapa huvudknapp
@@ -82,8 +30,8 @@ public class SelectFile extends AppCompatActivity {
         String fileName = file.getName();
         choose.setText(fileName.substring(0, fileName.length() - 4));
 
-        addView(choose, 180);
-        addConstraintSet(choose, 0);
+        Library.addView(choose, density, layout, 180);
+        Library.addConstraintSet(choose, 0, layout, buttonCount, density);
 
         buttonCount++;
 
@@ -148,31 +96,7 @@ public class SelectFile extends AppCompatActivity {
 
         return folder.delete();
     }
-    private void importSingleFile(DocumentFile file, File targetFolder)
-    {
-        if (file == null || !file.isFile()) return;
 
-        if (!targetFolder.exists()) {
-            targetFolder.mkdirs();
-        }
-
-        File targetFile = new File(targetFolder, file.getName());
-
-        try (
-                InputStream in = getContentResolver().openInputStream(file.getUri());
-                FileOutputStream out = new FileOutputStream(targetFile)
-        ) {
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-
-            while ((bytesRead = in.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesRead);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     private final ActivityResultLauncher<String[]> multipleFilesLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.OpenMultipleDocuments(),
@@ -183,18 +107,21 @@ public class SelectFile extends AppCompatActivity {
                                     DocumentFile.fromSingleUri(this, uri);
 
                             if (file != null) {
-                                importSingleFile(file, new File(getFilesDir(), folder));
+                                Library.importFile(file, new File(getFilesDir(), folder), this);
                             }
                         }
+                        Library.createSummaryFile(getFilesDir(), folder);
+                        
                     }
             );
     private void createUI()
     {
         Intent intent = getIntent();
+        density = getResources().getDisplayMetrics().density;
 
         folder = intent.getStringExtra("FOLDER_NAME");
 
-        Button addFileButton = addExtraButton("Add file", 500);
+        Button addFileButton = Library.addExtraButton("Add file", 500, density, layout, buttonCount, this);
         addFileButton.setOnClickListener(view -> {
             // gå till simple_input
             Intent simple_input_intent = new Intent(SelectFile.this, SimpleInput.class);
@@ -202,17 +129,16 @@ public class SelectFile extends AppCompatActivity {
             startActivity(simple_input_intent);
         });
 
-        Button deleteFolderButton = addExtraButton("Delete folder", -500);
+        Button deleteFolderButton = Library.addExtraButton("Delete folder", -500, density, layout, buttonCount, this);
         deleteFolderButton.setOnClickListener(view -> {
             deleteAlert(folder);
         });
 
         buttonCount++;
 
-        Button importFile = addExtraButton("import file", 0);
+        Button importFile = Library.addExtraButton("import file", 0, density, layout, buttonCount, this);
         importFile.setOnClickListener(view -> {
             // importera en fil
-
             multipleFilesLauncher.launch(new String[]{"text/plain"});
         });
 

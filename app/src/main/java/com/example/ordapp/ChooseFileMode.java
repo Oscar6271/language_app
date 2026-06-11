@@ -16,23 +16,9 @@ import com.example.ordapp.databinding.ActivitySelectFileBinding;
 import java.io.File;
 
 public class ChooseFileMode extends AppCompatActivity {
-    public native String printFile(String fileName);
 
     static {
         System.loadLibrary("ordapp");
-    }
-
-    private void DeleteFile(File file)
-    {
-        // Kontrollera om filen finns och ta bort den
-        if(file.exists()){
-            boolean deleted = file.delete();
-//            if(deleted){
-//                Log.d("FILE_DELETE", "Filen togs bort!");
-//            } else {
-//                Log.d("FILE_DELETE", "Kunde inte ta bort filen.");
-//            }
-        }
     }
 
     @Override
@@ -67,7 +53,7 @@ public class ChooseFileMode extends AppCompatActivity {
         binding.EditWordSet.setOnClickListener(view -> {
             Intent editIntent = new Intent(ChooseFileMode.this, SimpleInput.class);
             editIntent.putExtra("FILE_NAME", fileNameWOextension);
-            editIntent.putExtra("CONTENT", printFile(filePathWOextension));
+            editIntent.putExtra("CONTENT", Library.printFile(filePathWOextension));
             editIntent.putExtra("APPEND", false);
             editIntent.putExtra("FOLDER_NAME", folder);
             Log.d("FILE_NAME", filePathWOextension);
@@ -79,7 +65,8 @@ public class ChooseFileMode extends AppCompatActivity {
                     .setTitle("Delete wordset")
                     .setMessage("Are you sure you want to delete this wordset?")
                     .setPositiveButton("Delete", (dialog, which) -> {
-                        DeleteFile(new File(filePath));
+                        Library.DeleteFile(new File(filePath));
+                        Library.createSummaryFile(getFilesDir(), folder);
                         finish();
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> {
