@@ -109,7 +109,6 @@ public class ChooseFolder extends AppCompatActivity {
         File[] files = getFilesDir().listFiles();
 
         for(File file : files) {
-            // Log.d("DEBUG", "File: " + file.getName());
             if(file.isDirectory()) {
                 Button choose = new Button(this);
                 choose.setText(file.getName());

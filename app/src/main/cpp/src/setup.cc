@@ -19,6 +19,13 @@ std::vector<char> seperators{':', ','};
 
 long int randomIndex;
 
+enum codes
+{
+    EMPTY,
+    NOT_EMPTY,
+    FIRST_TIME_DONE
+};
+
 void clear_lists()
 {
     wrong_translations.clear();
@@ -26,45 +33,6 @@ void clear_lists()
     phrases_list.clear();
     translation_list.clear();
 }
-
-/*void readFile(string const& fileName, string const& language_to_write_in)
-{
-    string fileNameWextention = fileName;
-    if(fileName.size() <= 4 || fileName.substr(fileName.size() - 4) != ".txt")
-    {
-        fileNameWextention = fileName + ".txt";
-    }
-    ifstream file{fileNameWextention};
-    string line;
-    clear_lists();
-
-    while(getline(file, line))
-    {
-        auto pos = line.find(':');
-        if(pos != string::npos)
-        {
-            string phrase, translation;
-
-            if(language_to_write_in == "translation")
-            {
-                phrase = line.substr(0, pos);
-                translation = line.substr(pos + 1);
-            }
-            else
-            {
-                translation = line.substr(0, pos);
-                phrase = line.substr(pos + 1);
-            }
-
-            trim_white_space(phrase);
-            trim_white_space(translation);
-
-            phrases_list.push_back(phrase);
-            translation_list.push_back(translation);
-        }
-    }
-    file.close();
-}*/
 
 void split_string(vector<string> & phrases, vector<string> & translations,
                   size_t pos, bool const write_in_swedish, string const& line)
@@ -105,7 +73,7 @@ string make_filePath(string const& fileName)
     return filePath;
 }
 
-void readFile(string const& fileName, string const& write_in_swedish)
+int readFile(string const& fileName, string const& write_in_swedish)
 {
     ifstream file{make_filePath(fileName)};
     bool write_in_original {write_in_swedish == "original"};
@@ -145,6 +113,7 @@ void readFile(string const& fileName, string const& write_in_swedish)
     }
 
     file.close();
+    return phrases_list.size();
 }
 
 // skickar true om svaret var rätt, false om det var fel
@@ -184,16 +153,24 @@ string compare(string userInput)
     return "Wrong, " + phrase + " means " + fullAnswer;
 }
 
-// skickar true om man är klar, annars false
-bool check_empty()
+int check_empty()
 {
     if(phrases_list.empty())
     {
         phrases_list = std::move(wrong_answers);
         translation_list = std::move(wrong_translations);
+
+        // om listan fortfarande är tom
+        if(phrases_list.empty())
+        {
+            return EMPTY;
+        }
+
+        // om listan inte är tom längre, första omgången är ändå klar
+        return FIRST_TIME_DONE;
     }
 
-    return phrases_list.empty();
+    return NOT_EMPTY;
 }
 
 long int random(int max)

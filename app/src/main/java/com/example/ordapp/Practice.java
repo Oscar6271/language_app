@@ -1,6 +1,7 @@
 package com.example.ordapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
@@ -24,7 +25,12 @@ public class Practice extends AppCompatActivity {
     public Button compareButtonVariable;
     private String wordToTranslate;
 
-    private boolean hasBeenCorrected = false, running = true;
+    private boolean hasBeenCorrected = false, running = true, first_time = true;
+    int totalWords, totalCorrect;
+    Intent intent;
+    public static final int EMPTY = 0;
+    public static final int NOT_EMPTY = 1;
+    public static final int FIRST_TIME_DONE = 2;
     private TextView ResponseTextBox, infoTextBox;
     static {
         System.loadLibrary("ordapp");
@@ -32,12 +38,12 @@ public class Practice extends AppCompatActivity {
 
     private void init_file()
     {
-        Intent intent = getIntent();
+        intent = getIntent();
         String filePath = intent.getStringExtra("FILE_PATH");
         String language_to_write_in = intent.getStringExtra("LANGUAGE");
         Log.d("FILE PATH", filePath);
 
-        Library.readFile(filePath, language_to_write_in);
+        totalWords = Library.readFile(filePath, language_to_write_in);
         wordToTranslate = Library.pickWord();
     }
 
@@ -69,12 +75,32 @@ public class Practice extends AppCompatActivity {
 
         init_file();
         set_text();
-        Log.d("WORD", wordToTranslate);
+
+        totalCorrect = 0;
 
         binding.compareButton.setOnClickListener(view -> {
 
             if(!running)
             {
+                SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
+                String fileName = intent.getStringExtra("FILE_NAME");
+
+                if((double) totalCorrect / totalWords >= 0.5 && (double) totalCorrect / totalWords < 1)
+                {
+                    // gul knapp
+                    prefs.edit().putString(fileName, "yellow").apply();
+                }
+                else if((double) totalCorrect / totalWords == 1)
+                {
+                    // grön knapp
+                    prefs.edit().putString(fileName, "green").apply();
+                }
+                else
+                {
+                    // röd knapp
+                    prefs.edit().putString(fileName, "red").apply();
+                }
+                Log.d("PRACTICE", "" + (double) totalCorrect / totalWords);
                 finish();
             }
 
@@ -93,14 +119,23 @@ public class Practice extends AppCompatActivity {
                 ResponseTextBox.setText(response);
                 hasBeenCorrected = true;
                 compareButtonVariable.setText("Next word");
+                if(first_time && response.equals("Correct!"))
+                {
+                    totalCorrect++;
+                }
             }
 
-            if(Library.checkEmpty())
+            int status = Library.checkEmpty();
+            if(status == EMPTY)
             {
                 infoTextBox.setText("Wordset completed!");
                 running = false;
                 compareButtonVariable.setText("Practice other sets");
                 set_text();
+            }
+            else if(status == FIRST_TIME_DONE)
+            {
+                first_time = false;
             }
         });
     }

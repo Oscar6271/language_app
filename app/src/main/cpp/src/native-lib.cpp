@@ -45,7 +45,7 @@ Java_com_example_ordapp_Library_printFile(
     return env->NewStringUTF(response.c_str());
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT int JNICALL
 Java_com_example_ordapp_Library_readFile(
         JNIEnv* env,
         jobject /* this */,
@@ -60,7 +60,7 @@ Java_com_example_ordapp_Library_readFile(
     // frigör minnet som har allokerats
     env->ReleaseStringUTFChars(fileNameJava, fileName);
     env->ReleaseStringUTFChars(languageWriteJava, language_to_write_in);
-    readFile(fileNameParameter, languageParameter);
+    return readFile(fileNameParameter, languageParameter);
 }
 
 extern "C" JNIEXPORT jstring JNICALL
@@ -85,9 +85,9 @@ Java_com_example_ordapp_Library_compare(
     return env->NewStringUTF(response.c_str());
 }
 
-extern "C" JNIEXPORT jboolean JNICALL
+extern "C" JNIEXPORT int JNICALL
 Java_com_example_ordapp_Library_checkEmpty(
         JNIEnv* env,
         jobject) {
-    return check_empty() ? JNI_TRUE : JNI_FALSE;
+    return check_empty();
 }

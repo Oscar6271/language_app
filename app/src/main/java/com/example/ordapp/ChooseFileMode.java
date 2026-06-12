@@ -30,22 +30,23 @@ public class ChooseFileMode extends AppCompatActivity {
         Intent intent = getIntent();
         String folder = intent.getStringExtra("FOLDER_NAME");
         String fileName = intent.getStringExtra("FILE_NAME");
-        String filePath = new File(getFilesDir(), folder + "/" + fileName).getAbsolutePath();
-
-        String filePathWOextension = filePath.substring(0, filePath.length() - 4);
         String fileNameWOextension = fileName.substring(0, fileName.length() - 4);
+
+        String filePath = new File(getFilesDir(), folder + "/" + fileName).getAbsolutePath();
+        String filePathWOextension = filePath.substring(0, filePath.length() - 4);
 
         binding.PracticeTranslation.setOnClickListener(view -> {
             Intent practiceTranslationIntent = new Intent(ChooseFileMode.this, Practice.class);
             practiceTranslationIntent.putExtra("FILE_PATH", filePathWOextension);
+            practiceTranslationIntent.putExtra("FILE_NAME", fileNameWOextension);
             practiceTranslationIntent.putExtra("LANGUAGE", "translation");
-            Log.d("FILE", filePathWOextension);
             startActivity(practiceTranslationIntent);
         });
 
         binding.PracticeOriginal.setOnClickListener(view -> {
             Intent pracitceOriginalIntent = new Intent(ChooseFileMode.this, Practice.class);
             pracitceOriginalIntent.putExtra("FILE_PATH", filePathWOextension);
+            pracitceOriginalIntent.putExtra("FILE_NAME", fileNameWOextension);
             pracitceOriginalIntent.putExtra("LANGUAGE", "original");
             startActivity(pracitceOriginalIntent);
         });
@@ -56,7 +57,6 @@ public class ChooseFileMode extends AppCompatActivity {
             editIntent.putExtra("CONTENT", Library.printFile(filePathWOextension));
             editIntent.putExtra("APPEND", false);
             editIntent.putExtra("FOLDER_NAME", folder);
-            Log.d("FILE_NAME", filePathWOextension);
             startActivity(editIntent);
         });
 

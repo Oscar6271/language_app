@@ -14,15 +14,14 @@ extern std::vector<std::string> phrases_list;
 extern std::vector<std::string> translation_list;
 extern long int randomIndex;
 
-void readFile(std::string const& fileName, std::string const& language_to_write_in);
+int readFile(std::string const& fileName, std::string const& language_to_write_in);
 
 // skickar true om svaret var rätt, false om det var fel
 // tar även bort ordet om det var rätt svaret och lägger till i wrong containers om man
 // svarade fel
 std::string compare(std::string userInput);
 
-// skickar true om man är klar, annars false
-bool check_empty();
+int check_empty();
 
 // skickar tillbaka ordet
 std::string pickWord();

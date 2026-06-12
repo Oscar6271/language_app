@@ -1,6 +1,9 @@
 package com.example.ordapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,16 +31,34 @@ public class SelectFile extends AppCompatActivity {
         // 1. Skapa huvudknapp
         Button choose = new Button(this);
         String fileName = file.getName();
-        choose.setText(fileName.substring(0, fileName.length() - 4));
+        String fileNameWOextension = fileName.substring(0, fileName.length() - 4);
+        choose.setText(fileNameWOextension);
 
         Library.addView(choose, density, layout, 180);
         Library.addConstraintSet(choose, 0, layout, buttonCount, density);
+
+        SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
+        String color = prefs.getString(fileNameWOextension, "");
+        if(color.equals("yellow"))
+        {
+            choose.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.YELLOW));
+        }
+        else if(color.equals("green"))
+        {
+            choose.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.GREEN));
+        }
+        else if(color.equals("red"))
+        {
+            choose.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.RED));
+        }
 
         buttonCount++;
 
         choose.setOnClickListener(view -> {
             Intent ChooseFileModeIntent = new Intent(SelectFile.this, ChooseFileMode.class);
-            // Log.d("DEBUG", folder + "/" + file.getName());
             ChooseFileModeIntent.putExtra("FILE_NAME", fileName);
             ChooseFileModeIntent.putExtra("FOLDER_NAME", getIntent().getStringExtra("FOLDER_NAME"));
             startActivity(ChooseFileModeIntent);
@@ -48,7 +69,6 @@ public class SelectFile extends AppCompatActivity {
         Log.d("FILES", "finding files");
         Intent intent = getIntent();
         String folderName = intent.getStringExtra("FOLDER_NAME");
-        // Log.d("FOLDER", folderName);
 
         File folder = new File(getFilesDir(), folderName);
         File[] files = folder.listFiles();
@@ -111,7 +131,7 @@ public class SelectFile extends AppCompatActivity {
                             }
                         }
                         Library.createSummaryFile(getFilesDir(), folder);
-                        
+
                     }
             );
     private void createUI()
