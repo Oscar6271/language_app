@@ -2,6 +2,9 @@ package com.example.ordapp;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,37 +56,37 @@ public final class Library {
         return (int) (dp * density);
     }
 
-    public static void addView(Button choose, float density, ConstraintLayout layout, int size)
+    public static void addView(Button button, float density, ConstraintLayout layout, int size)
     {
-        choose.setId(View.generateViewId());
+        button.setId(View.generateViewId());
         ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
                 dpToPx(size, density), dpToPx(70, density)
         );
-        choose.setLayoutParams(btnParams);
-        layout.addView(choose);
+        button.setLayoutParams(btnParams);
+        layout.addView(button);
     }
 
-    public static void addConstraintSet(Button choose, int startMargin, ConstraintLayout layout, int buttonCount, float density)
+    public static void addConstraintSet(Button button, int startMargin, ConstraintLayout layout, int buttonCount, float density)
     {
         ConstraintSet mainSet = new ConstraintSet();
         mainSet.clone(layout);
 
         int topMargin = dpToPx(80 + buttonCount * 80, density);
-        mainSet.connect(choose.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
-        mainSet.connect(choose.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin);
-        mainSet.connect(choose.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
+        mainSet.connect(button.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, topMargin);
+        mainSet.connect(button.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, startMargin);
+        mainSet.connect(button.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 0);
 
         mainSet.applyTo(layout);
     }
 
-    public static void addView(EditText choose, float density, ConstraintLayout layout)
+    public static void addView(EditText text, float density, ConstraintLayout layout)
     {
-        choose.setId(View.generateViewId());
+        text.setId(View.generateViewId());
         ConstraintLayout.LayoutParams btnParams = new ConstraintLayout.LayoutParams(
                 dpToPx(150, density), dpToPx(70, density)
         );
-        choose.setLayoutParams(btnParams);
-        layout.addView(choose);
+        text.setLayoutParams(btnParams);
+        layout.addView(text);
     }
 
     public static void addConstraintSet(EditText choose, int startMarging, ConstraintLayout layout, int buttonCount, float density)
@@ -135,12 +138,40 @@ public final class Library {
 
     public static Button addExtraButton(String buttonTitle, int startMargin, float density, ConstraintLayout layout, int buttonCount, Context context)
     {
-        Button choose = new Button(context);
-        choose.setText(buttonTitle);
+        Button button = new Button(context);
+        button.setText(buttonTitle);
 
-        Library.addView(choose, density, layout, 150);
-        Library.addConstraintSet(choose, startMargin, layout, buttonCount, density);
+        Library.addView(button, density, layout, 150);
+        Library.addConstraintSet(button, startMargin, layout, buttonCount, density);
 
-        return choose;
+        return button;
+    }
+
+    public static Button createButton(SharedPreferences prefs, String prefKey, Context context, float density, ConstraintLayout layout, int size, int buttonCount, String buttonText)
+    {
+        String color = prefs.getString(prefKey, "");
+
+        Button button = new Button(context);
+        addView(button, density, layout, size);
+        addConstraintSet(button, 0, layout, buttonCount, density);
+        button.setText(buttonText);
+
+        if(color.equals("yellow"))
+        {
+            button.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.YELLOW));
+        }
+        else if(color.equals("green"))
+        {
+            button.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.GREEN));
+        }
+        else if(color.equals("red"))
+        {
+            button.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.RED));
+        }
+
+        return button;
     }
 }

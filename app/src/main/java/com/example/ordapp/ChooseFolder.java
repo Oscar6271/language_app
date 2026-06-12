@@ -1,6 +1,7 @@
 package com.example.ordapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -107,17 +108,15 @@ public class ChooseFolder extends AppCompatActivity {
     private void displayFolders()
     {
         File[] files = getFilesDir().listFiles();
+        SharedPreferences prefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
 
         for(File file : files) {
             if(file.isDirectory()) {
-                Button choose = new Button(this);
-                choose.setText(file.getName());
-
-                Library.addView(choose, density, layout, 150);
-                Library.addConstraintSet(choose, 0, layout, buttonCount, density);
+                String folderName = file.getName();
+                Button folderButton = Library.createButton(prefs, folderName, this, density, layout, 150, buttonCount, folderName);
                 buttonCount++;
 
-                choose.setOnClickListener(view -> {
+                folderButton.setOnClickListener(view -> {
                     Intent intent = new Intent(ChooseFolder.this, SelectFile.class);
                     intent.putExtra("FOLDER_NAME", file.getName());
                     startActivity(intent);

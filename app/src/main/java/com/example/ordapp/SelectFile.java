@@ -26,38 +26,15 @@ public class SelectFile extends AppCompatActivity {
     private String folder;
     float density;
 
-    private void createButtons(File file) {
-
-        // 1. Skapa huvudknapp
-        Button choose = new Button(this);
+    private void createButtons(File file, SharedPreferences prefs) {
         String fileName = file.getName();
         String fileNameWOextension = fileName.substring(0, fileName.length() - 4);
-        choose.setText(fileNameWOextension);
 
-        Library.addView(choose, density, layout, 180);
-        Library.addConstraintSet(choose, 0, layout, buttonCount, density);
-
-        SharedPreferences prefs = getSharedPreferences("app", MODE_PRIVATE);
-        String color = prefs.getString(fileNameWOextension, "");
-        if(color.equals("yellow"))
-        {
-            choose.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.YELLOW));
-        }
-        else if(color.equals("green"))
-        {
-            choose.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.GREEN));
-        }
-        else if(color.equals("red"))
-        {
-            choose.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.RED));
-        }
+        Button button = Library.createButton(prefs, fileNameWOextension, this, density, layout, 180, buttonCount, fileNameWOextension);
 
         buttonCount++;
 
-        choose.setOnClickListener(view -> {
+        button.setOnClickListener(view -> {
             Intent ChooseFileModeIntent = new Intent(SelectFile.this, ChooseFileMode.class);
             ChooseFileModeIntent.putExtra("FILE_NAME", fileName);
             ChooseFileModeIntent.putExtra("FOLDER_NAME", getIntent().getStringExtra("FOLDER_NAME"));
@@ -72,10 +49,11 @@ public class SelectFile extends AppCompatActivity {
 
         File folder = new File(getFilesDir(), folderName);
         File[] files = folder.listFiles();
+        SharedPreferences prefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
 
         for (File file : files) {
             if (file.isFile() && !file.getName().equals("profileInstalled")) {
-                createButtons(file);
+                createButtons(file, prefs);
             }
         }
     }
