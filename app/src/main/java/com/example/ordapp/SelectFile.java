@@ -23,12 +23,12 @@ import java.io.File;
 public class SelectFile extends AppCompatActivity {
     private ConstraintLayout layout;  // Huvud-ConstraintLayout inuti ScrollView
     private int buttonCount = 0;     // För att positionera knappar vertikalt
-    private String folder;
+    private String folder, fileNameWOextension;
     float density;
 
     private void createButtons(File file, SharedPreferences prefs) {
         String fileName = file.getName();
-        String fileNameWOextension = fileName.substring(0, fileName.length() - 4);
+        fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 
         Button button = Library.createButton(prefs, fileNameWOextension, this, density, layout, 180, buttonCount, fileNameWOextension);
 
@@ -49,13 +49,19 @@ public class SelectFile extends AppCompatActivity {
 
         File folder = new File(getFilesDir(), folderName);
         File[] files = folder.listFiles();
-        SharedPreferences prefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
-
+        SharedPreferences currentPrefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
+        int currentValue = 0;
+        int maxValue = 0;
         for (File file : files) {
             if (file.isFile() && !file.getName().equals("profileInstalled")) {
-                createButtons(file, prefs);
+                createButtons(file, currentPrefs);
+                maxValue += 3;
+                currentValue += Library.evauluatePref(currentPrefs, fileNameWOextension);
             }
         }
+
+        SharedPreferences prefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+        Library.setNextColor(currentValue, maxValue, prefs, folderName);
     }
 
     private void deleteAlert(String folderName)
@@ -142,6 +148,8 @@ public class SelectFile extends AppCompatActivity {
 
         buttonCount++;
         createDropDowns();
+
+        getSupportActionBar().setTitle("Choose file from " + folder);
     }
 
     @Override

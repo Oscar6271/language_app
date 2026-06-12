@@ -83,24 +83,12 @@ public class Practice extends AppCompatActivity {
             if(!running)
             {
                 SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
-                String button = intent.getStringExtra("LANGUAGE");;
+                String button = intent.getStringExtra("LANGUAGE");
+                String file = intent.getStringExtra("FILE_NAME");
+                String key = file + "_" + button;
 
-                if((double) totalCorrect / totalWords >= 0.5 && (double) totalCorrect / totalWords < 1)
-                {
-                    // gul knapp
-                    prefs.edit().putString(button, "yellow").apply();
-                }
-                else if((double) totalCorrect / totalWords == 1)
-                {
-                    // grön knapp
-                    prefs.edit().putString(button, "green").apply();
-                }
-                else
-                {
-                    // röd knapp
-                    prefs.edit().putString(button, "red").apply();
-                }
-                Log.d("PRACTICE", "" + (double) totalCorrect / totalWords);
+                Library.setNextColor(totalCorrect, totalWords, prefs, key);
+                
                 finish();
             }
 

@@ -49,6 +49,7 @@ public class ChooseFolder extends AppCompatActivity {
         }
         Library.createSummaryFile(getFilesDir(), folderName);
     }
+
     private final ActivityResultLauncher<Uri> importFolderLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.OpenDocumentTree(),
@@ -115,7 +116,6 @@ public class ChooseFolder extends AppCompatActivity {
                 String folderName = file.getName();
                 Button folderButton = Library.createButton(prefs, folderName, this, density, layout, 150, buttonCount, folderName);
                 buttonCount++;
-
                 folderButton.setOnClickListener(view -> {
                     Intent intent = new Intent(ChooseFolder.this, SelectFile.class);
                     intent.putExtra("FOLDER_NAME", file.getName());

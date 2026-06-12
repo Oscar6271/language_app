@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +26,10 @@ public final class Library {
     public static native String pickWord();
     public static native String compare(String userInput);
     public static native int checkEmpty();
+
+    public static final int GREEN = 3;
+    public static final int YELLOW = 2;
+    public static final int RED = 1;
 
     public static void createSummaryFile(File FilesDir, String folderName)
     {
@@ -149,12 +154,14 @@ public final class Library {
 
     public static Button createButton(SharedPreferences prefs, String prefKey, Context context, float density, ConstraintLayout layout, int size, int buttonCount, String buttonText)
     {
-        String color = prefs.getString(prefKey, "");
 
         Button button = new Button(context);
         addView(button, density, layout, size);
         addConstraintSet(button, 0, layout, buttonCount, density);
         button.setText(buttonText);
+
+        String color = prefs.getString(prefKey, "");
+        Log.d("createButton", "" + color);
 
         if(color.equals("yellow"))
         {
@@ -173,5 +180,46 @@ public final class Library {
         }
 
         return button;
+    }
+
+    public static int evauluatePref(SharedPreferences prefs, String prefKey)
+    {
+        String color = prefs.getString(prefKey, "");
+
+        if(color.equals("yellow"))
+        {
+            return YELLOW;
+        }
+        else if(color.equals("green"))
+        {
+            return GREEN;
+        }
+        else if(color.equals("red"))
+        {
+            return RED;
+        }
+
+        return 0;
+    }
+
+    public static void setNextColor(int currentValue, int maxValue, SharedPreferences nextPref, String nextPrefKey)
+    {
+        double ratio = (double) currentValue / maxValue;
+
+        String color = "";
+        if(ratio >= 0.5 && ratio < 1)
+        {
+            color = "yellow";
+        }
+        else if(ratio == 1)
+        {
+            color = "green";
+        }
+        else if(ratio < 0.5 && ratio >= 0.0)
+        {
+            color = "red";
+        }
+
+        nextPref.edit().putString(nextPrefKey, color).apply();
     }
 }

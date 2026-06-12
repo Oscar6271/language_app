@@ -22,48 +22,74 @@ import java.io.File;
 
 public class ChooseFileMode extends AppCompatActivity {
 
+    Button Translation, Original, EditWordset, DeleteWordset;
+    ConstraintLayout layout;
+    String fileNameWOextension;
     static {
         System.loadLibrary("ordapp");
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ActivityChooseFileModeBinding binding = ActivityChooseFileModeBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        ConstraintLayout layout = findViewById(R.id.main);
-
-        Intent intent = getIntent();
-        String folder = intent.getStringExtra("FOLDER_NAME");
-        String fileName = intent.getStringExtra("FILE_NAME");
-        String fileNameWOextension = fileName.substring(0, fileName.length() - 4);
-
-        String filePath = new File(getFilesDir(), folder + "/" + fileName).getAbsolutePath();
-        String filePathWOextension = filePath.substring(0, filePath.length() - 4);
-
+    private void createButtons()
+    {
         SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
 
         float density = getResources().getDisplayMetrics().density;
         int buttonCount = 0, buttonSize = 180;
 
-        Button Translation = Library.createButton(prefs, "translation", this, density, layout, buttonSize, buttonCount, "Practice translation");
+        Translation = Library.createButton(prefs, fileNameWOextension + "_translation", this, density, layout, buttonSize, buttonCount, "Practice translation");
         buttonCount++;
 
-        Button Original = Library.createButton(prefs, "original", this, density, layout, buttonSize, buttonCount, "Practice original");
+        Original = Library.createButton(prefs, fileNameWOextension + "_original", this, density, layout, buttonSize, buttonCount, "Practice original");
         buttonCount++;
 
-
-        Button EditWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Edit wordset");
+        EditWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Edit wordset");
         buttonCount++;
 
-        Button DeleteWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Delete wordset");
-        buttonCount++;
+        DeleteWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Delete wordset");
+    }
+
+    private void setPreference()
+    {
+        SharedPreferences currentPrefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+
+        int translationColor = Library.evauluatePref(currentPrefs, fileNameWOextension + "_translation");
+        int originalColor = Library.evauluatePref(currentPrefs, fileNameWOextension + "_original");
+
+        if(translationColor == Library.RED && originalColor == Library.GREEN)
+        {
+            originalColor = Library.YELLOW;
+        }
+        else if(originalColor == Library.RED && translationColor == Library.GREEN)
+        {
+            translationColor = Library.YELLOW;
+        }
+
+        int maxValue = 6;
+        int currentValue = translationColor + originalColor;
+
+        SharedPreferences prefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
+        Library.setNextColor(currentValue, maxValue, prefs, fileNameWOextension);
+    }
+
+    private void createUI()
+    {
+        Intent intent = getIntent();
+        String folder = intent.getStringExtra("FOLDER_NAME");
+        String fileName = intent.getStringExtra("FILE_NAME");
+        fileNameWOextension = fileName.substring(0, fileName.length() - 4);
+
+        String filePath = new File(getFilesDir(), folder + "/" + fileName).getAbsolutePath();
+        String filePathWOextension = filePath.substring(0, filePath.length() - 4);
+
+        createButtons();
+
+        setPreference();
 
         Translation.setOnClickListener(view -> {
             Intent practiceTranslationIntent = new Intent(ChooseFileMode.this, Practice.class);
             practiceTranslationIntent.putExtra("FILE_PATH", filePathWOextension);
             practiceTranslationIntent.putExtra("LANGUAGE", "translation");
+            practiceTranslationIntent.putExtra("FILE_NAME", fileNameWOextension);
             startActivity(practiceTranslationIntent);
         });
 
@@ -71,6 +97,7 @@ public class ChooseFileMode extends AppCompatActivity {
             Intent pracitceOriginalIntent = new Intent(ChooseFileMode.this, Practice.class);
             pracitceOriginalIntent.putExtra("FILE_PATH", filePathWOextension);
             pracitceOriginalIntent.putExtra("LANGUAGE", "original");
+            pracitceOriginalIntent.putExtra("FILE_NAME", fileNameWOextension);
             startActivity(pracitceOriginalIntent);
         });
 
@@ -97,5 +124,28 @@ public class ChooseFileMode extends AppCompatActivity {
                     })
                     .show();
         });
+
+        String pathName = folder + "/" + fileName;
+        String pathNameWOextension = pathName.substring(0, pathName.length() - 4);
+        getSupportActionBar().setTitle("Choose action in " + pathNameWOextension);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ActivityChooseFileModeBinding binding = ActivityChooseFileModeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        layout = findViewById(R.id.main);
+
+        createUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        layout.removeAllViews();
+
+        createUI();
     }
 }
