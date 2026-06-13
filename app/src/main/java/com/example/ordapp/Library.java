@@ -236,4 +236,40 @@ public final class Library {
     {
         return prefs.getString(prefKey, "");
     }
+
+    public static void gotoNextColor(SharedPreferences prefs, String prefKey)
+    {
+        String color = prefs.getString(prefKey, "");
+
+        if(color.equals("green"))
+        {
+            return;
+        }
+
+        if(color.equals("yellow"))
+        {
+            setColor(prefs, prefKey, "green");
+        }
+        else if(color.equals("red"))
+        {
+            setColor(prefs, prefKey, "yellow");
+        }
+    }
+
+    public static void setPracticeColor(int totalCorrect, int totalWords, SharedPreferences prefs, String prefKey)
+    {
+        double ratio = (double) totalCorrect / totalWords;
+        if(ratio == 1)
+        {
+            Library.gotoNextColor(prefs, prefKey);
+        }
+        else if(ratio > 0.5 && ratio < 1 && Library.getColor(prefs, prefKey).equals("green"))
+        {
+            Library.setColor(prefs, prefKey, "yellow");
+        }
+        else if(ratio <= 0.5)
+        {
+            Library.setColor(prefs, prefKey, "red");
+        }
+    }
 }

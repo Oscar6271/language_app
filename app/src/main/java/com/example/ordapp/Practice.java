@@ -87,8 +87,7 @@ public class Practice extends AppCompatActivity {
                 String file = intent.getStringExtra("FILE_NAME");
                 String key = file + "_" + button;
 
-                Library.setNextColor(totalCorrect, totalWords, prefs, key);
-                
+                Library.setPracticeColor(totalCorrect, totalWords, prefs, key);
                 finish();
             }
 

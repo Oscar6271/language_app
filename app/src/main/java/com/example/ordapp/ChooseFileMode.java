@@ -64,7 +64,7 @@ public class ChooseFileMode extends AppCompatActivity {
             translationColor = Library.YELLOW;
         }
 
-        int maxValue = 6;
+        int maxValue = 2 * Library.GREEN;
         int currentValue = translationColor + originalColor;
 
         SharedPreferences prefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
