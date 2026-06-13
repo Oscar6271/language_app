@@ -239,7 +239,8 @@ public final class Library {
 
     public static void gotoNextColor(SharedPreferences prefs, String prefKey)
     {
-        String color = prefs.getString(prefKey, "");
+        // om knappen inte har en färg, default till röd och sätt den sen till gul
+        String color = prefs.getString(prefKey, "red");
 
         if(color.equals("green"))
         {
