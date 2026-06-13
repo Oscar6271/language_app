@@ -106,7 +106,7 @@ public class Practice extends AppCompatActivity {
                 ResponseTextBox.setText(response);
                 hasBeenCorrected = true;
                 compareButtonVariable.setText("Next word");
-                if(first_time && response.equals("Correct!"))
+                if(first_time && response.startsWith("Correct!"))
                 {
                     totalCorrect++;
                 }

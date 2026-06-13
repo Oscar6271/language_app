@@ -116,6 +116,18 @@ int readFile(string const& fileName, string const& write_in_swedish)
     return phrases_list.size();
 }
 
+string printAlternatives(vector<string> answers)
+{
+    string alternatives{};
+    for(string answer : answers)
+    {
+        alternatives += answer + " and ";
+    }
+
+    // tar bort det sista " and "
+    return alternatives.substr(0, alternatives.size() - 5);
+}
+
 // skickar true om svaret var rätt, false om det var fel
 // tar även bort ordet om det var rätt svaret och lägger till i wrong containers om man
 // svarade fel
@@ -144,7 +156,7 @@ string compare(string userInput)
         string explanation = ignore_explanation(answer);
         if(userInput == answer || userInput == explanation)
         {
-            return "Correct!";
+            return "Correct! " + phrase + " means " + printAlternatives(answers);
         }
     }
 
