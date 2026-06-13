@@ -180,10 +180,10 @@ public class ChooseFolder extends AppCompatActivity {
                     LocalDate today = LocalDate.now();
                     int day = today.getDayOfWeek().getValue();
                     int week = today.get(WeekFields.ISO.weekOfWeekBasedYear());
-                    
+
                     SharedPreferences CompletedPrefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
                     CompletedPrefs.edit().putInt(folder + "_LAST_COMPLETED_WEEK", week).apply();
-                    CompletedPrefs.edit().putInt(folder + "_LAST_COMPLETED_DAY", day).apply();}
+                    CompletedPrefs.edit().putInt(folder + "_LAST_COMPLETED_DAY", day).apply();
                 }
             }
         }
