@@ -118,6 +118,7 @@ public class Practice extends AppCompatActivity {
                 infoTextBox.setText("Wordset completed!");
                 running = false;
                 compareButtonVariable.setText("Practice other sets");
+                ResponseTextBox.setText("You got " + totalCorrect + "/" + totalWords + " correct. That is " + (double) (totalCorrect / totalWords) * 100 + "%");
                 set_text();
             }
             else if(status == FIRST_TIME_DONE)
