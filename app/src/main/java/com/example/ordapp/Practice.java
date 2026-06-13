@@ -97,9 +97,12 @@ public class Practice extends AppCompatActivity {
                     {
                         otherButton = "original";
                     }
-
                     String otherKey = file + "_" + otherButton;
-                    Library.setColor(prefs, otherKey, "yellow");
+
+                    if(Library.getColor(prefs, otherKey).equals("green"))
+                    {
+                        Library.setColor(prefs, otherKey, "yellow");
+                    }
                 }
                 finish();
             }
