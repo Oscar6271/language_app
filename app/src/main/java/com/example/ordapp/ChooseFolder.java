@@ -50,14 +50,14 @@ public class ChooseFolder extends AppCompatActivity {
         int lastCompletedDay = prefs.getInt(prefsKey + "_LAST_COMPLETED_DAY", 0);
         LocalDate today = LocalDate.now();
         int day = today.getDayOfWeek().getValue();
+
+        int difference = Math.abs(lastCompletedWeek - currentWeek);
         // Det har gått mindre än 1 vecka, t.ex man har
         // klarat mappen på söndag och det är måndag nu
-        if(lastCompletedDay - day < 0)
+        if(lastCompletedDay - day < 0 && difference <= 1)
         {
             return;
         }
-
-        int difference = Math.abs(lastCompletedWeek - currentWeek);
 
         if(difference == 1)
         {
