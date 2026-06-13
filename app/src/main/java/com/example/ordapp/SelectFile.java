@@ -2,8 +2,6 @@ package com.example.ordapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +20,7 @@ import java.io.File;
 
 public class SelectFile extends AppCompatActivity {
     private ConstraintLayout layout;  // Huvud-ConstraintLayout inuti ScrollView
-    private int buttonCount = 0;     // För att positionera knappar vertikalt
+    private int buttonCount = 0, lastCompletedWeek;     // För att positionera knappar vertikalt
     private String folder, fileNameWOextension;
     float density;
 
@@ -31,7 +29,6 @@ public class SelectFile extends AppCompatActivity {
         fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 
         Button button = Library.createButton(prefs, fileNameWOextension, this, density, layout, 180, buttonCount, fileNameWOextension);
-
         buttonCount++;
 
         button.setOnClickListener(view -> {
@@ -43,7 +40,6 @@ public class SelectFile extends AppCompatActivity {
     }
 
     private void createDropDowns() {
-        Log.d("FILES", "finding files");
         Intent intent = getIntent();
         String folderName = intent.getStringExtra("FOLDER_NAME");
 

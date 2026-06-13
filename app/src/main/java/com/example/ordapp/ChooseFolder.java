@@ -16,6 +16,8 @@ import androidx.documentfile.provider.DocumentFile;
 import com.example.ordapp.databinding.ActivityChooseFolderBinding;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 
 public class ChooseFolder extends AppCompatActivity {
 
@@ -23,6 +25,54 @@ public class ChooseFolder extends AppCompatActivity {
     int buttonCount = 0;
     ConstraintLayout layout;
     String folderName;
+
+    private void setAllFilesColor(String folder, String color)
+    {
+        File folderFile = new File(getFilesDir(), folder);
+        File[] files = folderFile.listFiles();
+        SharedPreferences prefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
+        SharedPreferences FileButtonPrefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+
+        for (File file : files) {
+            if (file.isFile() && !file.getName().equals("profileInstalled")) {
+                String fileName = file.getName();
+                String fileNameWOextension = fileName.substring(0, fileName.length() - 4);
+
+                Library.setColor(prefs, fileNameWOextension, color);
+                Library.setColor(FileButtonPrefs, fileNameWOextension + "_translation", color);
+                Library.setColor(FileButtonPrefs, fileNameWOextension + "_original", color);}
+        }
+    }
+    private void resetColor(SharedPreferences prefs, String prefsKey)
+    {
+        int currentWeek = 1;
+        int lastCompletedWeek = prefs.getInt(prefsKey + "_LAST_COMPLETED_WEEK", 0);
+        int lastCompletedDay = prefs.getInt(prefsKey + "_LAST_COMPLETED_DAY", 0);
+        LocalDate today = LocalDate.now();
+        int day = today.getDayOfWeek().getValue();
+        // Det har gått mindre än 1 vecka, t.ex man har
+        // klarat mappen på söndag och det är måndag nu
+        if(lastCompletedDay - day < 0)
+        {
+            return;
+        }
+
+        int difference = Math.abs(lastCompletedWeek - currentWeek);
+
+        if(difference == 1)
+        {
+            // ändrar färg på mappen
+            Library.setColor(prefs, prefsKey, "yellow");
+
+            // ändra färg för alla filer
+            setAllFilesColor(prefsKey, "yellow");
+        }
+        else if(difference >= 2)
+        {
+            Library.setColor(prefs, prefsKey, "red");
+            setAllFilesColor(prefsKey, "red");
+        }
+    }
 
     private void importFolder(Uri treeUri)
     {
@@ -113,14 +163,28 @@ public class ChooseFolder extends AppCompatActivity {
 
         for(File file : files) {
             if(file.isDirectory()) {
-                String folderName = file.getName();
-                Button folderButton = Library.createButton(prefs, folderName, this, density, layout, 150, buttonCount, folderName);
+                String folder = file.getName();
+
+                Button folderButton = Library.createButton(prefs, folder, this, density, layout, 150, buttonCount, folder);
+                resetColor(prefs, folder);
                 buttonCount++;
+
                 folderButton.setOnClickListener(view -> {
                     Intent intent = new Intent(ChooseFolder.this, SelectFile.class);
                     intent.putExtra("FOLDER_NAME", file.getName());
                     startActivity(intent);
                 });
+
+                if(Library.getColor(prefs, folder).equals("green"))
+                {
+                    LocalDate today = LocalDate.now();
+                    int day = today.getDayOfWeek().getValue();
+                    int week = today.get(WeekFields.ISO.weekOfWeekBasedYear());
+                    
+                    SharedPreferences CompletedPrefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
+                    CompletedPrefs.edit().putInt(folder + "_LAST_COMPLETED_WEEK", week).apply();
+                    CompletedPrefs.edit().putInt(folder + "_LAST_COMPLETED_DAY", day).apply();}
+                }
             }
         }
     }

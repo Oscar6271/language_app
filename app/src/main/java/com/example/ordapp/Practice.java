@@ -124,6 +124,7 @@ public class Practice extends AppCompatActivity {
             else if(status == FIRST_TIME_DONE)
             {
                 first_time = false;
+                infoTextBox.setText("Redo your mistakes");
             }
         });
     }

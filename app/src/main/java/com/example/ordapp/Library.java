@@ -154,30 +154,13 @@ public final class Library {
 
     public static Button createButton(SharedPreferences prefs, String prefKey, Context context, float density, ConstraintLayout layout, int size, int buttonCount, String buttonText)
     {
-
         Button button = new Button(context);
         addView(button, density, layout, size);
         addConstraintSet(button, 0, layout, buttonCount, density);
         button.setText(buttonText);
+        button.setTextColor(Color.BLACK);
 
-        String color = prefs.getString(prefKey, "");
-        Log.d("createButton", "" + color);
-
-        if(color.equals("yellow"))
-        {
-            button.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.YELLOW));
-        }
-        else if(color.equals("green"))
-        {
-            button.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.GREEN));
-        }
-        else if(color.equals("red"))
-        {
-            button.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.RED));
-        }
+        readPref(prefs, prefKey, button);
 
         return button;
     }
@@ -221,5 +204,36 @@ public final class Library {
         }
 
         nextPref.edit().putString(nextPrefKey, color).apply();
+    }
+
+    public static void setColor(SharedPreferences prefs, String prefsKey, String color)
+    {
+        prefs.edit().putString(prefsKey, color).apply();
+    }
+
+    public static void readPref(SharedPreferences prefs, String prefKey, Button button)
+    {
+        String color = prefs.getString(prefKey, "");
+
+        if(color.equals("yellow"))
+        {
+            button.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.YELLOW));
+        }
+        else if(color.equals("green"))
+        {
+            button.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.GREEN));
+        }
+        else if(color.equals("red"))
+        {
+            button.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.RED));
+        }
+    }
+
+    public static String getColor(SharedPreferences prefs, String prefKey)
+    {
+        return prefs.getString(prefKey, "");
     }
 }
