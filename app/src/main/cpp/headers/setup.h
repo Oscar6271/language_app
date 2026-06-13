@@ -31,3 +31,5 @@ void writeToFile(std::string const& fileName,
                  std::string const& contentToWrite, bool append);
 
 std::string printFile(std::string const& fileName);
+
+int check_size();

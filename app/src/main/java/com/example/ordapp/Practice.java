@@ -26,12 +26,10 @@ public class Practice extends AppCompatActivity {
     private String wordToTranslate;
 
     private boolean hasBeenCorrected = false, running = true, first_time = true;
-    int totalWords, totalCorrect;
+    int totalWords, totalCorrect, totalAnswered, redoAnswered, redoSize;
     Intent intent;
-    public static final int EMPTY = 0;
-    public static final int NOT_EMPTY = 1;
-    public static final int FIRST_TIME_DONE = 2;
-    private TextView ResponseTextBox, infoTextBox;
+    public static final int EMPTY = 0, FIRST_TIME_DONE = 2;
+    private TextView ResponseTextBox, infoTextBox, totalAnsweredBox;
     static {
         System.loadLibrary("ordapp");
     }
@@ -41,7 +39,6 @@ public class Practice extends AppCompatActivity {
         intent = getIntent();
         String filePath = intent.getStringExtra("FILE_PATH");
         String language_to_write_in = intent.getStringExtra("LANGUAGE");
-        Log.d("FILE PATH", filePath);
 
         totalWords = Library.readFile(filePath, language_to_write_in);
         wordToTranslate = Library.pickWord();
@@ -61,6 +58,8 @@ public class Practice extends AppCompatActivity {
         ResponseTextBox.setText("");
         infoTextBox = (TextView) findViewById(R.id.infoText);
         compareButtonVariable = (Button)findViewById(R.id.compareButton);
+        totalAnsweredBox = (TextView)findViewById(R.id.totalAnsweredText);
+        totalAnsweredBox.setText("");
     }
 
     @Override
@@ -77,6 +76,9 @@ public class Practice extends AppCompatActivity {
         set_text();
 
         totalCorrect = 0;
+        totalAnswered = 0;
+        redoAnswered = 0;
+        redoSize = 0;
 
         binding.compareButton.setOnClickListener(view -> {
 
@@ -88,6 +90,17 @@ public class Practice extends AppCompatActivity {
                 String key = file + "_" + button;
 
                 Library.setPracticeColor(totalCorrect, totalWords, prefs, key);
+                if(Library.getColor(prefs, key).equals("red"))
+                {
+                    String otherButton = "translation";
+                    if(button.equals("translation"))
+                    {
+                        otherButton = "original";
+                    }
+
+                    String otherKey = file + "_" + otherButton;
+                    Library.setColor(prefs, otherKey, "yellow");
+                }
                 finish();
             }
 
@@ -110,6 +123,18 @@ public class Practice extends AppCompatActivity {
                 {
                     totalCorrect++;
                 }
+
+                totalAnswered++;
+                if(first_time)
+                {
+                    double percentage = ((double) totalAnswered / totalWords) * 100;
+                    totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + totalWords + String.format(" (%.1f%%)", percentage));
+                }
+                else
+                {
+                    double percentage = ((double) totalAnswered / redoSize) * 100;
+                    totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + redoSize + String.format(" (%.1f%%)", percentage));
+                }
             }
 
             int status = Library.checkEmpty();
@@ -118,13 +143,24 @@ public class Practice extends AppCompatActivity {
                 infoTextBox.setText("Wordset completed!");
                 running = false;
                 compareButtonVariable.setText("Practice other sets");
-                ResponseTextBox.setText("You got " + totalCorrect + "/" + totalWords + " correct. That is " + (double) (totalCorrect / totalWords) * 100 + "%");
+
+                double percentage = (((double) totalCorrect / totalWords)) * 100;
+                ResponseTextBox.setText("You got " + totalCorrect + "/" + totalWords + " correct. That is " + String.format(" (%.1f%%)", percentage));
+                if(Library.checkSize() == 0)
+                {
+                    totalAnsweredBox.setText("");
+                }
                 set_text();
             }
             else if(status == FIRST_TIME_DONE)
             {
                 first_time = false;
                 infoTextBox.setText("Redo your mistakes");
+                totalAnswered = 0;
+                redoSize = Library.checkSize();
+
+                double percentage = ((double) totalAnswered / redoSize) * 100;
+                totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + redoSize + String.format(" (%.1f%%)", percentage));
             }
         });
     }

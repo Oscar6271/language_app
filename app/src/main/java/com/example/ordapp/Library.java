@@ -26,6 +26,7 @@ public final class Library {
     public static native String pickWord();
     public static native String compare(String userInput);
     public static native int checkEmpty();
+    public static native int checkSize();
 
     public static final int GREEN = 3;
     public static final int YELLOW = 2;

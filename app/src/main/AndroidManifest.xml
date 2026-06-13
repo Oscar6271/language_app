@@ -15,23 +15,28 @@
         <activity
             android:name=".ChooseFileMode"
             android:exported="false"
-            android:label="Choose action" />
+            android:label="Choose action"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SelectFile"
             android:exported="false"
-            android:label="Choose File" />
+            android:label="Choose File"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SimpleInput"
             android:exported="false"
-            android:label="Edit files" />
+            android:label="Edit files"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Practice"
             android:exported="false"
-            android:label="Practice wordset" />
+            android:label="Practice wordset"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ChooseFolder"
             android:exported="true"
-            android:label="Word app">
+            android:label="Word app"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

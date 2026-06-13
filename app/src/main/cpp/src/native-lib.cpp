@@ -91,3 +91,10 @@ Java_com_example_ordapp_Library_checkEmpty(
         jobject) {
     return check_empty();
 }
+
+extern "C" JNIEXPORT int JNICALL
+Java_com_example_ordapp_Library_checkSize(
+        JNIEnv* env,
+        jobject) {
+    return check_size();
+}

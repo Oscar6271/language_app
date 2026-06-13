@@ -243,3 +243,8 @@ string printFile(string const& fileName)
 
     return result;
 }
+
+int check_size()
+{
+    return phrases_list.size();
+}
