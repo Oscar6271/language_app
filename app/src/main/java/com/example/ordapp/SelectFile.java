@@ -28,7 +28,7 @@ public class SelectFile extends AppCompatActivity {
         String fileName = file.getName();
         fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 
-        Button button = Library.createButton(prefs, fileNameWOextension, this, density, layout, 180, buttonCount, fileNameWOextension);
+        Button button = Library.createButton(prefs, fileNameWOextension, this, density, layout, 180, buttonCount, fileNameWOextension, true);
         buttonCount++;
 
         button.setOnClickListener(view -> {
@@ -51,7 +51,7 @@ public class SelectFile extends AppCompatActivity {
         for (File file : files) {
             if (file.isFile() && !file.getName().equals("profileInstalled")) {
                 createButtons(file, currentPrefs);
-                maxValue += 3;
+                maxValue += Library.GREEN;
                 currentValue += Library.evauluatePref(currentPrefs, fileNameWOextension);
             }
         }
@@ -110,8 +110,6 @@ public class SelectFile extends AppCompatActivity {
                                 Library.importFile(file, new File(getFilesDir(), folder), this);
                             }
                         }
-                        Library.createSummaryFile(getFilesDir(), folder);
-
                     }
             );
     private void createUI()

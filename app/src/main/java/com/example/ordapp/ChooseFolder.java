@@ -97,7 +97,6 @@ public class ChooseFolder extends AppCompatActivity {
                 Library.importFile(file, targetFolder, this);
             }
         }
-        Library.createSummaryFile(getFilesDir(), folderName);
     }
 
     private final ActivityResultLauncher<Uri> importFolderLauncher =
@@ -165,7 +164,7 @@ public class ChooseFolder extends AppCompatActivity {
             if(file.isDirectory()) {
                 String folder = file.getName();
 
-                Button folderButton = Library.createButton(prefs, folder, this, density, layout, 150, buttonCount, folder);
+                Button folderButton = Library.createButton(prefs, folder, this, density, layout, 150, buttonCount, folder, true);
                 resetColor(prefs, folder);
                 buttonCount++;
 

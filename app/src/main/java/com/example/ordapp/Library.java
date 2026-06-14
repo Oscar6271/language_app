@@ -28,9 +28,7 @@ public final class Library {
     public static native int checkEmpty();
     public static native int checkSize();
 
-    public static final int GREEN = 3;
-    public static final int YELLOW = 2;
-    public static final int RED = 1;
+    public static final int GREEN = 3, YELLOW = 2, RED = 1, UNASSIGNED = 0;
 
     public static void createSummaryFile(File FilesDir, String folderName)
     {
@@ -132,13 +130,15 @@ public final class Library {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Library.createSummaryFile(context.getFilesDir(), targetFolder.getName());
     }
 
     public static void DeleteFile(File file)
     {
         // Kontrollera om filen finns och ta bort den
         if(file.exists()){
-            boolean deleted = file.delete();
+            file.delete();
         }
     }
 
@@ -153,7 +153,7 @@ public final class Library {
         return button;
     }
 
-    public static Button createButton(SharedPreferences prefs, String prefKey, Context context, float density, ConstraintLayout layout, int size, int buttonCount, String buttonText)
+    public static Button createButton(SharedPreferences prefs, String prefKey, Context context, float density, ConstraintLayout layout, int size, int buttonCount, String buttonText, boolean setColor)
     {
         Button button = new Button(context);
         addView(button, density, layout, size);
@@ -161,7 +161,10 @@ public final class Library {
         button.setText(buttonText);
         button.setTextColor(Color.BLACK);
 
-        readPref(prefs, prefKey, button);
+        if(setColor)
+        {
+            readPref(prefs, prefKey, button);
+        }
 
         return button;
     }
@@ -183,7 +186,7 @@ public final class Library {
             return RED;
         }
 
-        return 0;
+        return UNASSIGNED;
     }
 
     public static void setNextColor(int currentValue, int maxValue, SharedPreferences nextPref, String nextPrefKey)
