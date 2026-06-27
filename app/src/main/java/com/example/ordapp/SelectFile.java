@@ -16,6 +16,7 @@ import androidx.documentfile.provider.DocumentFile;
 import com.example.ordapp.databinding.ActivitySelectFileBinding;
 
 import java.io.File;
+import java.time.LocalDate;
 
 
 public class SelectFile extends AppCompatActivity {
@@ -23,6 +24,8 @@ public class SelectFile extends AppCompatActivity {
     private int buttonCount = 0, lastCompletedWeek;     // För att positionera knappar vertikalt
     private String folder, fileNameWOextension;
     float density;
+    boolean wasGreen;
+    Intent intent;
 
     private void createButtons(File file, SharedPreferences prefs) {
         String fileName = file.getName();
@@ -40,7 +43,6 @@ public class SelectFile extends AppCompatActivity {
     }
 
     private void createDropDowns() {
-        Intent intent = getIntent();
         String folderName = intent.getStringExtra("FOLDER_NAME");
 
         File folder = new File(getFilesDir(), folderName);
@@ -146,16 +148,53 @@ public class SelectFile extends AppCompatActivity {
         getSupportActionBar().setTitle("Choose file from " + folder);
     }
 
+    private boolean isAllFilesGreen()
+    {
+        String folderName = intent.getStringExtra("FOLDER_NAME");
+
+        File folder = new File(getFilesDir(), folderName);
+        File[] files = folder.listFiles();
+
+        if(files == null)
+        {
+            return false;
+        }
+
+        SharedPreferences currentPrefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
+        for (File file : files) {
+            if (file.isFile() && !file.getName().equals("profileInstalled")) {
+                String fileName = file.getName();
+                fileNameWOextension = fileName.substring(0, fileName.length() - 4);
+
+                if(Library.evauluatePref(currentPrefs, fileNameWOextension) != Library.GREEN) {
+                     return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void saveDate()
+    {
+        SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+        LocalDate today = LocalDate.now();
+
+        CompletedPrefs.edit()
+                .putString(folder + "_LAST_COMPLETED_DATE", today.toString())
+                .apply();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivitySelectFileBinding binding = ActivitySelectFileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        intent = getIntent();
 
         // ScrollView finns i XML, ConstraintLayout som child
         layout = findViewById(R.id.main);
         createUI();
-
+        wasGreen = isAllFilesGreen();
     }
 
     @Override
@@ -165,5 +204,11 @@ public class SelectFile extends AppCompatActivity {
         buttonCount = 0;
 
         createUI();
+
+        boolean isGreen = isAllFilesGreen();
+        if(!wasGreen && isGreen) {
+            saveDate();
+        }
+        wasGreen = isGreen;
     }
 }
