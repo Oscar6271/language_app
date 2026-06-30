@@ -21,7 +21,7 @@ import java.time.LocalDate;
 
 public class SelectFile extends AppCompatActivity {
     private ConstraintLayout layout;  // Huvud-ConstraintLayout inuti ScrollView
-    private int buttonCount = 0, lastCompletedWeek;     // För att positionera knappar vertikalt
+    private int buttonCount = 0;     // För att positionera knappar vertikalt
     private String folder, fileNameWOextension;
     float density;
     boolean wasGreen;
