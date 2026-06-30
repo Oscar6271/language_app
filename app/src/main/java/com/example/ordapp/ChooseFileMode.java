@@ -85,20 +85,19 @@ public class ChooseFileMode extends AppCompatActivity {
 
         setPreference();
 
+        Intent practiceIntent = new Intent(ChooseFileMode.this, Practice.class);
+        practiceIntent.putExtra("FILE_PATH", filePathWOextension);
+        practiceIntent.putExtra("FILE_NAME", fileNameWOextension);
+        practiceIntent.putExtra("FOLDER", folder);
+
         Translation.setOnClickListener(view -> {
-            Intent practiceTranslationIntent = new Intent(ChooseFileMode.this, Practice.class);
-            practiceTranslationIntent.putExtra("FILE_PATH", filePathWOextension);
-            practiceTranslationIntent.putExtra("LANGUAGE", "translation");
-            practiceTranslationIntent.putExtra("FILE_NAME", fileNameWOextension);
-            startActivity(practiceTranslationIntent);
+            practiceIntent.putExtra("LANGUAGE", "translation");
+            startActivity(practiceIntent);
         });
 
         Original.setOnClickListener(view -> {
-            Intent pracitceOriginalIntent = new Intent(ChooseFileMode.this, Practice.class);
-            pracitceOriginalIntent.putExtra("FILE_PATH", filePathWOextension);
-            pracitceOriginalIntent.putExtra("LANGUAGE", "original");
-            pracitceOriginalIntent.putExtra("FILE_NAME", fileNameWOextension);
-            startActivity(pracitceOriginalIntent);
+            practiceIntent.putExtra("LANGUAGE", "original");
+            startActivity(practiceIntent);
         });
 
         EditWordset.setOnClickListener(view -> {

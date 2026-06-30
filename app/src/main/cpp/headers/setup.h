@@ -33,3 +33,9 @@ void writeToFile(std::string const& fileName,
 std::string printFile(std::string const& fileName);
 
 int check_size();
+
+void addAlternative(std::string newAlternative);
+
+bool rewriteFile(std::string const& fileName);
+
+void clean_wrong_lists();

@@ -8,16 +8,15 @@
 #include <cstdio>
 
 #include "../headers/setup.h"
+#include "../headers/library.h"
 
 using namespace std;
 
-std::vector<std::string> wrong_answers;
-std::vector<std::string> wrong_translations;
-std::vector<std::string> phrases_list;
-std::vector<std::string> translation_list;
+std::vector<std::string> wrong_answers, wrong_translations, phrases_list, translation_list, phrases_list_copy, translation_list_copy;
 std::vector<char> seperators{':', ','};
 
 long int randomIndex;
+bool rewriteFile_var = false;
 
 enum codes
 {
@@ -113,6 +112,9 @@ int readFile(string const& fileName, string const& write_in_swedish)
     }
 
     file.close();
+    phrases_list_copy = phrases_list;
+    translation_list_copy = translation_list;
+
     return phrases_list.size();
 }
 
@@ -247,4 +249,38 @@ string printFile(string const& fileName)
 int check_size()
 {
     return phrases_list.size();
+}
+
+void addAlternative(string newAlternative)
+{
+    rewriteFile_var = true;
+    clean_wrong_lists();
+    trim_white_space(translation_list_copy.at(randomIndex));
+    to_lower(newAlternative);
+    translation_list_copy.at(randomIndex) += " / " + trim_white_space(newAlternative);
+}
+
+bool rewriteFile(string const& fileName)
+{
+    if(!rewriteFile_var)
+    {
+        return false;
+    }
+
+    string content{};
+
+    for(int i = 0; i < phrases_list_copy.size(); i++)
+    {
+        content += phrases_list_copy.at(i) + " : " + translation_list_copy.at(i) + '\n';
+    }
+
+    writeToFile(fileName, content, false);
+
+    return true;
+}
+
+void clean_wrong_lists()
+{
+    wrong_translations.pop_back();
+    wrong_answers.pop_back();
 }

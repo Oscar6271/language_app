@@ -9,17 +9,30 @@
     tools:context=".Practice">
 
     <Button
+        android:id="@+id/IWasRightButton"
+        android:layout_width="110dp"
+        android:layout_height="86dp"
+        android:layout_marginTop="-130dp"
+        android:text="I was right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.583" />
+
+    <Button
         android:id="@+id/compareButton"
-        android:layout_width="200dp"
-        android:layout_height="80dp"
+        android:layout_width="185dp"
+        android:layout_height="82dp"
         android:layout_marginTop="-130dp"
         android:text="Check"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.565" />
+        app:layout_constraintVertical_bias="0.584" />
 
     <TextView
         android:id="@+id/WordToTranslateText"

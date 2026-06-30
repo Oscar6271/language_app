@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -28,7 +29,10 @@ public class Practice extends AppCompatActivity {
     private boolean hasBeenCorrected = false, running = true, first_time = true;
     int totalWords, totalCorrect, totalAnswered, redoAnswered, redoSize;
     Intent intent;
+    ActivityPracticeBinding binding;
+    String filePath;
     public static final int EMPTY = 0, FIRST_TIME_DONE = 2;
+
     private TextView ResponseTextBox, infoTextBox, totalAnsweredBox;
     static {
         System.loadLibrary("ordapp");
@@ -37,7 +41,7 @@ public class Practice extends AppCompatActivity {
     private void init_file()
     {
         intent = getIntent();
-        String filePath = intent.getStringExtra("FILE_PATH");
+        filePath = intent.getStringExtra("FILE_PATH");
         String language_to_write_in = intent.getStringExtra("LANGUAGE");
 
         totalWords = Library.readFile(filePath, language_to_write_in);
@@ -62,24 +66,8 @@ public class Practice extends AppCompatActivity {
         totalAnsweredBox.setText("");
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ActivityPracticeBinding binding;
-
-        super.onCreate(savedInstanceState);
-        binding = ActivityPracticeBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        setupButtons();
-
-        init_file();
-        set_text();
-
-        totalCorrect = 0;
-        totalAnswered = 0;
-        redoAnswered = 0;
-        redoSize = 0;
-
+    private void compareButton()
+    {
         binding.compareButton.setOnClickListener(view -> {
 
             if(!running)
@@ -104,6 +92,12 @@ public class Practice extends AppCompatActivity {
                         Library.setColor(prefs, otherKey, "yellow");
                     }
                 }
+
+                String folder = intent.getStringExtra("FOLDER");
+                if(Library.rewriteFile(filePath))
+                {
+                    Library.createSummaryFile(getFilesDir(), folder);
+                }
                 finish();
             }
 
@@ -115,13 +109,19 @@ public class Practice extends AppCompatActivity {
                 binding.TranslationInputField.getEditText().setText("");
                 compareButtonVariable.setText("Check");
                 ResponseTextBox.setText("");
+                binding.IWasRightButton.setVisibility(View.INVISIBLE);
             }
             else
             {
-                String response = Library.compare(binding.TranslationInputField.getEditText().getText().toString());
-                ResponseTextBox.setText(response);
+                binding.IWasRightButton.setVisibility(View.VISIBLE);
+                String input = binding.TranslationInputField.getEditText().getText().toString();
+                String response = Library.compare(input);
                 hasBeenCorrected = true;
                 compareButtonVariable.setText("Next word");
+
+                ResponseTextBox.setText(response);
+                IwasRightButton(input);
+
                 if(first_time && response.startsWith("Correct!"))
                 {
                     totalCorrect++;
@@ -166,5 +166,45 @@ public class Practice extends AppCompatActivity {
                 totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + redoSize + String.format(" (%.1f%%)", percentage));
             }
         });
+    }
+
+    private void IwasRightButton(String input)
+    {
+        binding.IWasRightButton.setOnClickListener(view -> {
+            totalCorrect++;
+
+            new androidx.appcompat.app.AlertDialog.Builder(Practice.this)
+                    .setTitle("Add word")
+                    .setMessage("Do you want to add " + input + " as alternative?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        Library.addAlternative(input);
+                        ResponseTextBox.setText("Added " + input + " as alternative for " + wordToTranslate);
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        Library.clean_wrong_lists();
+                        dialog.dismiss();
+                    })
+                    .show();
+        });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityPracticeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setupButtons();
+
+        init_file();
+        set_text();
+
+        totalCorrect = 0;
+        totalAnswered = 0;
+        redoAnswered = 0;
+        redoSize = 0;
+        binding.IWasRightButton.setVisibility(View.INVISIBLE);
+
+        compareButton();
     }
 }

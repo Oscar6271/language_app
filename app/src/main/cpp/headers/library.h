@@ -10,7 +10,7 @@
 #include <utility>
 
 void to_lower(std::string & word);
-void trim_white_space(std::string & word);
+std::string trim_white_space(std::string & word);
 
 std::string ignore_explanation(std::string const& word);
 

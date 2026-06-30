@@ -29,12 +29,13 @@ void clean_string(string & s)
     }, L' ');
 }
 
-void trim_white_space(string & phrase)
+string trim_white_space(string & phrase)
 {
-    phrase.erase(0, phrase.find_first_not_of(" \t"));
-    phrase.erase(phrase.find_last_not_of(" \t") + 1);
+    phrase.erase(0, phrase.find_first_not_of(" \t\r\n"));
+    phrase.erase(phrase.find_last_not_of(" \t\r\n") + 1);
 
     clean_string(phrase);
+    return phrase;
 }
 
 string ignore_explanation(string const& word)

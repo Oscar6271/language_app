@@ -98,3 +98,34 @@ Java_com_example_ordapp_Library_checkSize(
         jobject) {
     return check_size();
 }
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_ordapp_Library_addAlternative(
+        JNIEnv* env,
+        jobject,
+        jstring newAlternative) {
+    const char* userInput = env->GetStringUTFChars(newAlternative, nullptr);
+    std::string userInputParameter(userInput);
+
+    env->ReleaseStringUTFChars(newAlternative, userInput);
+    addAlternative(userInputParameter);
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_example_ordapp_Library_rewriteFile(
+        JNIEnv* env,
+        jobject,
+        jstring fileName) {
+    const char* file_name = env->GetStringUTFChars(fileName, nullptr);
+    std::string file_name_parameter(file_name);
+
+    env->ReleaseStringUTFChars(fileName, file_name);
+    return rewriteFile(file_name_parameter) ? JNI_TRUE : JNI_FALSE;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_ordapp_Library_clean_wrong_lists(
+        JNIEnv* env,
+        jobject) {
+    clean_wrong_lists();
+}
