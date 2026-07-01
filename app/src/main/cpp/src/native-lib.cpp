@@ -124,7 +124,7 @@ Java_com_example_ordapp_Library_rewriteFile(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_ordapp_Library_clean_wrong_lists(
+Java_com_example_ordapp_Library_clean_1wrong_1lists(
         JNIEnv* env,
         jobject) {
     clean_wrong_lists();

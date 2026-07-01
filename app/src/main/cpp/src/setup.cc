@@ -12,8 +12,9 @@
 
 using namespace std;
 
-std::vector<std::string> wrong_answers, wrong_translations, phrases_list, translation_list, phrases_list_copy, translation_list_copy;
-std::vector<char> seperators{':', ','};
+vector<string> wrong_answers, wrong_translations, phrases_list, translation_list, phrases_list_copy, translation_list_copy;
+vector<char> seperators{':', ','};
+vector<int> indexes{};
 
 long int randomIndex;
 bool rewriteFile_var = false;
@@ -202,6 +203,7 @@ string pickWord()
     if(!phrases_list.empty())
     {
         randomIndex = random(phrases_list.size() - 1);
+        indexes.push_back(randomIndex);
 
         return phrases_list.at(randomIndex);
     }
@@ -209,19 +211,18 @@ string pickWord()
 }
 
 void writeToFile(string const& fileName,
-                 string const& contentToWrite, bool append)
+                 string contentToWrite, bool append)
 {
     ofstream file;
 
     if(append)
     {
-        file.open(fileName + ".txt", ios::app);
+        file.open(make_filePath(fileName), ios::app);
     }
     else
     {
-        file.open(fileName + ".txt");
+        file.open(make_filePath(fileName) + ".txt");
     }
-
     file << contentToWrite << endl;
 }
 
@@ -255,9 +256,12 @@ void addAlternative(string newAlternative)
 {
     rewriteFile_var = true;
     clean_wrong_lists();
-    trim_white_space(translation_list_copy.at(randomIndex));
+    int previousIndex = indexes.back();
+    indexes.pop_back();
+    trim_white_space(translation_list_copy.at(previousIndex));
     to_lower(newAlternative);
-    translation_list_copy.at(randomIndex) += " / " + trim_white_space(newAlternative);
+    translation_list_copy.at(previousIndex) += " / " + trim_white_space(newAlternative);
+    previousIndex = randomIndex;
 }
 
 bool rewriteFile(string const& fileName)
@@ -281,6 +285,9 @@ bool rewriteFile(string const& fileName)
 
 void clean_wrong_lists()
 {
-    wrong_translations.pop_back();
-    wrong_answers.pop_back();
+    if(!wrong_answers.empty() && !wrong_translations.empty())
+    {
+        wrong_translations.pop_back();
+        wrong_answers.pop_back();
+    }
 }

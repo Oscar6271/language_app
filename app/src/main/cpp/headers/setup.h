@@ -28,7 +28,7 @@ std::string pickWord();
 
 // skickar tillbaka true om man kunde skriva till filen, annars false
 void writeToFile(std::string const& fileName,
-                 std::string const& contentToWrite, bool append);
+                 std::string contentToWrite, bool append);
 
 std::string printFile(std::string const& fileName);
 
