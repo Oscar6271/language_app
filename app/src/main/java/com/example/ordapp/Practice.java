@@ -66,112 +66,134 @@ public class Practice extends AppCompatActivity {
         totalAnsweredBox.setText("");
     }
 
+    private void wordsetCompleted()
+    {
+        if(!running)
+        {
+            SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+            String button = intent.getStringExtra("LANGUAGE");
+            String file = intent.getStringExtra("FILE_NAME");
+            String key = file + "_" + button;
+
+            Library.setPracticeColor(totalCorrect, totalWords, prefs, key);
+            if(Library.getColor(prefs, key).equals("red"))
+            {
+                String otherButton = "translation";
+                if(button.equals("translation"))
+                {
+                    otherButton = "original";
+                }
+                String otherKey = file + "_" + otherButton;
+
+                if(Library.getColor(prefs, otherKey).equals("green"))
+                {
+                    Library.setColor(prefs, otherKey, "yellow");
+                }
+            }
+
+            String folder = intent.getStringExtra("FOLDER");
+            if(Library.rewriteFile(filePath))
+            {
+                Library.createSummaryFile(getFilesDir(), folder);
+            }
+            finish();
+        }
+    }
+
+    private void nextWord()
+    {
+        hasBeenCorrected = false;
+        wordToTranslate = Library.pickWord();
+        set_text();
+        binding.TranslationInputField.getEditText().setText("");
+        compareButtonVariable.setText("Check");
+        ResponseTextBox.setText("");
+        binding.IWasRightButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void checkWord()
+    {
+        binding.IWasRightButton.setVisibility(View.VISIBLE);
+        String input = binding.TranslationInputField.getEditText().getText().toString();
+        String response = Library.compare(input);
+        hasBeenCorrected = true;
+        compareButtonVariable.setText("Next word");
+
+        ResponseTextBox.setText(response);
+        IwasRightButton(input);
+
+        if(first_time && response.startsWith("Correct!"))
+        {
+            totalCorrect++;
+        }
+
+        totalAnswered++;
+        if(first_time)
+        {
+            double percentage = ((double) totalAnswered / totalWords) * 100;
+            totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + totalWords + String.format(" (%.1f%%)", percentage));
+        }
+        else
+        {
+            double percentage = ((double) totalAnswered / redoSize) * 100;
+            totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + redoSize + String.format(" (%.1f%%)", percentage));
+        }
+    }
+
+    private void checkStatus()
+    {
+        int status = Library.checkEmpty();
+        if(status == EMPTY)
+        {
+            infoTextBox.setText("Wordset completed!");
+            running = false;
+            compareButtonVariable.setText("Practice other sets");
+
+            double percentage = (((double) totalCorrect / totalWords)) * 100;
+            ResponseTextBox.setText("You got " + totalCorrect + "/" + totalWords + " correct. That is " + String.format(" (%.1f%%)", percentage));
+            if(Library.checkSize() == 0)
+            {
+                totalAnsweredBox.setText("");
+            }
+            set_text();
+        }
+        else if(status == FIRST_TIME_DONE)
+        {
+            first_time = false;
+            infoTextBox.setText("Redo your mistakes");
+            totalAnswered = 0;
+            redoSize = Library.checkSize();
+
+            double percentage = ((double) totalAnswered / redoSize) * 100;
+            totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + redoSize + String.format(" (%.1f%%)", percentage));
+        }
+    }
     private void compareButton()
     {
         binding.compareButton.setOnClickListener(view -> {
 
-            if(!running)
-            {
-                SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
-                String button = intent.getStringExtra("LANGUAGE");
-                String file = intent.getStringExtra("FILE_NAME");
-                String key = file + "_" + button;
-
-                Library.setPracticeColor(totalCorrect, totalWords, prefs, key);
-                if(Library.getColor(prefs, key).equals("red"))
-                {
-                    String otherButton = "translation";
-                    if(button.equals("translation"))
-                    {
-                        otherButton = "original";
-                    }
-                    String otherKey = file + "_" + otherButton;
-
-                    if(Library.getColor(prefs, otherKey).equals("green"))
-                    {
-                        Library.setColor(prefs, otherKey, "yellow");
-                    }
-                }
-
-                String folder = intent.getStringExtra("FOLDER");
-                if(Library.rewriteFile(filePath))
-                {
-                    Library.createSummaryFile(getFilesDir(), folder);
-                }
-                finish();
-            }
+            wordsetCompleted();
 
             if(hasBeenCorrected)
             {
-                hasBeenCorrected = false;
-                wordToTranslate = Library.pickWord();
-                set_text();
-                binding.TranslationInputField.getEditText().setText("");
-                compareButtonVariable.setText("Check");
-                ResponseTextBox.setText("");
-                binding.IWasRightButton.setVisibility(View.INVISIBLE);
+               nextWord();
             }
             else
             {
-                binding.IWasRightButton.setVisibility(View.VISIBLE);
-                String input = binding.TranslationInputField.getEditText().getText().toString();
-                String response = Library.compare(input);
-                hasBeenCorrected = true;
-                compareButtonVariable.setText("Next word");
-
-                ResponseTextBox.setText(response);
-                IwasRightButton(input);
-
-                if(first_time && response.startsWith("Correct!"))
-                {
-                    totalCorrect++;
-                }
-
-                totalAnswered++;
-                if(first_time)
-                {
-                    double percentage = ((double) totalAnswered / totalWords) * 100;
-                    totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + totalWords + String.format(" (%.1f%%)", percentage));
-                }
-                else
-                {
-                    double percentage = ((double) totalAnswered / redoSize) * 100;
-                    totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + redoSize + String.format(" (%.1f%%)", percentage));
-                }
+                checkWord();
             }
 
-            int status = Library.checkEmpty();
-            if(status == EMPTY)
-            {
-                infoTextBox.setText("Wordset completed!");
-                running = false;
-                compareButtonVariable.setText("Practice other sets");
-
-                double percentage = (((double) totalCorrect / totalWords)) * 100;
-                ResponseTextBox.setText("You got " + totalCorrect + "/" + totalWords + " correct. That is " + String.format(" (%.1f%%)", percentage));
-                if(Library.checkSize() == 0)
-                {
-                    totalAnsweredBox.setText("");
-                }
-                set_text();
-            }
-            else if(status == FIRST_TIME_DONE)
-            {
-                first_time = false;
-                infoTextBox.setText("Redo your mistakes");
-                totalAnswered = 0;
-                redoSize = Library.checkSize();
-
-                double percentage = ((double) totalAnswered / redoSize) * 100;
-                totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + redoSize + String.format(" (%.1f%%)", percentage));
-            }
+            checkStatus();
         });
     }
 
     private void IwasRightButton(String input)
     {
         binding.IWasRightButton.setOnClickListener(view -> {
-            totalCorrect++;
+            if(first_time)
+            {
+                totalCorrect++;
+            }
 
             new androidx.appcompat.app.AlertDialog.Builder(Practice.this)
                     .setTitle("Add word")
@@ -182,6 +204,7 @@ public class Practice extends AppCompatActivity {
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         Library.clean_wrong_lists();
+                        ResponseTextBox.setText("Answered corrected, but not added as alternative");
                         dialog.dismiss();
                     })
                     .show();

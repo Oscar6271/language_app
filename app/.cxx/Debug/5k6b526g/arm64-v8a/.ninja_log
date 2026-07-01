@@ -79,3 +79,7 @@
 1011	1044	1782922469025658717	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/arm64-v8a/libordapp.so	b5b6adcd11d7e9e6
 7	985	1782922655688409735	CMakeFiles/ordapp.dir/src/setup.cc.o	d85dfa201c2e4a84
 985	1015	1782922655733409456	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/arm64-v8a/libordapp.so	b5b6adcd11d7e9e6
+0	1032	1782930271141294212	CMakeFiles/ordapp.dir/src/native-lib.cpp.o	7e2309714dc2ac7
+2	1155	1782930271263279203	CMakeFiles/ordapp.dir/src/library.cpp.o	45dd70807b908223
+1	1709	1782930271809212032	CMakeFiles/ordapp.dir/src/setup.cc.o	d85dfa201c2e4a84
+1710	1757	1782930271875203912	/home/oscar/code/eget/language_app/app/build/intermediates/cxx/Debug/5k6b526g/obj/arm64-v8a/libordapp.so	b5b6adcd11d7e9e6
