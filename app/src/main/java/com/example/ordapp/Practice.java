@@ -112,18 +112,22 @@ public class Practice extends AppCompatActivity {
 
     private void checkWord()
     {
-        binding.IWasRightButton.setVisibility(View.VISIBLE);
         String input = binding.TranslationInputField.getEditText().getText().toString();
         String response = Library.compare(input);
         hasBeenCorrected = true;
         compareButtonVariable.setText("Next word");
 
         ResponseTextBox.setText(response);
-        IwasRightButton(input);
 
         if(first_time && response.startsWith("Correct!"))
         {
             totalCorrect++;
+        }
+
+        if(response.startsWith("Wrong"))
+        {
+            binding.IWasRightButton.setVisibility(View.VISIBLE);
+            IwasRightButton(input);
         }
 
         totalAnswered++;
