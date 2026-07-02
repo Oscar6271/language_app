@@ -80,17 +80,16 @@
 
     <TextView
         android:id="@+id/responseText"
-        android:layout_width="318dp"
-        android:layout_height="97dp"
+        android:layout_width="317dp"
+        android:layout_height="78dp"
         android:layout_marginTop="-280dp"
         android:text="TextView"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.541" />
+        app:layout_constraintVertical_bias="0.53" />
 
     <TextView
         android:id="@+id/totalAnsweredText"

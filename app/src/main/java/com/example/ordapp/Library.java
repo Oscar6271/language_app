@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +29,7 @@ public final class Library {
     public static native void addAlternative(String newAlternative);
     public static native boolean rewriteFile(String fileName);
     public static native void clean_wrong_lists();
+    public static native int wordsLeft();
 
     public static final int GREEN = 3, YELLOW = 2, RED = 1, UNASSIGNED = 0;
 

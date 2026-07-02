@@ -221,7 +221,7 @@ void writeToFile(string const& fileName,
     }
     else
     {
-        file.open(make_filePath(fileName) + ".txt");
+        file.open(make_filePath(fileName));
     }
     file << contentToWrite << endl;
 }
@@ -290,4 +290,9 @@ void clean_wrong_lists()
         wrong_translations.pop_back();
         wrong_answers.pop_back();
     }
+}
+
+int wordsLeft()
+{
+    return phrases_list.size();
 }

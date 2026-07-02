@@ -1,26 +1,20 @@
 package com.example.ordapp;
 
+import static com.google.android.material.snackbar.Snackbar.make;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Debug;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ordapp.databinding.ActivityPracticeBinding;
-import com.example.ordapp.databinding.ActivitySimpleInputBinding;
-
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
+import com.google.android.material.snackbar.Snackbar;
 
 public class Practice extends AppCompatActivity {
     public Button compareButtonVariable;
@@ -66,36 +60,41 @@ public class Practice extends AppCompatActivity {
         totalAnsweredBox.setText("");
     }
 
+    private void resetGame()
+    {
+        SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+        String button = intent.getStringExtra("LANGUAGE");
+        String file = intent.getStringExtra("FILE_NAME");
+        String key = file + "_" + button;
+
+        Library.setPracticeColor(totalCorrect, totalWords, prefs, key);
+        if(Library.getColor(prefs, key).equals("red"))
+        {
+            String otherButton = "translation";
+            if(button.equals("translation"))
+            {
+                otherButton = "original";
+            }
+            String otherKey = file + "_" + otherButton;
+
+            if(Library.getColor(prefs, otherKey).equals("green"))
+            {
+                Library.setColor(prefs, otherKey, "yellow");
+            }
+        }
+
+        String folder = intent.getStringExtra("FOLDER");
+        if(Library.rewriteFile(filePath))
+        {
+            Library.createSummaryFile(getFilesDir(), folder);
+        }
+    }
+
     private void wordsetCompleted()
     {
         if(!running)
         {
-            SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
-            String button = intent.getStringExtra("LANGUAGE");
-            String file = intent.getStringExtra("FILE_NAME");
-            String key = file + "_" + button;
-
-            Library.setPracticeColor(totalCorrect, totalWords, prefs, key);
-            if(Library.getColor(prefs, key).equals("red"))
-            {
-                String otherButton = "translation";
-                if(button.equals("translation"))
-                {
-                    otherButton = "original";
-                }
-                String otherKey = file + "_" + otherButton;
-
-                if(Library.getColor(prefs, otherKey).equals("green"))
-                {
-                    Library.setColor(prefs, otherKey, "yellow");
-                }
-            }
-
-            String folder = intent.getStringExtra("FOLDER");
-            if(Library.rewriteFile(filePath))
-            {
-                Library.createSummaryFile(getFilesDir(), folder);
-            }
+            resetGame();
             finish();
         }
     }
@@ -140,9 +139,8 @@ public class Practice extends AppCompatActivity {
         }
     }
 
-    private void checkStatus()
+    private void checkStatus(int status)
     {
-        int status = Library.checkEmpty();
         if(status == EMPTY)
         {
             infoTextBox.setText("Wordset completed!");
@@ -183,8 +181,30 @@ public class Practice extends AppCompatActivity {
                 checkWord();
             }
 
-            checkStatus();
+            checkStatus(Library.checkEmpty());
         });
+    }
+
+    private void createSnackBar(String message)
+    {
+        Snackbar snackbar = Snackbar.make(
+                binding.getRoot(),
+                message,
+                Snackbar.LENGTH_INDEFINITE);
+
+        snackbar.setAction("Close", v -> snackbar.dismiss());
+
+        View snackBarView = snackbar.getView();
+
+        FrameLayout.LayoutParams params =
+                (FrameLayout.LayoutParams) snackBarView.getLayoutParams();
+
+        params.gravity = Gravity.TOP;
+        params.topMargin = 600;
+
+        snackBarView.setLayoutParams(params);
+
+        snackbar.show();
     }
 
     private void IwasRightButton(String input)
@@ -194,20 +214,39 @@ public class Practice extends AppCompatActivity {
             {
                 totalCorrect++;
             }
-
+            ResponseTextBox.setText("");
             new androidx.appcompat.app.AlertDialog.Builder(Practice.this)
                     .setTitle("Add word")
                     .setMessage("Do you want to add " + input + " as alternative?")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         Library.addAlternative(input);
-                        ResponseTextBox.setText("Added " + input + " as alternative for " + wordToTranslate);
+                        /*if(!lastWord)
+                        {
+                            ResponseTextBox.setText("Added " + input + " as alternative for " + wordToTranslate);
+                        }*/
+                        createSnackBar("Added " + input + " as alternative for " + wordToTranslate);
+
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         Library.clean_wrong_lists();
-                        ResponseTextBox.setText("Answered corrected, but not added as alternative");
+                        /*if(!lastWord)
+                        {
+                            ResponseTextBox.setText("Answered corrected, but not added as alternative");
+                        }*/
+                        /*Snackbar.make(binding.getRoot(), "Answered corrected, but not added as alternative", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Close", v -> {
+                                    // Snackbar stängs automatiskt när knappen trycks
+                                });*/
+                        createSnackBar("Answered corrected, but not added as alternative");
+
                         dialog.dismiss();
                     })
                     .show();
+            if(Library.wordsLeft() <= 1)
+            {
+                totalCorrect++;
+                checkStatus(EMPTY);
+            }
         });
     }
 

@@ -129,3 +129,10 @@ Java_com_example_ordapp_Library_clean_1wrong_1lists(
         jobject) {
     clean_wrong_lists();
 }
+
+extern "C" JNIEXPORT int JNICALL
+Java_com_example_ordapp_Library_wordsLeft(
+        JNIEnv* env,
+        jobject) {
+    return wordsLeft();
+}
