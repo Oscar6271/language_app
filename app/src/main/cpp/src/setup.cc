@@ -296,3 +296,8 @@ int wordsLeft()
 {
     return phrases_list.size();
 }
+
+int mistakes()
+{
+    return wrong_answers.size();
+}

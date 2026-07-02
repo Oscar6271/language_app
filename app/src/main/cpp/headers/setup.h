@@ -41,3 +41,5 @@ bool rewriteFile(std::string const& fileName);
 void clean_wrong_lists();
 
 int wordsLeft();
+
+int mistakes();

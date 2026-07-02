@@ -224,29 +224,18 @@ public class Practice extends AppCompatActivity {
                     .setMessage("Do you want to add " + input + " as alternative?")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         Library.addAlternative(input);
-                        /*if(!lastWord)
-                        {
-                            ResponseTextBox.setText("Added " + input + " as alternative for " + wordToTranslate);
-                        }*/
+
                         createSnackBar("Added " + input + " as alternative for " + wordToTranslate);
 
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         Library.clean_wrong_lists();
-                        /*if(!lastWord)
-                        {
-                            ResponseTextBox.setText("Answered corrected, but not added as alternative");
-                        }*/
-                        /*Snackbar.make(binding.getRoot(), "Answered corrected, but not added as alternative", Snackbar.LENGTH_INDEFINITE)
-                                .setAction("Close", v -> {
-                                    // Snackbar stängs automatiskt när knappen trycks
-                                });*/
                         createSnackBar("Answered corrected, but not added as alternative");
 
                         dialog.dismiss();
                     })
                     .show();
-            if(Library.wordsLeft() <= 1)
+            if(Library.wordsLeft() <= 1 && Library.mistakes() == 0)
             {
                 totalCorrect++;
                 checkStatus(EMPTY);

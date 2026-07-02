@@ -30,6 +30,7 @@ public final class Library {
     public static native boolean rewriteFile(String fileName);
     public static native void clean_wrong_lists();
     public static native int wordsLeft();
+    public static native int mistakes();
 
     public static final int GREEN = 3, YELLOW = 2, RED = 1, UNASSIGNED = 0;
 

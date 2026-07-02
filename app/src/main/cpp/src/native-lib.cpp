@@ -136,3 +136,10 @@ Java_com_example_ordapp_Library_wordsLeft(
         jobject) {
     return wordsLeft();
 }
+
+extern "C" JNIEXPORT int JNICALL
+Java_com_example_ordapp_Library_mistakes(
+        JNIEnv* env,
+        jobject) {
+    return mistakes();
+}
