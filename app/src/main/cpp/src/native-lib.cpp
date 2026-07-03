@@ -50,16 +50,16 @@ Java_com_example_ordapp_Library_readFile(
         JNIEnv* env,
         jobject /* this */,
         jstring fileNameJava,
-        jstring languageWriteJava) {
+        jstring languageJava) {
     const char* fileName = env->GetStringUTFChars(fileNameJava, nullptr);
     std::string fileNameParameter(fileName);
 
-    const char* language_to_write_in = env->GetStringUTFChars(languageWriteJava, nullptr);
+    const char* language_to_write_in = env->GetStringUTFChars(languageJava, nullptr);
     std::string languageParameter(language_to_write_in);
 
     // frigör minnet som har allokerats
     env->ReleaseStringUTFChars(fileNameJava, fileName);
-    env->ReleaseStringUTFChars(languageWriteJava, language_to_write_in);
+    env->ReleaseStringUTFChars(languageJava, language_to_write_in);
     return readFile(fileNameParameter, languageParameter);
 }
 

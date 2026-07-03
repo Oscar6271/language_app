@@ -236,7 +236,6 @@ public class Practice extends AppCompatActivity {
                     .show();
             if(Library.wordsLeft() <= 1 && Library.mistakes() == 0)
             {
-                totalCorrect++;
                 checkStatus(EMPTY);
             }
         });

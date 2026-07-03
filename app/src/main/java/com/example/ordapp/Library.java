@@ -21,7 +21,7 @@ import java.io.InputStream;
 public final class Library {
     public static native void writeToFile(String fileName, String contentToWrite, boolean append);
     public static native String printFile(String fileName);
-    public static native int readFile(String fileName, String language_to_write_in);
+    public static native int readFile(String fileName, String language);
     public static native String pickWord();
     public static native String compare(String userInput);
     public static native int checkEmpty();

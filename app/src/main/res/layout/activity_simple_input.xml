@@ -69,7 +69,7 @@
                 android:id="@+id/SimpleInputText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Word , Translation"
+                android:hint="swedish , spanish"
                 tools:layout_editor_absoluteX="18dp"
                 tools:layout_editor_absoluteY="281dp" />
 

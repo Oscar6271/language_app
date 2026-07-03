@@ -36,10 +36,10 @@ public class ChooseFileMode extends AppCompatActivity {
         float density = getResources().getDisplayMetrics().density;
         int buttonCount = 0, buttonSize = 180;
 
-        Translation = Library.createButton(prefs, fileNameWOextension + "_translation", this, density, layout, buttonSize, buttonCount, "Practice translation", true);
+        Translation = Library.createButton(prefs, fileNameWOextension + "_translation", this, density, layout, buttonSize, buttonCount, "Write spanish", true);
         buttonCount++;
 
-        Original = Library.createButton(prefs, fileNameWOextension + "_original", this, density, layout, buttonSize, buttonCount, "Practice original", true);
+        Original = Library.createButton(prefs, fileNameWOextension + "_original", this, density, layout, buttonSize, buttonCount, "Write swedish", true);
         buttonCount++;
 
         EditWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Edit wordset", false);

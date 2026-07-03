@@ -14,10 +14,9 @@ using namespace std;
 
 vector<string> wrong_answers, wrong_translations, phrases_list, translation_list, phrases_list_copy, translation_list_copy;
 vector<char> seperators{':', ','};
-vector<int> indexes{};
 
 long int randomIndex;
-bool rewriteFile_var = false;
+bool rewriteFile_var = false, write_in_original;
 
 enum codes
 {
@@ -30,8 +29,12 @@ void clear_lists()
 {
     wrong_translations.clear();
     wrong_answers.clear();
+
     phrases_list.clear();
     translation_list.clear();
+
+    translation_list_copy.clear();
+    phrases_list_copy.clear();
 }
 
 void split_string(vector<string> & phrases, vector<string> & translations,
@@ -76,10 +79,10 @@ string make_filePath(string const& fileName)
     return filePath;
 }
 
-int readFile(string const& fileName, string const& write_in_swedish)
+int readFile(string const& fileName, string const& language)
 {
     ifstream file{make_filePath(fileName)};
-    bool write_in_original {write_in_swedish == "original"};
+    write_in_original = language == "original";
 
     if(!file.is_open())
     {
@@ -204,7 +207,6 @@ string pickWord()
     if(!phrases_list.empty())
     {
         randomIndex = random(phrases_list.size() - 1);
-        indexes.push_back(randomIndex);
 
         return phrases_list.at(randomIndex);
     }
@@ -275,10 +277,19 @@ bool rewriteFile(string const& fileName)
     }
 
     string content{};
-
-    for(int i = 0; i < phrases_list_copy.size(); i++)
+    if(write_in_original)
     {
-        content += trim_white_space(phrases_list_copy.at(i)) + " : " + trim_white_space(translation_list_copy.at(i)) + '\n';
+        for(int i = 0; i < phrases_list_copy.size(); i++)
+        {
+            content += trim_white_space(translation_list_copy.at(i)) + " : " + trim_white_space(phrases_list_copy.at(i)) + '\n';
+        }
+    }
+    else
+    {
+        for(int i = 0; i < phrases_list_copy.size(); i++)
+        {
+            content += trim_white_space(phrases_list_copy.at(i)) + " : " + trim_white_space(translation_list_copy.at(i)) + '\n';
+        }
     }
 
     writeToFile(fileName, content, false);
