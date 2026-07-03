@@ -103,12 +103,17 @@ extern "C" JNIEXPORT void JNICALL
 Java_com_example_ordapp_Library_addAlternative(
         JNIEnv* env,
         jobject,
-        jstring newAlternative) {
-    const char* userInput = env->GetStringUTFChars(newAlternative, nullptr);
-    std::string userInputParameter(userInput);
+        jstring newAlternative,
+        jstring correctWord) {
+    const char* alt = env->GetStringUTFChars(newAlternative, nullptr);
+    std::string altParameter(alt);
+    env->ReleaseStringUTFChars(newAlternative, alt);
 
-    env->ReleaseStringUTFChars(newAlternative, userInput);
-    addAlternative(userInputParameter);
+    const char* correct = env->GetStringUTFChars(correctWord, nullptr);
+    std::string correctWordParameter(correct);
+    env->ReleaseStringUTFChars(correctWord, correct);
+
+    addAlternative(altParameter, correctWordParameter);
 }
 
 extern "C" JNIEXPORT jboolean JNICALL

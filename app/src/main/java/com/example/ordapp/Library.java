@@ -26,7 +26,7 @@ public final class Library {
     public static native String compare(String userInput);
     public static native int checkEmpty();
     public static native int checkSize();
-    public static native void addAlternative(String newAlternative);
+    public static native void addAlternative(String newAlternative, String previousWord);
     public static native boolean rewriteFile(String fileName);
     public static native void clean_wrong_lists();
     public static native int wordsLeft();

@@ -34,7 +34,7 @@ std::string printFile(std::string const& fileName);
 
 int check_size();
 
-void addAlternative(std::string newAlternative);
+void addAlternative(std::string newAlternative, std::string correctWord);
 
 bool rewriteFile(std::string const& fileName);
 

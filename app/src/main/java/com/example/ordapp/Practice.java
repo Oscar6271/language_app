@@ -18,7 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class Practice extends AppCompatActivity {
     public Button compareButtonVariable;
-    private String wordToTranslate;
+    private String wordToTranslate = "";
 
     private boolean hasBeenCorrected = false, running = true, first_time = true;
     int totalWords, totalCorrect, totalAnswered, redoAnswered, redoSize;
@@ -178,7 +178,7 @@ public class Practice extends AppCompatActivity {
 
             if(hasBeenCorrected)
             {
-               nextWord();
+                nextWord();
             }
             else
             {
@@ -194,7 +194,8 @@ public class Practice extends AppCompatActivity {
         Snackbar snackbar = Snackbar.make(
                 binding.getRoot(),
                 message,
-                Snackbar.LENGTH_INDEFINITE);
+                Snackbar.LENGTH_SHORT);
+        snackbar.setDuration(1000); // 1 sekund
 
         snackbar.setAction("Close", v -> snackbar.dismiss());
 
@@ -223,10 +224,8 @@ public class Practice extends AppCompatActivity {
                     .setTitle("Add word")
                     .setMessage("Do you want to add " + input + " as alternative?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        Library.addAlternative(input);
-
+                        Library.addAlternative(input, wordToTranslate);
                         createSnackBar("Added " + input + " as alternative for " + wordToTranslate);
-
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         Library.clean_wrong_lists();

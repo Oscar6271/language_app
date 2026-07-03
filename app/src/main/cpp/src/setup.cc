@@ -55,6 +55,9 @@ void split_string(vector<string> & phrases, vector<string> & translations,
 
     phrases.push_back(phrase);
     translations.push_back(translation);
+
+    phrases_list_copy.push_back(phrase);
+    translation_list_copy.push_back(translation);
 }
 
 string make_filePath(string const& fileName)
@@ -113,8 +116,6 @@ int readFile(string const& fileName, string const& write_in_swedish)
     }
 
     file.close();
-    phrases_list_copy = phrases_list;
-    translation_list_copy = translation_list;
 
     return phrases_list.size();
 }
@@ -252,16 +253,18 @@ int check_size()
     return phrases_list.size();
 }
 
-void addAlternative(string newAlternative)
+void addAlternative(string newAlternative, string correctWord)
 {
     rewriteFile_var = true;
     clean_wrong_lists();
-    int previousIndex = indexes.back();
-    indexes.pop_back();
-    trim_white_space(translation_list_copy.at(previousIndex));
-    to_lower(newAlternative);
-    translation_list_copy.at(previousIndex) += " / " + trim_white_space(newAlternative);
-    previousIndex = randomIndex;
+
+    auto it = find(phrases_list_copy.begin(), phrases_list_copy.end(), correctWord);
+    int previousIndex = distance(phrases_list_copy.begin(), it);
+
+    if(previousIndex < translation_list_copy.size())
+    {
+        translation_list_copy[previousIndex] += " / " + newAlternative;
+    }
 }
 
 bool rewriteFile(string const& fileName)
@@ -275,7 +278,7 @@ bool rewriteFile(string const& fileName)
 
     for(int i = 0; i < phrases_list_copy.size(); i++)
     {
-        content += phrases_list_copy.at(i) + " : " + translation_list_copy.at(i) + '\n';
+        content += trim_white_space(phrases_list_copy.at(i)) + " : " + trim_white_space(translation_list_copy.at(i)) + '\n';
     }
 
     writeToFile(fileName, content, false);
