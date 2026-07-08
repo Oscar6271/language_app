@@ -27,7 +27,7 @@ public class Practice extends AppCompatActivity {
     String filePath;
     public static final int EMPTY = 0, FIRST_TIME_DONE = 2;
 
-    private TextView ResponseTextBox, infoTextBox, totalAnsweredBox;
+    private TextView ResponseTextBox, totalAnsweredBox;
     static {
         System.loadLibrary("ordapp");
     }
@@ -54,7 +54,6 @@ public class Practice extends AppCompatActivity {
     {
         ResponseTextBox = (TextView)findViewById(R.id.responseText);
         ResponseTextBox.setText("");
-        infoTextBox = (TextView) findViewById(R.id.infoText);
         compareButtonVariable = (Button)findViewById(R.id.compareButton);
         totalAnsweredBox = (TextView)findViewById(R.id.totalAnsweredText);
         totalAnsweredBox.setText("");
@@ -147,7 +146,6 @@ public class Practice extends AppCompatActivity {
     {
         if(status == EMPTY)
         {
-            infoTextBox.setText("Wordset completed!");
             running = false;
             compareButtonVariable.setText("Practice other sets");
 
@@ -162,7 +160,6 @@ public class Practice extends AppCompatActivity {
         else if(status == FIRST_TIME_DONE)
         {
             first_time = false;
-            infoTextBox.setText("Redo your mistakes");
             totalAnswered = 0;
             redoSize = Library.checkSize();
 
@@ -215,7 +212,7 @@ public class Practice extends AppCompatActivity {
     private void IwasRightButton(String input)
     {
         binding.IWasRightButton.setOnClickListener(view -> {
-            if(first_time)
+            if(first_time || Library.wordsLeft() <= 1)
             {
                 totalCorrect++;
             }
