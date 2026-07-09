@@ -265,6 +265,7 @@ public final class Library {
         }
     }
 
+    // stegar vidare till nästa färg röd --> gul --> grön
     public static void setPracticeColor(int totalCorrect, int totalWords, SharedPreferences prefs, String prefKey)
     {
         double ratio = (double) totalCorrect / totalWords;
@@ -272,7 +273,7 @@ public final class Library {
         {
             Library.gotoNextColor(prefs, prefKey);
         }
-        else if(ratio > 0.5 && ratio < 1 && Library.getColor(prefs, prefKey).equals("green"))
+        else if(ratio > 0.5 && ratio < 1 )
         {
             Library.setColor(prefs, prefKey, "yellow");
         }

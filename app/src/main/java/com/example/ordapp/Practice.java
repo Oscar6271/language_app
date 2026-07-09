@@ -66,7 +66,9 @@ public class Practice extends AppCompatActivity {
         String file = intent.getStringExtra("FILE_NAME");
         String key = file + "_" + button;
 
-        Library.setPracticeColor(totalCorrect, totalWords, prefs, key);
+        Library.setNextColor(totalCorrect, totalWords, prefs, key);
+
+        // om setNeen knapp är röd sätts och den andra grön sätt den gröna till gul
         if(Library.getColor(prefs, key).equals("red"))
         {
             String otherButton = "translation";
