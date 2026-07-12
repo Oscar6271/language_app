@@ -17,12 +17,12 @@ import com.example.ordapp.databinding.ActivityChooseFolderBinding;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 
 public class ChooseFolder extends AppCompatActivity {
 
     float density;
     int buttonCount = 0;
+    long daysPassed = 0;
     ConstraintLayout layout;
     String folderName;
 
@@ -48,38 +48,40 @@ public class ChooseFolder extends AppCompatActivity {
                 Library.setColor(FileButtonPrefs, fileNameWOextension + "_original", color);}
         }
     }
-    private void resetColor(SharedPreferences prefs, String prefsKey)
+    private void resetColor(SharedPreferences prefs, String folder)
     {
         String savedDate = prefs.getString(
-                prefsKey + "_LAST_COMPLETED_DATE",
+                folder + "_LAST_COMPLETED_DATE",
                 null
         );
 
-        if(savedDate == null)
+        if(savedDate == null || savedDate.isEmpty())
         {
             return;
         }
 
         LocalDate completedDate = LocalDate.parse(savedDate);
-        long daysPassed =
+        daysPassed =
                 java.time.temporal.ChronoUnit.DAYS.between(
                         completedDate,
                         LocalDate.now()
                 );
+        SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
+        daysPassedPref.edit().putLong(folder + "_daysPassed", daysPassed).apply();
 
-        if(daysPassed < 7)
+        if(daysPassed < 7 )
         {
             return;
         }
         else if(daysPassed < 14)
         {
-            Library.setColor(prefs, prefsKey, "yellow");
-            setAllFilesColor(prefsKey, "yellow");
+            Library.setColor(prefs, folder, "yellow");
+            setAllFilesColor(folder, "yellow");
         }
         else
         {
-            Library.setColor(prefs, prefsKey, "red");
-            setAllFilesColor(prefsKey, "red");
+            Library.setColor(prefs, folder, "red");
+            setAllFilesColor(folder, "red");
         }
     }
 
@@ -181,6 +183,7 @@ public class ChooseFolder extends AppCompatActivity {
                     Intent intent = new Intent(ChooseFolder.this, SelectFile.class);
                     intent.putExtra("FOLDER_NAME", file.getName());
                     startActivity(intent);
+                    intent.putExtra(folder + "_daysPassed", daysPassed);
                 });
             }
         }

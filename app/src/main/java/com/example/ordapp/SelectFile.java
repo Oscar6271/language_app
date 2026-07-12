@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -146,6 +148,11 @@ public class SelectFile extends AppCompatActivity {
         createDropDowns();
 
         getSupportActionBar().setTitle("Choose file from " + folder);
+
+        SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
+        String text = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
+
+        //Library.addTextView(layout, this, folder + " completed " + text + " days ago");
     }
 
     private boolean isAllFilesGreen()
@@ -184,6 +191,11 @@ public class SelectFile extends AppCompatActivity {
                 .apply();
     }
 
+    private void resetDate()
+    {
+        SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+        CompletedPrefs.edit().putString(folder + "_LAST_COMPLETED_DATE", "").apply();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -205,9 +217,21 @@ public class SelectFile extends AppCompatActivity {
 
         createUI();
 
+        // om alla filer precis har blivit gröna sparar man datumet
+        // annars kollar man om en fil har uppdaterats och nollställer då datumet
         boolean isGreen = isAllFilesGreen();
-        if(!wasGreen && isGreen) {
+        if((!wasGreen && isGreen)) {
             saveDate();
+        }
+        else
+        {
+            SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
+            boolean fileUpdated = FileChangedprefs.getBoolean("any_file", false);
+
+            if(fileUpdated) {
+                SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+                Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
+            }
         }
         wasGreen = isGreen;
     }

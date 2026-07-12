@@ -66,7 +66,14 @@ public class Practice extends AppCompatActivity {
         String file = intent.getStringExtra("FILE_NAME");
         String key = file + "_" + button;
 
+        totalAnsweredBox.setText("");
+
         Library.setNextColor(totalCorrect, totalWords, prefs, key);
+
+        // markera att man har klarat filen igen
+        SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
+        // vilken fil som helst kan uppdateras för att nollställa datumet
+        FileChangedprefs.edit().putBoolean("any_file", true).apply();
 
         // om setNeen knapp är röd sätts och den andra grön sätt den gröna till gul
         if(Library.getColor(prefs, key).equals("red"))

@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -281,5 +282,32 @@ public final class Library {
         {
             Library.setColor(prefs, prefKey, "red");
         }
+    }
+
+    public static void resetDate(SharedPreferences pref, String key)
+    {
+        pref.edit().putString(key, "").apply();
+    }
+
+    public static void addTextView(ConstraintLayout layout, Context context, String text)
+    {
+        TextView textView = new TextView(context);
+        textView.setId(View.generateViewId());
+        textView.setText(text);
+
+        ConstraintLayout.LayoutParams params =
+                new ConstraintLayout.LayoutParams(
+                        ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                        ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        params.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
+        params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
+        params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+        params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+        params.verticalBias = 0.05f;   // 0 = högst upp, 1 = längst ner
+
+        textView.setLayoutParams(params);
+
+        layout.addView(textView);
     }
 }
