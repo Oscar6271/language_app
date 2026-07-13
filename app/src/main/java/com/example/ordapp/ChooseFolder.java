@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -66,6 +67,7 @@ public class ChooseFolder extends AppCompatActivity {
                         completedDate,
                         LocalDate.now()
                 );
+        Log.d(folder, String.valueOf(daysPassed));
         SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
         daysPassedPref.edit().putLong(folder + "_daysPassed", daysPassed).apply();
 
