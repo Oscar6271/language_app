@@ -1,6 +1,7 @@
 package com.example.ordapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -76,7 +77,8 @@ public class SimpleInput extends AppCompatActivity {
                 String contentText = contentEdit.getText().toString();
 
                 Library.writeToFile(file.getAbsolutePath(), contentText, append);
-                Library.createSummaryFile(getFilesDir(), folderName);
+                SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+                Library.createSummaryFile(getFilesDir(), folderName, prefs);
 
                 // Log.d("WRITE", "written: " + getFilesDir().getAbsolutePath() + "/" + folderName + "/" + fileName);
                 finish();

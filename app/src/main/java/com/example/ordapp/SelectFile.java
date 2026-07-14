@@ -115,7 +115,8 @@ public class SelectFile extends AppCompatActivity {
                                     DocumentFile.fromSingleUri(this, uri);
 
                             if (file != null) {
-                                Library.importFile(file, new File(getFilesDir(), folder), this);
+                                SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+                                Library.importFile(file, new File(getFilesDir(), folder), this, prefs);
                             }
                         }
                     }

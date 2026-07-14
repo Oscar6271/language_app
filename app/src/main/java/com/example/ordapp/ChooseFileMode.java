@@ -114,7 +114,8 @@ public class ChooseFileMode extends AppCompatActivity {
                     .setMessage("Are you sure you want to delete this wordset?")
                     .setPositiveButton("Delete", (dialog, which) -> {
                         Library.DeleteFile(new File(filePath));
-                        Library.createSummaryFile(getFilesDir(), folder);
+                        SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+                        Library.createSummaryFile(getFilesDir(), folder, prefs);
                         finish();
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> {

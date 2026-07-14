@@ -35,9 +35,9 @@ public final class Library {
 
     public static final int GREEN = 3, YELLOW = 2, RED = 1, UNASSIGNED = 0;
 
-    public static void createSummaryFile(File FilesDir, String folderName)
+    public static void createSummaryFile(File FilesDir, String folderName, SharedPreferences prefs)
     {
-        File summaryFile = new File(FilesDir, folderName + "/" + folderName + "_summary.txt");
+        File summaryFile = new File(FilesDir, folderName + "/"  + "summary.txt");
         if(summaryFile.exists())
         {
             summaryFile.delete();
@@ -58,6 +58,9 @@ public final class Library {
                 writeToFile(fileWOextension, printFile(filePathWOextension), true);
             }
         }
+        Library.setColor(prefs, folderName + "_summary_translation", "yellow");
+        Library.setColor(prefs, folderName + "_summary_original", "yellow");
+
     }
 
     public static int dpToPx(int dp, float density)
@@ -111,7 +114,7 @@ public final class Library {
         mainSet.applyTo(layout);
     }
 
-    public static void importFile(DocumentFile file, File targetFolder, Context context)
+    public static void importFile(DocumentFile file, File targetFolder, Context context, SharedPreferences prefs)
     {
         if (file == null || !file.isFile()) return;
 
@@ -136,7 +139,7 @@ public final class Library {
             e.printStackTrace();
         }
 
-        Library.createSummaryFile(context.getFilesDir(), targetFolder.getName());
+        Library.createSummaryFile(context.getFilesDir(), targetFolder.getName(), prefs);
     }
 
     public static void DeleteFile(File file)
