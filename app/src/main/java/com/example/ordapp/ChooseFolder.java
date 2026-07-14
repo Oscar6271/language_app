@@ -45,8 +45,8 @@ public class ChooseFolder extends AppCompatActivity {
                 String fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 
                 Library.setColor(prefs, fileNameWOextension, color);
-                Library.setColor(FileButtonPrefs, fileNameWOextension + "_translation", color);
-                Library.setColor(FileButtonPrefs, fileNameWOextension + "_original", color);}
+                Library.setColor(FileButtonPrefs, folder + "_" + fileNameWOextension + "_translation", color);
+                Library.setColor(FileButtonPrefs, folder + "_" + fileNameWOextension + "_original", color);}
         }
     }
     private void resetColor(SharedPreferences prefs, String folder)
@@ -180,10 +180,10 @@ public class ChooseFolder extends AppCompatActivity {
                 resetColor(prefs, folder);
                 Button folderButton = Library.createButton(prefs, folder, this, density, layout, 150, buttonCount, folder, true);
                 buttonCount++;
-
+                Log.d("FOLDER", folder);
                 folderButton.setOnClickListener(view -> {
                     Intent intent = new Intent(ChooseFolder.this, SelectFile.class);
-                    intent.putExtra("FOLDER_NAME", file.getName());
+                    intent.putExtra("FOLDER_NAME", folder);
                     startActivity(intent);
                     intent.putExtra(folder + "_daysPassed", daysPassed);
                 });

@@ -24,7 +24,7 @@ public class ChooseFileMode extends AppCompatActivity {
 
     Button Translation, Original, EditWordset, DeleteWordset;
     ConstraintLayout layout;
-    String fileNameWOextension;
+    String fileNameWOextension, folder;
     static {
         System.loadLibrary("ordapp");
     }
@@ -36,10 +36,10 @@ public class ChooseFileMode extends AppCompatActivity {
         float density = getResources().getDisplayMetrics().density;
         int buttonCount = 0, buttonSize = 180;
 
-        Translation = Library.createButton(prefs, fileNameWOextension + "_translation", this, density, layout, buttonSize, buttonCount, "Write spanish", true);
+        Translation = Library.createButton(prefs, folder + "_" + fileNameWOextension + "_translation", this, density, layout, buttonSize, buttonCount, "Write spanish", true);
         buttonCount++;
 
-        Original = Library.createButton(prefs, fileNameWOextension + "_original", this, density, layout, buttonSize, buttonCount, "Write swedish", true);
+        Original = Library.createButton(prefs, folder + "_" + fileNameWOextension + "_original", this, density, layout, buttonSize, buttonCount, "Write swedish", true);
         buttonCount++;
 
         EditWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Edit wordset", false);
@@ -51,9 +51,8 @@ public class ChooseFileMode extends AppCompatActivity {
     private void setPreference()
     {
         SharedPreferences currentPrefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
-
-        int translationColor = Library.evauluatePref(currentPrefs, fileNameWOextension + "_translation");
-        int originalColor = Library.evauluatePref(currentPrefs, fileNameWOextension + "_original");
+        int translationColor = Library.evauluatePref(currentPrefs, folder + "_" + fileNameWOextension + "_translation");
+        int originalColor = Library.evauluatePref(currentPrefs, folder + "_" + fileNameWOextension + "_original");
 
         if(translationColor == Library.RED && originalColor == Library.GREEN)
         {
@@ -68,13 +67,13 @@ public class ChooseFileMode extends AppCompatActivity {
         int currentValue = translationColor + originalColor;
 
         SharedPreferences prefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
-        Library.setNextColor(currentValue, maxValue, prefs, fileNameWOextension);
+        Library.setNextColor(currentValue, maxValue, prefs, folder + "_" + fileNameWOextension);
     }
 
     private void createUI()
     {
         Intent intent = getIntent();
-        String folder = intent.getStringExtra("FOLDER_NAME");
+        folder = intent.getStringExtra("FOLDER_NAME");
         String fileName = intent.getStringExtra("FILE_NAME");
         fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 

@@ -64,7 +64,8 @@ public class Practice extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
         String button = intent.getStringExtra("LANGUAGE");
         String file = intent.getStringExtra("FILE_NAME");
-        String key = file + "_" + button;
+        String folder = intent.getStringExtra("FOLDER");
+        String key = folder + "_" + file + "_" + button;
 
         totalAnsweredBox.setText("");
 
@@ -83,7 +84,7 @@ public class Practice extends AppCompatActivity {
             {
                 otherButton = "original";
             }
-            String otherKey = file + "_" + otherButton;
+            String otherKey = folder + "_" + file + "_" + otherButton;
 
             if(Library.getColor(prefs, otherKey).equals("green"))
             {
@@ -91,7 +92,6 @@ public class Practice extends AppCompatActivity {
             }
         }
 
-        String folder = intent.getStringExtra("FOLDER");
         if(Library.rewriteFile(filePath))
         {
             Library.createSummaryFile(getFilesDir(), folder);

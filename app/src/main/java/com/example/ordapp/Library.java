@@ -37,7 +37,7 @@ public final class Library {
 
     public static void createSummaryFile(File FilesDir, String folderName)
     {
-        File summaryFile = new File(FilesDir, folderName + "/" + "summary.txt");
+        File summaryFile = new File(FilesDir, folderName + "/" + folderName + "_summary.txt");
         if(summaryFile.exists())
         {
             summaryFile.delete();

@@ -33,7 +33,7 @@ public class SelectFile extends AppCompatActivity {
         String fileName = file.getName();
         fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 
-        Button button = Library.createButton(prefs, fileNameWOextension, this, density, layout, 180, buttonCount, fileNameWOextension, true);
+        Button button = Library.createButton(prefs, folder + "_" + fileNameWOextension, this, density, layout, 180, buttonCount, fileNameWOextension, true);
         buttonCount++;
 
         button.setOnClickListener(view -> {
@@ -52,14 +52,18 @@ public class SelectFile extends AppCompatActivity {
         SharedPreferences currentPrefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
         int currentValue = 0;
         int maxValue = 0;
+        // läs in vad varje fil har för färg och räkna ut medelvärde
         for (File file : files) {
             if (file.isFile() && !file.getName().equals("profileInstalled")) {
                 createButtons(file, currentPrefs);
                 maxValue += Library.GREEN;
-                currentValue += Library.evauluatePref(currentPrefs, fileNameWOextension);
+                currentValue += Library.evauluatePref(currentPrefs, folderName + "_" + fileNameWOextension);
+                Log.d("Curr", String.valueOf(currentValue));
+                Log.d("KEY", folderName + "_" + fileNameWOextension);
             }
         }
-
+        Log.d("VALUE", String.valueOf((double) currentValue / maxValue));
+        // skriv det medelvärdet till mappen
         SharedPreferences prefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
         Library.setNextColor(currentValue, maxValue, prefs, folderName);
     }
@@ -173,7 +177,7 @@ public class SelectFile extends AppCompatActivity {
                 String fileName = file.getName();
                 fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 
-                if(Library.evauluatePref(currentPrefs, fileNameWOextension) != Library.GREEN) {
+                if(Library.evauluatePref(currentPrefs, folder + "_" + fileNameWOextension) != Library.GREEN) {
                      return false;
                 }
             }
