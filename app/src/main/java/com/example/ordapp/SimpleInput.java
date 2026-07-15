@@ -77,17 +77,13 @@ public class SimpleInput extends AppCompatActivity {
                 String contentText = contentEdit.getText().toString();
 
                 Library.writeToFile(file.getAbsolutePath(), contentText, append);
-                SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
-                Library.createSummaryFile(getFilesDir(), folderName, prefs);
+                Library.createSummaryFile(getFilesDir(), folderName);
 
-                // Log.d("WRITE", "written: " + getFilesDir().getAbsolutePath() + "/" + folderName + "/" + fileName);
                 finish();
 
             } else {
                 errormessage.setText("Input a filename to save wordset");
             }
-
-            // Log.d("DEBUG", "Added file to " + folderName + "/" + fileName);
         });
     }
 }

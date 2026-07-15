@@ -102,13 +102,12 @@ public class ChooseFolder extends AppCompatActivity {
         {
             targetFolder.mkdirs();
         }
-        SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
 
         // Här kan du kopiera filerna till getFilesDir()
         // eller bara skriva ut vad som finns i mappen
         for (DocumentFile file : folder.listFiles()) {
             if (file.isFile()) {
-                Library.importFile(file, targetFolder, this, prefs);
+                Library.importFile(file, targetFolder, this);
             }
         }
     }

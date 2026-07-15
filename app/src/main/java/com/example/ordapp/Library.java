@@ -35,7 +35,7 @@ public final class Library {
 
     public static final int GREEN = 3, YELLOW = 2, RED = 1, UNASSIGNED = 0;
 
-    public static void createSummaryFile(File FilesDir, String folderName, SharedPreferences prefs)
+    public static void createSummaryFile(File FilesDir, String folderName)
     {
         File summaryFile = new File(FilesDir, folderName + "/"  + "summary.txt");
         if(summaryFile.exists())
@@ -58,9 +58,6 @@ public final class Library {
                 writeToFile(fileWOextension, printFile(filePathWOextension), true);
             }
         }
-        Library.setColor(prefs, folderName + "_summary_translation", "yellow");
-        Library.setColor(prefs, folderName + "_summary_original", "yellow");
-
     }
 
     public static int dpToPx(int dp, float density)
@@ -114,7 +111,7 @@ public final class Library {
         mainSet.applyTo(layout);
     }
 
-    public static void importFile(DocumentFile file, File targetFolder, Context context, SharedPreferences prefs)
+    public static void importFile(DocumentFile file, File targetFolder, Context context)
     {
         if (file == null || !file.isFile()) return;
 
@@ -139,14 +136,18 @@ public final class Library {
             e.printStackTrace();
         }
 
-        Library.createSummaryFile(context.getFilesDir(), targetFolder.getName(), prefs);
+        Library.createSummaryFile(context.getFilesDir(), targetFolder.getName());
     }
 
-    public static void DeleteFile(File file)
+    public static void DeleteFile(File file, SharedPreferences prefs, String fileName, String folder)
     {
         // Kontrollera om filen finns och ta bort den
         if(file.exists()){
             file.delete();
+            if(!fileName.equalsIgnoreCase("summary")) {
+                prefs.edit().putString(folder + "_" + fileName + "_translation", "red").apply();
+                prefs.edit().putString(folder + "_" + fileName + "_original", "red").apply();
+            }
         }
     }
 
@@ -181,15 +182,15 @@ public final class Library {
     {
         String color = prefs.getString(prefKey, "");
 
-        if(color.equals("yellow"))
+        if(color.equalsIgnoreCase("yellow"))
         {
             return YELLOW;
         }
-        else if(color.equals("green"))
+        else if(color.equalsIgnoreCase("green"))
         {
             return GREEN;
         }
-        else if(color.equals("red"))
+        else if(color.equalsIgnoreCase("red"))
         {
             return RED;
         }
@@ -227,17 +228,17 @@ public final class Library {
     {
         String color = prefs.getString(prefKey, "");
 
-        if(color.equals("yellow"))
+        if(color.equalsIgnoreCase("yellow"))
         {
             button.setBackgroundTintList(
                     ColorStateList.valueOf(Color.YELLOW));
         }
-        else if(color.equals("green"))
+        else if(color.equalsIgnoreCase("green"))
         {
             button.setBackgroundTintList(
                     ColorStateList.valueOf(Color.GREEN));
         }
-        else if(color.equals("red"))
+        else if(color.equalsIgnoreCase("red"))
         {
             button.setBackgroundTintList(
                     ColorStateList.valueOf(Color.RED));

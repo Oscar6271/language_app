@@ -94,7 +94,7 @@ public class Practice extends AppCompatActivity {
 
         if(Library.rewriteFile(filePath))
         {
-            Library.createSummaryFile(getFilesDir(), folder, prefs);
+            Library.createSummaryFile(getFilesDir(), folder);
         }
     }
 
