@@ -67,9 +67,9 @@ public class ChooseFolder extends AppCompatActivity {
                         completedDate,
                         LocalDate.now()
                 );
-        Log.d(folder, String.valueOf(daysPassed));
         SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
         daysPassedPref.edit().putLong(folder + "_daysPassed", daysPassed).apply();
+        daysPassedPref.edit().putString(folder + "_date", savedDate).apply();
 
         if(daysPassed < 7 )
         {
@@ -180,7 +180,6 @@ public class ChooseFolder extends AppCompatActivity {
                 resetColor(prefs, folder);
                 Button folderButton = Library.createButton(prefs, folder, this, density, layout, 150, buttonCount, folder, true);
                 buttonCount++;
-                Log.d("FOLDER", folder);
                 folderButton.setOnClickListener(view -> {
                     Intent intent = new Intent(ChooseFolder.this, SelectFile.class);
                     intent.putExtra("FOLDER_NAME", folder);

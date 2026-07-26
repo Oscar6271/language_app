@@ -68,6 +68,9 @@ public class ChooseFileMode extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
         Library.setNextColor(currentValue, maxValue, prefs, folder + "_" + fileNameWOextension);
+        Log.d("SAVE",
+                folder + "_" + fileNameWOextension + "=" +
+                        prefs.getString(folder + "_" + fileNameWOextension, null));
     }
 
     private void createUI()
@@ -144,7 +147,7 @@ public class ChooseFileMode extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         layout.removeAllViews();
-
+        Log.d("LIFECYCLE", "ChooseFileMode onResume");
         createUI();
     }
 }

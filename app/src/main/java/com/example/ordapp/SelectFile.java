@@ -58,11 +58,8 @@ public class SelectFile extends AppCompatActivity {
                 createButtons(file, currentPrefs);
                 maxValue += Library.GREEN;
                 currentValue += Library.evauluatePref(currentPrefs, folderName + "_" + fileNameWOextension);
-                Log.d("Curr", String.valueOf(currentValue));
-                Log.d("KEY", folderName + "_" + fileNameWOextension);
             }
         }
-        Log.d("VALUE", String.valueOf((double) currentValue / maxValue));
         // skriv det medelvärdet till mappen
         SharedPreferences prefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
         Library.setNextColor(currentValue, maxValue, prefs, folderName);
@@ -154,9 +151,9 @@ public class SelectFile extends AppCompatActivity {
         getSupportActionBar().setTitle("Choose file from " + folder);
 
         SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
-        String text = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
-
-        //Library.addTextView(layout, this, folder + " completed " + text + " days ago");
+        String days = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
+        String date = daysPassedPref.getString(folder + "_date", "not completed yet");
+        Library.addTextView(layout, this, folder + " completed on: " + date + "\n(" + days + " days ago)");
     }
 
     private boolean isAllFilesGreen()
@@ -176,8 +173,9 @@ public class SelectFile extends AppCompatActivity {
             if (file.isFile() && !file.getName().equals("profileInstalled")) {
                 String fileName = file.getName();
                 fileNameWOextension = fileName.substring(0, fileName.length() - 4);
-
-                if(Library.evauluatePref(currentPrefs, folder + "_" + fileNameWOextension) != Library.GREEN) {
+                int color = Library.evauluatePref(currentPrefs, folderName + "_" + fileNameWOextension);
+                Log.d("COLOR", fileName + "=" + color);
+                if(color != Library.GREEN) {
                      return false;
                 }
             }
@@ -195,11 +193,6 @@ public class SelectFile extends AppCompatActivity {
                 .apply();
     }
 
-    private void resetDate()
-    {
-        SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
-        CompletedPrefs.edit().putString(folder + "_LAST_COMPLETED_DATE", "").apply();
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,6 +200,7 @@ public class SelectFile extends AppCompatActivity {
         setContentView(binding.getRoot());
         intent = getIntent();
 
+        Log.d("LIFECYCLE", "SelectFIle onCreate");
         // ScrollView finns i XML, ConstraintLayout som child
         layout = findViewById(R.id.main);
         createUI();
@@ -218,19 +212,21 @@ public class SelectFile extends AppCompatActivity {
         super.onResume();
         layout.removeAllViews();
         buttonCount = 0;
+        Log.d("LIFECYCLE", "SelectFIle onResume");
 
         createUI();
 
         // om alla filer precis har blivit gröna sparar man datumet
         // annars kollar man om en fil har uppdaterats och nollställer då datumet
         boolean isGreen = isAllFilesGreen();
+
         if((!wasGreen && isGreen)) {
             saveDate();
         }
         else
         {
             SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
-            boolean fileUpdated = FileChangedprefs.getBoolean("any_file", false);
+            boolean fileUpdated = FileChangedprefs.getBoolean(folder + "_any_file", false);
 
             if(fileUpdated) {
                 SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
