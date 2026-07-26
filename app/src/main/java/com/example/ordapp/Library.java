@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -251,10 +252,11 @@ public final class Library {
         return prefs.getString(prefKey, "");
     }
 
+    // stegar vidare till nästa färg röd --> gul --> grön
     public static void gotoNextColor(SharedPreferences prefs, String prefKey)
     {
         // om knappen inte har en färg, default till röd och sätt den sen till gul
-        String color = prefs.getString(prefKey, "red");
+        String color = prefs.getString(prefKey, "");
 
         if(color.equals("green"))
         {
@@ -271,7 +273,7 @@ public final class Library {
         }
     }
 
-    // stegar vidare till nästa färg röd --> gul --> grön
+    // Sätter nästa färg beroende på hur många rätt man har
     public static void setPracticeColor(int totalCorrect, int totalWords, SharedPreferences prefs, String prefKey)
     {
         double ratio = (double) totalCorrect / totalWords;
@@ -310,6 +312,7 @@ public final class Library {
         params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
         params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
         params.verticalBias = 0.05f;   // 0 = högst upp, 1 = längst ner
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
 
         textView.setLayoutParams(params);
 

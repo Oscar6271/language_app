@@ -152,8 +152,24 @@ public class SelectFile extends AppCompatActivity {
 
         SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
         String days = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
-        String date = daysPassedPref.getString(folder + "_date", "not completed yet");
-        Library.addTextView(layout, this, folder + " completed on: " + date + "\n(" + days + " days ago)");
+        String dateString = daysPassedPref.getString(folder + "_date", "not completed yet");
+
+        String text = "";
+
+        if(!dateString.equalsIgnoreCase("not completed yet"))
+        {
+            LocalDate date = LocalDate.parse(dateString);
+            int day = date.getDayOfMonth();
+            String month = date.getMonth().toString().toLowerCase();
+            int year = date.getYear();
+            text = folder + " was completed on:\n" + day + " " +
+                    month + " " + year + " (" + days + " days ago)";
+        }
+        else
+        {
+            text = folder + " has not been completed yet";
+        }
+        Library.addTextView(layout, this, text);
     }
 
     private boolean isAllFilesGreen()
@@ -174,7 +190,7 @@ public class SelectFile extends AppCompatActivity {
                 String fileName = file.getName();
                 fileNameWOextension = fileName.substring(0, fileName.length() - 4);
                 int color = Library.evauluatePref(currentPrefs, folderName + "_" + fileNameWOextension);
-                Log.d("COLOR", fileName + "=" + color);
+
                 if(color != Library.GREEN) {
                      return false;
                 }
@@ -200,7 +216,6 @@ public class SelectFile extends AppCompatActivity {
         setContentView(binding.getRoot());
         intent = getIntent();
 
-        Log.d("LIFECYCLE", "SelectFIle onCreate");
         // ScrollView finns i XML, ConstraintLayout som child
         layout = findViewById(R.id.main);
         createUI();
@@ -212,7 +227,6 @@ public class SelectFile extends AppCompatActivity {
         super.onResume();
         layout.removeAllViews();
         buttonCount = 0;
-        Log.d("LIFECYCLE", "SelectFIle onResume");
 
         createUI();
 
