@@ -71,6 +71,9 @@ public class ChooseFolder extends AppCompatActivity {
         daysPassedPref.edit().putLong(folder + "_daysPassed", daysPassed).apply();
         daysPassedPref.edit().putString(folder + "_date", savedDate).apply();
 
+        Log.d("DATE_FOLDER", folder + savedDate);
+
+
         if(daysPassed < 7 )
         {
             return;

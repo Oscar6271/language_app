@@ -117,6 +117,30 @@ public class SelectFile extends AppCompatActivity {
                         }
                     }
             );
+    private void addDateText() {
+        SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
+        String days = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
+        String dateString = daysPassedPref.getString(folder + "_date", "not completed yet");
+
+        String text = "";
+
+        Log.d("DATE", dateString);
+
+        if(!dateString.isEmpty())
+        {
+            LocalDate date = LocalDate.parse(dateString);
+            int day = date.getDayOfMonth();
+            String month = date.getMonth().toString().toLowerCase();
+            int year = date.getYear();
+            text = folder + " was completed on:\n" + day + " " +
+                    month + " " + year + " (" + days + " days ago)";
+        }
+        else
+        {
+            text = folder + " has not been completed yet";
+        }
+        Library.addTextView(layout, this, text);
+    }
     private void createUI()
     {
         Intent intent = getIntent();
@@ -150,26 +174,7 @@ public class SelectFile extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Choose file from " + folder);
 
-        SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
-        String days = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
-        String dateString = daysPassedPref.getString(folder + "_date", "not completed yet");
-
-        String text = "";
-
-        if(!dateString.equalsIgnoreCase("not completed yet"))
-        {
-            LocalDate date = LocalDate.parse(dateString);
-            int day = date.getDayOfMonth();
-            String month = date.getMonth().toString().toLowerCase();
-            int year = date.getYear();
-            text = folder + " was completed on:\n" + day + " " +
-                    month + " " + year + " (" + days + " days ago)";
-        }
-        else
-        {
-            text = folder + " has not been completed yet";
-        }
-        Library.addTextView(layout, this, text);
+        addDateText();
     }
 
     private boolean isAllFilesGreen()
@@ -233,11 +238,13 @@ public class SelectFile extends AppCompatActivity {
         // om alla filer precis har blivit gröna sparar man datumet
         // annars kollar man om en fil har uppdaterats och nollställer då datumet
         boolean isGreen = isAllFilesGreen();
+        Log.d("GREEN", isGreen ? "is" : "is not");
+        Log.d("GREEN", wasGreen ? "was" : "was not");
 
         if((!wasGreen && isGreen)) {
             saveDate();
         }
-        else
+        else if(wasGreen && !isGreen)
         {
             SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
             boolean fileUpdated = FileChangedprefs.getBoolean(folder + "_any_file", false);
