@@ -5,9 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -55,6 +53,7 @@ public class SelectFile extends AppCompatActivity {
         // läs in vad varje fil har för färg och räkna ut medelvärde
         for (File file : files) {
             if (file.isFile() && !file.getName().equals("profileInstalled")) {
+                Log.d("FILE", file.getName());
                 createButtons(file, currentPrefs);
                 maxValue += Library.GREEN;
                 currentValue += Library.evauluatePref(currentPrefs, folderName + "_" + fileNameWOextension);
@@ -82,24 +81,30 @@ public class SelectFile extends AppCompatActivity {
                 })
                 .show();
     }
-    private boolean deleteFolder(File folder) {
-        if (folder == null || !folder.exists())
+    private boolean deleteFolder(File folder_file) {
+        if (folder_file == null || !folder_file.exists())
         {
             return false;
         }
 
-        File[] files = folder.listFiles();
+        File[] files = folder_file.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
                     deleteFolder(file);
                 } else {
-                    file.delete();
+                    SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
+                    FileChangedprefs.edit().putBoolean(folder + "_any_file", false).apply();
+
+                    SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+                    Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
+
+                    SharedPreferences filePref = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+                    Library.DeleteFile(file, filePref, file.getName().substring(0, file.getName().length() - 4), folder);
                 }
             }
         }
-
-        return folder.delete();
+        return folder_file.delete();
     }
 
     private final ActivityResultLauncher<String[]> multipleFilesLauncher =
@@ -118,9 +123,11 @@ public class SelectFile extends AppCompatActivity {
                     }
             );
     private void addDateText() {
+        SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+
         SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
         String days = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
-        String dateString = daysPassedPref.getString(folder + "_date", "not completed yet");
+        String dateString = CompletedPrefs.getString(folder + "_LAST_COMPLETED_DATE", "");
 
         String text = "";
 
@@ -241,15 +248,16 @@ public class SelectFile extends AppCompatActivity {
         Log.d("GREEN", isGreen ? "is" : "is not");
         Log.d("GREEN", wasGreen ? "was" : "was not");
 
-        if((!wasGreen && isGreen)) {
+        if(!wasGreen && isGreen) {
             saveDate();
         }
-        else if(wasGreen && !isGreen)
+        else
         {
             SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
             boolean fileUpdated = FileChangedprefs.getBoolean(folder + "_any_file", false);
 
             if(fileUpdated) {
+                FileChangedprefs.edit().putBoolean(folder + "_any_file", false).apply();
                 SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
                 Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
             }

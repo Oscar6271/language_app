@@ -145,11 +145,13 @@ public final class Library {
     {
         // Kontrollera om filen finns och ta bort den
         if(file.exists()){
+            prefs.edit().putString(folder + "_" + fileName + "_translation", "").apply();
+            prefs.edit().putString(folder + "_" + fileName + "_original", "").apply();
+            prefs.edit().putString(folder + "_" + fileName, "").apply();
+            Log.d("DELETE_FILE", folder + "_" + fileName + "_translation");
+            Log.d("DELETE_FILE", folder + "_" + fileName + "_original");
+
             file.delete();
-            if(!fileName.equalsIgnoreCase("summary")) {
-                prefs.edit().putString(folder + "_" + fileName + "_translation", "red").apply();
-                prefs.edit().putString(folder + "_" + fileName + "_original", "red").apply();
-            }
         }
     }
 
@@ -213,9 +215,13 @@ public final class Library {
         {
             color = "green";
         }
-        else if(ratio < 0.5 && ratio >= 0.0)
+        else if(ratio < 0.5 && ratio > 0.0)
         {
             color = "red";
+        }
+        else if(ratio == 0.0)
+        {
+            color = "";
         }
 
         nextPref.edit().putString(nextPrefKey, color).apply();

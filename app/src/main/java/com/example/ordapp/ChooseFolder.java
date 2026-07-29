@@ -51,13 +51,13 @@ public class ChooseFolder extends AppCompatActivity {
     }
     private void resetColor(SharedPreferences prefs, String folder)
     {
-        String savedDate = prefs.getString(
-                folder + "_LAST_COMPLETED_DATE",
-                null
-        );
+        String savedDate = prefs.getString(folder + "_LAST_COMPLETED_DATE",null);
+        SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
 
         if(savedDate == null || savedDate.isEmpty())
         {
+            daysPassedPref.edit().putString(folder + "_date", "").apply();
+            daysPassedPref.edit().putLong(folder + "_daysPassed", 0).apply();
             return;
         }
 
@@ -67,7 +67,6 @@ public class ChooseFolder extends AppCompatActivity {
                         completedDate,
                         LocalDate.now()
                 );
-        SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
         daysPassedPref.edit().putLong(folder + "_daysPassed", daysPassed).apply();
         daysPassedPref.edit().putString(folder + "_date", savedDate).apply();
 
