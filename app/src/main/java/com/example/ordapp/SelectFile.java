@@ -248,7 +248,7 @@ public class SelectFile extends AppCompatActivity {
         if(!wasGreen && isGreen) {
             saveDate();
         }
-        else
+        else if(!(wasGreen && isGreen))
         {
             SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
             boolean fileUpdated = FileChangedprefs.getBoolean(folder + "_any_file", false);
