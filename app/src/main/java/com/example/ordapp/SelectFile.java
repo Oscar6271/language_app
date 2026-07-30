@@ -124,10 +124,10 @@ public class SelectFile extends AppCompatActivity {
             );
     private void addDateText() {
         SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+        String dateString = CompletedPrefs.getString(folder + "_LAST_COMPLETED_DATE", "");
 
         SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
         String days = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
-        String dateString = CompletedPrefs.getString(folder + "_LAST_COMPLETED_DATE", "");
 
         String text = "";
 
@@ -240,13 +240,10 @@ public class SelectFile extends AppCompatActivity {
         layout.removeAllViews();
         buttonCount = 0;
 
-        createUI();
 
         // om alla filer precis har blivit gröna sparar man datumet
         // annars kollar man om en fil har uppdaterats och nollställer då datumet
         boolean isGreen = isAllFilesGreen();
-        Log.d("GREEN", isGreen ? "is" : "is not");
-        Log.d("GREEN", wasGreen ? "was" : "was not");
 
         if(!wasGreen && isGreen) {
             saveDate();
@@ -262,6 +259,7 @@ public class SelectFile extends AppCompatActivity {
                 Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
             }
         }
+        createUI();
         wasGreen = isGreen;
     }
 }

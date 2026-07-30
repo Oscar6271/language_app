@@ -45,9 +45,11 @@ public class Practice extends AppCompatActivity {
     private void set_text()
     {
         TextView wordToTranslateTextBox;
+        String file = intent.getStringExtra("FILE_NAME");
 
         wordToTranslateTextBox = (TextView)findViewById(R.id.WordToTranslateText);
         wordToTranslateTextBox.setText(wordToTranslate);
+        getSupportActionBar().setTitle("Practice " + file);
     }
 
     private void setupButtons()

@@ -127,9 +127,7 @@ public class ChooseFileMode extends AppCompatActivity {
                     .show();
         });
 
-        String pathName = folder + "/" + fileName;
-        String pathNameWOextension = pathName.substring(0, pathName.length() - 4);
-        getSupportActionBar().setTitle("Choose action in " + pathNameWOextension);
+        getSupportActionBar().setTitle("Choose action in " + fileNameWOextension);
     }
 
     @Override

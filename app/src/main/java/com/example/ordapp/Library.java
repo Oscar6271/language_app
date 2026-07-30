@@ -148,8 +148,6 @@ public final class Library {
             prefs.edit().putString(folder + "_" + fileName + "_translation", "").apply();
             prefs.edit().putString(folder + "_" + fileName + "_original", "").apply();
             prefs.edit().putString(folder + "_" + fileName, "").apply();
-            Log.d("DELETE_FILE", folder + "_" + fileName + "_translation");
-            Log.d("DELETE_FILE", folder + "_" + fileName + "_original");
 
             file.delete();
         }
