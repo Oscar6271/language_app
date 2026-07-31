@@ -120,9 +120,10 @@ public class Practice extends AppCompatActivity {
         binding.IWasRightButton.setVisibility(View.INVISIBLE);
     }
 
-    private void checkWord()
+    private void setResponse()
     {
         String input = binding.TranslationInputField.getEditText().getText().toString();
+
         String response = Library.compare(input);
         hasBeenCorrected = true;
         compareButtonVariable.setText("Next word");
@@ -135,7 +136,7 @@ public class Practice extends AppCompatActivity {
         else if(response.startsWith("Correct!") && response.length() > "Correct!".length())
         {
             String alternative = response.substring("Correct!".length());
-            createSnackBar(alternative, 2000);
+            createSnackBar(alternative, 3500);
             ResponseTextBox.setText("Correct!");
         }
         else
@@ -153,6 +154,11 @@ public class Practice extends AppCompatActivity {
             binding.IWasRightButton.setVisibility(View.VISIBLE);
             IwasRightButton(input);
         }
+    }
+
+    private void checkWord()
+    {
+        setResponse();
 
         totalAnswered++;
         if(first_time)
@@ -195,19 +201,22 @@ public class Practice extends AppCompatActivity {
     private void PracticeMain()
     {
         binding.compareButton.setOnClickListener(view -> {
-
             wordsetCompleted();
 
-            if(hasBeenCorrected)
-            {
-                nextWord();
-            }
-            else
-            {
-                checkWord();
-            }
+            int status = Library.checkEmpty();
+            checkStatus(status);
 
-            checkStatus(Library.checkEmpty());
+            if(status != EMPTY)
+            {
+                if(hasBeenCorrected)
+                {
+                    nextWord();
+                }
+                else
+                {
+                    checkWord();
+                }
+            }
         });
     }
 
@@ -237,7 +246,7 @@ public class Practice extends AppCompatActivity {
     private void IwasRightButton(String input)
     {
         binding.IWasRightButton.setOnClickListener(view -> {
-            if(first_time || Library.wordsLeft() <= 1)
+            if(first_time)
             {
                 totalCorrect++;
             }
