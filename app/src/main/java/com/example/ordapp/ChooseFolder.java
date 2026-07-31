@@ -109,6 +109,7 @@ public class ChooseFolder extends AppCompatActivity {
         // eller bara skriva ut vad som finns i mappen
         for (DocumentFile file : folder.listFiles()) {
             if (file.isFile()) {
+                Log.d("FILE", file.getName());
                 Library.importFile(file, targetFolder, this);
             }
         }

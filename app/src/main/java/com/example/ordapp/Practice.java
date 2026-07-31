@@ -127,7 +127,21 @@ public class Practice extends AppCompatActivity {
         hasBeenCorrected = true;
         compareButtonVariable.setText("Next word");
 
-        ResponseTextBox.setText(response);
+        // om det står något annat än Correct! ska man skriva nåt annat
+        if(response.startsWith("Correct!") && response.length() == "Correct!".length())
+        {
+            ResponseTextBox.setText(response);
+        }
+        else if(response.startsWith("Correct!") && response.length() > "Correct!".length())
+        {
+            String alternative = response.substring("Correct!".length());
+            createSnackBar(alternative, 2000);
+            ResponseTextBox.setText("Correct!");
+        }
+        else
+        {
+            ResponseTextBox.setText(response);
+        }
 
         if(first_time && response.startsWith("Correct!"))
         {
@@ -161,7 +175,7 @@ public class Practice extends AppCompatActivity {
             compareButtonVariable.setText("Practice other sets");
 
             double percentage = (((double) totalCorrect / totalWords)) * 100;
-            ResponseTextBox.setText("You got " + totalCorrect + "/" + totalWords + " correct. That is " + String.format(" (%.1f%%)", percentage));
+            ResponseTextBox.setText("You got " + totalCorrect + "/" + totalWords + " correct " + String.format(" (%.1f%%)", percentage));
             if(Library.checkSize() == 0)
             {
                 totalAnsweredBox.setText("");
@@ -178,7 +192,7 @@ public class Practice extends AppCompatActivity {
             totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + redoSize + String.format(" (%.1f%%)", percentage));
         }
     }
-    private void compareButton()
+    private void PracticeMain()
     {
         binding.compareButton.setOnClickListener(view -> {
 
@@ -197,13 +211,13 @@ public class Practice extends AppCompatActivity {
         });
     }
 
-    private void createSnackBar(String message)
+    private void createSnackBar(String message, int length)
     {
         Snackbar snackbar = Snackbar.make(
                 binding.getRoot(),
                 message,
                 Snackbar.LENGTH_SHORT);
-        snackbar.setDuration(1000); // 1 sekund
+        snackbar.setDuration(length); // 1 sekund
 
         snackbar.setAction("Close", v -> snackbar.dismiss());
 
@@ -213,7 +227,7 @@ public class Practice extends AppCompatActivity {
                 (FrameLayout.LayoutParams) snackBarView.getLayoutParams();
 
         params.gravity = Gravity.TOP;
-        params.topMargin = 600;
+        params.topMargin = 650;
 
         snackBarView.setLayoutParams(params);
 
@@ -227,17 +241,17 @@ public class Practice extends AppCompatActivity {
             {
                 totalCorrect++;
             }
-            ResponseTextBox.setText("");
+            ResponseTextBox.setText("Correct!");
             new androidx.appcompat.app.AlertDialog.Builder(Practice.this)
                     .setTitle("Add word")
                     .setMessage("Do you want to add " + input + " as alternative?")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         Library.addAlternative(input, wordToTranslate);
-                        createSnackBar("Added " + input + " as alternative for " + wordToTranslate);
+                        createSnackBar("Added " + input + " as alternative for " + wordToTranslate, 1000);
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         Library.clean_wrong_lists();
-                        createSnackBar("Answered corrected, but not added as alternative");
+                        createSnackBar("Answered corrected, but not added as alternative", 1000);
 
                         dialog.dismiss();
                     })
@@ -266,6 +280,6 @@ public class Practice extends AppCompatActivity {
         redoSize = 0;
         binding.IWasRightButton.setVisibility(View.INVISIBLE);
 
-        compareButton();
+        PracticeMain();
     }
 }

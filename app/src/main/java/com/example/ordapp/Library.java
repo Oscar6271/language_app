@@ -57,6 +57,7 @@ public final class Library {
                 // läs in varje fil med printFile till en String
                 String filePath = new File(FilesDir, folderName + "/" + file.getName()).getAbsolutePath();
                 String filePathWOextension = filePath.substring(0, filePath.length() - 4);
+                Log.d("FILE", fileWOextension);
                 writeToFile(fileWOextension, printFile(filePathWOextension), true);
             }
         }
