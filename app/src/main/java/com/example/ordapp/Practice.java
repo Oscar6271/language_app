@@ -135,7 +135,8 @@ public class Practice extends AppCompatActivity {
         }
         else if(response.startsWith("Correct!") && response.length() > "Correct!".length())
         {
-            String alternative = response.substring("Correct!".length());
+            // + 1 för att ta bort mellanslaget som hamnar framför alternative annars
+            String alternative = response.substring("Correct!".length() + 1);
             createSnackBar(alternative, 3500);
             ResponseTextBox.setText("Correct!");
         }
