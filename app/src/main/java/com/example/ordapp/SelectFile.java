@@ -27,6 +27,9 @@ public class SelectFile extends AppCompatActivity {
     boolean wasGreen;
     Intent intent;
 
+    /**
+     * Skapar knapp för en fil
+     */
     private void createButtons(File file, SharedPreferences prefs) {
         String fileName = file.getName();
         fileNameWOextension = fileName.substring(0, fileName.length() - 4);
@@ -42,7 +45,11 @@ public class SelectFile extends AppCompatActivity {
         });
     }
 
-    private void createDropDowns() {
+    /**
+     * Går igenom hela mappen och lägger till knappar för varje fil genom att kalla på createButtons.
+     * Räknar ut ett medelvärde för alla filers färg och bestämmer vilken färg mappen ska få
+     */
+    private void addFileButtons() {
         String folderName = intent.getStringExtra("FOLDER_NAME");
 
         File folder = new File(getFilesDir(), folderName);
@@ -64,6 +71,9 @@ public class SelectFile extends AppCompatActivity {
         Library.setNextColor(currentValue, maxValue, prefs, folderName);
     }
 
+    /**
+     * Skapar en alert innan man tar bort en mapp
+     */
     private void deleteAlert(String folderName)
     {
         File folder = new File(getFilesDir(), folderName);
@@ -81,6 +91,9 @@ public class SelectFile extends AppCompatActivity {
                 })
                 .show();
     }
+    /**
+     * Tar bort mappen och alla filer i den
+     */
     private boolean deleteFolder(File folder_file) {
         if (folder_file == null || !folder_file.exists())
         {
@@ -93,20 +106,27 @@ public class SelectFile extends AppCompatActivity {
                 if (file.isDirectory()) {
                     deleteFolder(file);
                 } else {
+                    // Sätt att ingen fil har uppdaterats
                     SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
                     FileChangedprefs.edit().putBoolean(folder + "_any_file", false).apply();
 
-                    SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
-                    Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
-
+                    // Ta bort filen
                     SharedPreferences filePref = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
                     Library.DeleteFile(file, filePref, file.getName().substring(0, file.getName().length() - 4), folder);
                 }
             }
         }
+
+        // reseta datumet för mappen
+        SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+        Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
+
         return folder_file.delete();
     }
 
+    /**
+     * Launcher för att importera flera filer samtidigt
+     */
     private final ActivityResultLauncher<String[]> multipleFilesLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.OpenMultipleDocuments(),
@@ -122,6 +142,9 @@ public class SelectFile extends AppCompatActivity {
                         }
                     }
             );
+    /**
+     * Skriver ut det datum som mappan har klarats av på och antal dagar sen avklarad
+     */
     private void addDateText() {
         SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
         String dateString = CompletedPrefs.getString(folder + "_LAST_COMPLETED_DATE", "");
@@ -148,13 +171,12 @@ public class SelectFile extends AppCompatActivity {
         }
         Library.addTextView(layout, this, text);
     }
-    private void createUI()
+
+    /**
+     * Lägger till knapparna Delete folder, Add file och Import file
+     */
+    private void addExtraButtons()
     {
-        Intent intent = getIntent();
-        density = getResources().getDisplayMetrics().density;
-
-        folder = intent.getStringExtra("FOLDER_NAME");
-
         Button addFileButton = Library.addExtraButton("Add file", 500, density, layout, buttonCount, this);
         addFileButton.setOnClickListener(view -> {
             // gå till simple_input
@@ -177,16 +199,40 @@ public class SelectFile extends AppCompatActivity {
         });
 
         buttonCount++;
-        createDropDowns();
+    }
+
+    /**
+     * Lägger till knappar och OnClickListener för att filer i mappen.
+     * Lägger även till knapparna Delete folder, Add file och Import file
+     */
+    private void createUI()
+    {
+        Intent intent = getIntent();
+        density = getResources().getDisplayMetrics().density;
+        folder = intent.getStringExtra("FOLDER_NAME");
+
+        addExtraButtons();
+
+        addFileButtons();
 
         getSupportActionBar().setTitle("Choose file from " + folder);
 
         addDateText();
     }
 
+    /**
+     * Kollar om alla filer i mappen är gröna
+     *
+     * @return true om alla filer i mappen är gröna, annars false.
+     */
     private boolean isAllFilesGreen()
     {
         String folderName = intent.getStringExtra("FOLDER_NAME");
+
+        if(folderName == null)
+        {
+            return false;
+        }
 
         File folder = new File(getFilesDir(), folderName);
         File[] files = folder.listFiles();
@@ -211,6 +257,9 @@ public class SelectFile extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Sparar dagens datum för en mapp
+     */
     private void saveDate()
     {
         SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
@@ -234,12 +283,16 @@ public class SelectFile extends AppCompatActivity {
         wasGreen = isAllFilesGreen();
     }
 
+    /**
+     * Återskapar UI:n.
+     * Kollar om alla filer i mappen precis har blivit gröna och sparar då datumet.
+     * Datumet resetas om man har gjort om en fil i mappen.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         layout.removeAllViews();
         buttonCount = 0;
-
 
         // om alla filer precis har blivit gröna sparar man datumet
         // annars kollar man om en fil har uppdaterats och nollställer då datumet
@@ -253,12 +306,14 @@ public class SelectFile extends AppCompatActivity {
             SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
             boolean fileUpdated = FileChangedprefs.getBoolean(folder + "_any_file", false);
 
+            // om någon fil i mappen har uppdaterats resetas datumet
             if(fileUpdated) {
                 FileChangedprefs.edit().putBoolean(folder + "_any_file", false).apply();
                 SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
                 Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
             }
         }
+
         createUI();
         wasGreen = isGreen;
     }

@@ -20,17 +20,25 @@ import java.io.File;
 import java.time.LocalDate;
 
 public class ChooseFolder extends AppCompatActivity {
-
+    ActivityChooseFolderBinding binding;
     float density;
     int buttonCount = 0;
     long daysPassed = 0;
     ConstraintLayout layout;
     String folderName;
 
+    /**
+     * Går igenom alla filerna i en mapp och sätter färg på filens translation
+     * och original knappar
+     *
+     * @param folder Mappen för filerna man ska sätta färg på
+     * @param color Den färg som filerna ska få
+     */
     private void setAllFilesColor(String folder, String color)
     {
         File folderFile = new File(getFilesDir(), folder);
         File[] files = folderFile.listFiles();
+
         if(files == null)
         {
             return;
@@ -44,18 +52,32 @@ public class ChooseFolder extends AppCompatActivity {
                 String fileName = file.getName();
                 String fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 
+                // Sätt filen, translation och original knapparna till den nya färgen
                 Library.setColor(prefs, fileNameWOextension, color);
                 Library.setColor(FileButtonPrefs, folder + "_" + fileNameWOextension + "_translation", color);
                 Library.setColor(FileButtonPrefs, folder + "_" + fileNameWOextension + "_original", color);}
         }
     }
+
+    /**
+     * Kollar om datumet då en mapp har klarats av är 7, 14, eller 21 dagar sen.
+     * Sätter då mappens färg till gul (vid 14 dagar) eller röd (vid 21 dagar).
+     * Använder setAllFilesColor
+     *
+     * @param prefs SharedPreferences mappen
+     * @param folder Mappen som man eventuellt ändrar färg på
+     */
     private void resetColor(SharedPreferences prefs, String folder)
     {
         String savedDate = prefs.getString(folder + "_LAST_COMPLETED_DATE",null);
+
+        // daysPassedPref läses i SelectFile för att dubbelkolla att den här
+        // funktionen används rätt
         SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
 
         if(savedDate == null || savedDate.isEmpty())
         {
+            // Om det inte finns ett sparat datum reseta preferencen
             daysPassedPref.edit().putString(folder + "_date", "").apply();
             daysPassedPref.edit().putLong(folder + "_daysPassed", 0).apply();
             return;
@@ -67,6 +89,7 @@ public class ChooseFolder extends AppCompatActivity {
                         completedDate,
                         LocalDate.now()
                 );
+
         daysPassedPref.edit().putLong(folder + "_daysPassed", daysPassed).apply();
         daysPassedPref.edit().putString(folder + "_date", savedDate).apply();
 
@@ -89,6 +112,12 @@ public class ChooseFolder extends AppCompatActivity {
         }
     }
 
+    /**
+     * Importerar en mapp genom att gå igenom alla filer i mappen och
+     * kallar på Library.ImportFile
+     *
+     * @param treeUri Mappen som ska importeras
+     */
     private void importFolder(Uri treeUri)
     {
         DocumentFile folder = DocumentFile.fromTreeUri(this, treeUri);
@@ -115,6 +144,10 @@ public class ChooseFolder extends AppCompatActivity {
         }
     }
 
+    /**
+     * Startar en launcher för att användaren ska kunna välja mapp
+     * från filhanteraren i mobilen
+     */
     private final ActivityResultLauncher<Uri> importFolderLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.OpenDocumentTree(),
@@ -130,37 +163,57 @@ public class ChooseFolder extends AppCompatActivity {
                     }
             );
 
+    /**
+     * Öppnar en file genom att starta SelectFile
+     *
+     * @param folder Den mapp som ska öppnas
+     */
+    private void openFolder(String folder)
+    {
+        Intent intent = new Intent(ChooseFolder.this, SelectFile.class);
+        intent.putExtra("FOLDER_NAME", folder);
+        intent.putExtra(folder + "_daysPassed", daysPassed);
+        startActivity(intent);
+    }
+
+    /**
+     * Lägger till knappar och OnClickListener för att kunna
+     * skapa och importera en ny mapp
+     */
     private void createFolder()
     {
-        // skapa en knapp och ett textfält under knappen, knappen ska köra raderna ovanför
-        Button addFolder = Library.addExtraButton("New folder", 500, density, layout, buttonCount, this);
         buttonCount++;
 
+        // Skapa textField där man skriver in mappens namn
         EditText textField = new EditText(this);
         textField.setHint("Name of folder");
         Library.addView(textField, density, layout);
         Library.addConstraintSet(textField, 500, layout, buttonCount, density);
         buttonCount--;
 
+        // skapa en knapp och ett textfält under knappen, knappen ska köra raderna ovanför
+        Button addFolder = Library.addExtraButton("New folder", 500, density, layout, buttonCount, this);
+
         addFolder.setOnClickListener(view -> {
             folderName = textField.getText().toString().trim();
             File folderFile = new File(getFilesDir(), folderName);
 
-            // Skapar en folder
+            textField.setText("");
+
+            // Skapar en mapp
             if (!folderFile.exists())
             {
                 folderFile.mkdirs();
-                textField.setText("");
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
+                openFolder(folderName);
             }
             else
             {
-                textField.setText("Folder already exists");
+                Library.createSnackBar(layout, "Folder already exists", 2500, 950);
             }
         });
 
+
+        // Knapp för att importera en mapp
         Button importFolder = Library.addExtraButton("Import folder", -500, density, layout, buttonCount, this);
 
         importFolder.setOnClickListener(view -> {
@@ -170,7 +223,9 @@ public class ChooseFolder extends AppCompatActivity {
 
         buttonCount += 2;
     }
-
+    /**
+     * Går igenom alla mappar, skapar knappar och OnClickListeners som startar SelectFile
+     */
     private void displayFolders()
     {
         File[] files = getFilesDir().listFiles();
@@ -184,15 +239,15 @@ public class ChooseFolder extends AppCompatActivity {
                 Button folderButton = Library.createButton(prefs, folder, this, density, layout, 150, buttonCount, folder, true);
                 buttonCount++;
                 folderButton.setOnClickListener(view -> {
-                    Intent intent = new Intent(ChooseFolder.this, SelectFile.class);
-                    intent.putExtra("FOLDER_NAME", folder);
-                    startActivity(intent);
-                    intent.putExtra(folder + "_daysPassed", daysPassed);
+                    openFolder(folder);
                 });
             }
         }
     }
 
+    /**
+     * Skapar UI, används från OnCreate och OnResume
+     */
     private void createUI()
     {
         buttonCount = 0;
@@ -203,7 +258,8 @@ public class ChooseFolder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityChooseFolderBinding binding = ActivityChooseFolderBinding.inflate(getLayoutInflater());
+
+        binding = ActivityChooseFolderBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         layout = findViewById(R.id.main);
         density = getResources().getDisplayMetrics().density;
@@ -214,6 +270,8 @@ public class ChooseFolder extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Ta bort UI:n för att sen bygga upp den igenom
+        // Behövs för att saker (färger) kan ha uppdaterats
         layout.removeAllViews();
 
         createUI();

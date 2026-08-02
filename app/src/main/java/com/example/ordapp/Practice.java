@@ -137,7 +137,7 @@ public class Practice extends AppCompatActivity {
         {
             // + 1 för att ta bort mellanslaget som hamnar framför alternative annars
             String alternative = response.substring("Correct!".length() + 1);
-            createSnackBar(alternative, 3500);
+            Library.createSnackBar(binding.getRoot(), alternative, 3000, 650);
             ResponseTextBox.setText("Correct!");
         }
         else
@@ -221,29 +221,6 @@ public class Practice extends AppCompatActivity {
         });
     }
 
-    private void createSnackBar(String message, int length)
-    {
-        Snackbar snackbar = Snackbar.make(
-                binding.getRoot(),
-                message,
-                Snackbar.LENGTH_SHORT);
-        snackbar.setDuration(length); // 1 sekund
-
-        snackbar.setAction("Close", v -> snackbar.dismiss());
-
-        View snackBarView = snackbar.getView();
-
-        FrameLayout.LayoutParams params =
-                (FrameLayout.LayoutParams) snackBarView.getLayoutParams();
-
-        params.gravity = Gravity.TOP;
-        params.topMargin = 650;
-
-        snackBarView.setLayoutParams(params);
-
-        snackbar.show();
-    }
-
     private void IwasRightButton(String input)
     {
         binding.IWasRightButton.setOnClickListener(view -> {
@@ -257,11 +234,11 @@ public class Practice extends AppCompatActivity {
                     .setMessage("Do you want to add " + input + " as alternative?")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         Library.addAlternative(input, wordToTranslate);
-                        createSnackBar("Added " + input + " as alternative for " + wordToTranslate, 1000);
+                        Library.createSnackBar(binding.getRoot(), "Added " + input + " as alternative for " + wordToTranslate, 1000, 650);
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         Library.clean_wrong_lists();
-                        createSnackBar("Answered corrected, but not added as alternative", 1000);
+                        Library.createSnackBar(binding.getRoot(), "Answered corrected, but not added as alternative", 1000, 650);
 
                         dialog.dismiss();
                     })

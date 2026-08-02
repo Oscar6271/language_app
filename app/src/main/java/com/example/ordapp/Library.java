@@ -10,11 +10,14 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.documentfile.provider.DocumentFile;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -322,5 +325,28 @@ public final class Library {
         textView.setLayoutParams(params);
 
         layout.addView(textView);
+    }
+
+    public static void createSnackBar(ConstraintLayout root, String message, int time, int topMargin)
+    {
+        Snackbar snackbar = Snackbar.make(
+                root,
+                message,
+                Snackbar.LENGTH_SHORT);
+        snackbar.setDuration(time); // 1 sekund
+
+        snackbar.setAction("Close", v -> snackbar.dismiss());
+
+        View snackBarView = snackbar.getView();
+
+        FrameLayout.LayoutParams params =
+                (FrameLayout.LayoutParams) snackBarView.getLayoutParams();
+
+        params.gravity = Gravity.TOP;
+        params.topMargin = topMargin;
+
+        snackBarView.setLayoutParams(params);
+
+        snackbar.show();
     }
 }
