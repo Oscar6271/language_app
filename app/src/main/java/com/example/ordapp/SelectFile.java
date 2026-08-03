@@ -146,6 +146,7 @@ public class SelectFile extends AppCompatActivity {
      * Skriver ut det datum som mappan har klarats av på och antal dagar sen avklarad
      */
     private void addDateText() {
+        // använd den här SharedPreferences för att kunna uppdatera texten utan att gå till ChooseFolder först
         SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
         String dateString = CompletedPrefs.getString(folder + "_LAST_COMPLETED_DATE", "");
 

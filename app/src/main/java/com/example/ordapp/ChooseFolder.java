@@ -53,7 +53,7 @@ public class ChooseFolder extends AppCompatActivity {
                 String fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 
                 // Sätt filen, translation och original knapparna till den nya färgen
-                Library.setColor(prefs, fileNameWOextension, color);
+                Library.setColor(prefs, folder + "_" + fileNameWOextension, color);
                 Library.setColor(FileButtonPrefs, folder + "_" + fileNameWOextension + "_translation", color);
                 Library.setColor(FileButtonPrefs, folder + "_" + fileNameWOextension + "_original", color);}
         }
