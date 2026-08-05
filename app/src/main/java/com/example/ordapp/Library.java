@@ -253,6 +253,11 @@ public final class Library {
             button.setBackgroundTintList(
                     ColorStateList.valueOf(Color.RED));
         }
+        else
+        {
+            button.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.LTGRAY));
+        }
     }
 
     public static String getColor(SharedPreferences prefs, String prefKey)

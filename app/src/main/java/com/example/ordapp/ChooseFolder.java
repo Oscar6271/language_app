@@ -113,6 +113,64 @@ public class ChooseFolder extends AppCompatActivity {
     }
 
     /**
+     * Tar bort mappen och alla filer i den
+     */
+    private boolean deleteFolder(File folder_file) {
+        if (folder_file == null || !folder_file.exists())
+        {
+            return false;
+        }
+
+        File[] files = folder_file.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteFolder(file);
+                } else {
+                    // Sätt att ingen fil har uppdaterats
+                    SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
+                    FileChangedprefs.edit().putBoolean(folderName + "_any_file", false).apply();
+
+                    // Ta bort filen
+                    SharedPreferences filePref = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+                    Library.DeleteFile(file, filePref, file.getName().substring(0, file.getName().length() - 4), folderName);
+                }
+            }
+        }
+
+        // reseta datumet för mappen
+        SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+        Library.resetDate(CompletedPrefs, folderName + "_LAST_COMPLETED_DATE");
+
+        return folder_file.delete();
+    }
+
+    private void ConfirmDialog(DocumentFile folder, File targetFolder) {
+        new androidx.appcompat.app.AlertDialog.Builder(ChooseFolder.this)
+                .setTitle("Import Folder?")
+                .setMessage("Do you want to replace " + folder.getName() + "?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // Här kan du kopiera filerna till getFilesDir()
+                    // eller bara skriva ut vad som finns i mappen
+                    deleteFolder(targetFolder);
+                    targetFolder.mkdirs();
+
+                    for (DocumentFile file : folder.listFiles()) {
+                        if (file.isFile()) {
+                            Library.importFile(file, targetFolder, this);
+                        }
+                    }
+                    Library.createSnackBar(layout, "Replaced " + folder.getName(), 2000, 1800);
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    Library.createSnackBar(layout, folder.getName() + " was not imported", 2000, 1800);
+
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
+    /**
      * Importerar en mapp genom att gå igenom alla filer i mappen och
      * kallar på Library.ImportFile
      *
@@ -132,15 +190,20 @@ public class ChooseFolder extends AppCompatActivity {
         if(!targetFolder.exists())
         {
             targetFolder.mkdirs();
-        }
-
-        // Här kan du kopiera filerna till getFilesDir()
-        // eller bara skriva ut vad som finns i mappen
-        for (DocumentFile file : folder.listFiles()) {
-            if (file.isFile()) {
-                Library.importFile(file, targetFolder, this);
+            // Här kan du kopiera filerna till getFilesDir()
+            // eller bara skriva ut vad som finns i mappen
+            for (DocumentFile file : folder.listFiles()) {
+                if (file.isFile()) {
+                    Library.importFile(file, targetFolder, this);
+                }
             }
         }
+        else
+        {
+            ConfirmDialog(folder, targetFolder);
+        }
+
+
     }
 
     /**

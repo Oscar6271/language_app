@@ -34,6 +34,39 @@ public class SelectFile extends AppCompatActivity {
     Intent intent;
 
     /**
+     * Tar bort mappen och alla filer i den
+     */
+    private boolean deleteFolder(File folder_file) {
+        if (folder_file == null || !folder_file.exists())
+        {
+            return false;
+        }
+
+        File[] files = folder_file.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteFolder(file);
+                } else {
+                    // Sätt att ingen fil har uppdaterats
+                    SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
+                    FileChangedprefs.edit().putBoolean(folder + "_any_file", false).apply();
+
+                    // Ta bort filen
+                    SharedPreferences filePref = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+                    Library.DeleteFile(file, filePref, file.getName().substring(0, file.getName().length() - 4), folder);
+                }
+            }
+        }
+
+        // reseta datumet för mappen
+        SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
+        Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
+
+        return folder_file.delete();
+    }
+
+    /**
      * Skapar knapp för en fil
      */
     private void createButtons(File file, SharedPreferences prefs) {
@@ -46,7 +79,7 @@ public class SelectFile extends AppCompatActivity {
         button.setOnClickListener(view -> {
             Intent ChooseFileModeIntent = new Intent(SelectFile.this, ChooseFileMode.class);
             ChooseFileModeIntent.putExtra("FILE_NAME", fileName);
-            ChooseFileModeIntent.putExtra("FOLDER_NAME", getIntent().getStringExtra("FOLDER_NAME"));
+            ChooseFileModeIntent.putExtra("FOLDER_NAME", folder);
             startActivity(ChooseFileModeIntent);
         });
     }
@@ -96,39 +129,23 @@ public class SelectFile extends AppCompatActivity {
                 })
                 .show();
     }
-    /**
-     * Tar bort mappen och alla filer i den
-     */
-    private boolean deleteFolder(File folder_file) {
-        if (folder_file == null || !folder_file.exists())
-        {
-            return false;
-        }
 
-        File[] files = folder_file.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    deleteFolder(file);
-                } else {
-                    // Sätt att ingen fil har uppdaterats
-                    SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
-                    FileChangedprefs.edit().putBoolean(folder + "_any_file", false).apply();
+    private void ConfirmDialog(DocumentFile file) {
+            new androidx.appcompat.app.AlertDialog.Builder(SelectFile.this)
+                    .setTitle("Import file?")
+                    .setMessage("Do you want to replace " + file.getName() + "?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        deleteFolder(new File(getFilesDir(), folder));
+                        Library.importFile(file, new File(getFilesDir(), folder), this);
+                        Library.createSnackBar(layout, "Replaced " + file.getName(), 1000, 650);
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        Library.createSnackBar(layout, file.getName() + " was not imported", 1000, 650);
 
-                    // Ta bort filen
-                    SharedPreferences filePref = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
-                    Library.DeleteFile(file, filePref, file.getName().substring(0, file.getName().length() - 4), folder);
-                }
-            }
-        }
-
-        // reseta datumet för mappen
-        SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
-        Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
-
-        return folder_file.delete();
+                        dialog.dismiss();
+                    })
+                    .show();
     }
-
     /**
      * Launcher för att importera flera filer samtidigt
      */
@@ -142,7 +159,13 @@ public class SelectFile extends AppCompatActivity {
                                     DocumentFile.fromSingleUri(this, uri);
 
                             if (file != null) {
-                                Library.importFile(file, new File(getFilesDir(), folder), this);
+                                if(file.exists()) {
+                                    ConfirmDialog(file);
+                                }
+                                else
+                                {
+                                    Library.importFile(file, new File(getFilesDir(), folder), this);
+                                }
                             }
                         }
                     }
@@ -157,8 +180,7 @@ public class SelectFile extends AppCompatActivity {
 
                             Uri treeUri = result.getData().getData();
 
-                            DocumentFile selectedFolder =
-                                    DocumentFile.fromTreeUri(this, treeUri);
+                            DocumentFile selectedFolder = DocumentFile.fromTreeUri(this, treeUri);
 
                             if (selectedFolder == null) {
                                 return;
@@ -201,7 +223,7 @@ public class SelectFile extends AppCompatActivity {
                                     Library.createSnackBar(layout, "Failed to export folder", 2000, 1800);
                                 }
                             }
-                            Library.createSnackBar(layout, "Added " + files.length + " files from " + folderName, 2000, 1800);
+                            Library.createSnackBar(layout, "Exported " + files.length + " files from " + folderName, 2000, 1800);
                         }
                     });
     /**
