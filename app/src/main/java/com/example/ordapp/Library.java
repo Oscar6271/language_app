@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -60,7 +61,6 @@ public final class Library {
                 // läs in varje fil med printFile till en String
                 String filePath = new File(FilesDir, folderName + "/" + file.getName()).getAbsolutePath();
                 String filePathWOextension = filePath.substring(0, filePath.length() - 4);
-                Log.d("FILE", fileWOextension);
                 writeToFile(fileWOextension, printFile(filePathWOextension), true);
             }
         }
@@ -319,7 +319,7 @@ public final class Library {
         params.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
         params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
         params.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
-        params.verticalBias = 0.05f;   // 0 = högst upp, 1 = längst ner
+        params.verticalBias = 0.03f;   // 0 = högst upp, 1 = längst ner
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
 
         textView.setLayoutParams(params);
@@ -327,13 +327,21 @@ public final class Library {
         layout.addView(textView);
     }
 
+    /**
+     * Skapar en Snackbar
+     *
+     * @param root Den ConstraintLayout som Snackbar ska placeras på
+     * @param message Det som ska skrivas ut
+     * @param time Tid i millisekunder som Snackbar ska visas
+     * @param topMargin Distans till toppen
+     */
     public static void createSnackBar(ConstraintLayout root, String message, int time, int topMargin)
     {
         Snackbar snackbar = Snackbar.make(
                 root,
                 message,
                 Snackbar.LENGTH_SHORT);
-        snackbar.setDuration(time); // 1 sekund
+        snackbar.setDuration(time);
 
         snackbar.setAction("Close", v -> snackbar.dismiss());
 

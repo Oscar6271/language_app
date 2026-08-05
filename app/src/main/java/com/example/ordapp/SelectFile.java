@@ -16,10 +16,16 @@ import androidx.documentfile.provider.DocumentFile;
 import com.example.ordapp.databinding.ActivitySelectFileBinding;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 
 public class SelectFile extends AppCompatActivity {
+    static {
+        System.loadLibrary("ordapp");
+    }
     private ConstraintLayout layout;  // Huvud-ConstraintLayout inuti ScrollView
     private int buttonCount = 0;     // För att positionera knappar vertikalt
     private String folder, fileNameWOextension;
@@ -60,7 +66,6 @@ public class SelectFile extends AppCompatActivity {
         // läs in vad varje fil har för färg och räkna ut medelvärde
         for (File file : files) {
             if (file.isFile() && !file.getName().equals("profileInstalled")) {
-                Log.d("FILE", file.getName());
                 createButtons(file, currentPrefs);
                 maxValue += Library.GREEN;
                 currentValue += Library.evauluatePref(currentPrefs, folderName + "_" + fileNameWOextension);
@@ -127,7 +132,7 @@ public class SelectFile extends AppCompatActivity {
     /**
      * Launcher för att importera flera filer samtidigt
      */
-    private final ActivityResultLauncher<String[]> multipleFilesLauncher =
+    private final ActivityResultLauncher<String[]> importMultipleFileLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.OpenMultipleDocuments(),
                     uris -> {
@@ -142,6 +147,63 @@ public class SelectFile extends AppCompatActivity {
                         }
                     }
             );
+    private final ActivityResultLauncher<Intent> exportFolderLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+
+                        if (result.getResultCode() == RESULT_OK &&
+                                result.getData() != null) {
+
+                            Uri treeUri = result.getData().getData();
+
+                            DocumentFile selectedFolder =
+                                    DocumentFile.fromTreeUri(this, treeUri);
+
+                            if (selectedFolder == null) {
+                                return;
+                            }
+
+                            // Mappen som ska exporteras från appens interna lagring
+                            String folderName = intent.getStringExtra("FOLDER_NAME");
+
+                            File folder = new File(getFilesDir(), folderName);
+                            File[] files = folder.listFiles();
+
+                            // Skapa exportmappen
+                            DocumentFile exportFolder = selectedFolder.createDirectory(folderName);
+
+                            if (exportFolder == null || files == null) {
+                                return;
+                            }
+
+                            // Kopiera alla filer
+                            for (File file : files) {
+                                DocumentFile exportFile = exportFolder.createFile("text/plain", file.getName());
+
+                                if (exportFile == null) {
+                                    continue;
+                                }
+
+                                try (OutputStream os = getContentResolver().openOutputStream(exportFile.getUri())) {
+                                    String path = file.getAbsolutePath();
+
+                                    // tar bort .txt om din JNI-funktion kräver det
+                                    if (path.endsWith(".txt")) {
+                                        path = path.substring(0, path.length() - 4);
+                                    }
+
+                                    String content = Library.printFile(path);
+
+                                    os.write(content.getBytes(StandardCharsets.UTF_8));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    Library.createSnackBar(layout, "Failed to export folder", 2000, 1800);
+                                }
+                            }
+                            Library.createSnackBar(layout, "Added " + files.length + " files from " + folderName, 2000, 1800);
+                        }
+                    });
     /**
      * Skriver ut det datum som mappan har klarats av på och antal dagar sen avklarad
      */
@@ -154,8 +216,6 @@ public class SelectFile extends AppCompatActivity {
         String days = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
 
         String text = "";
-
-        Log.d("DATE", dateString);
 
         if(!dateString.isEmpty())
         {
@@ -193,10 +253,18 @@ public class SelectFile extends AppCompatActivity {
 
         buttonCount++;
 
-        Button importFile = Library.addExtraButton("import file", 0, density, layout, buttonCount, this);
+        Button importFile = Library.addExtraButton("import file", 500, density, layout, buttonCount, this);
         importFile.setOnClickListener(view -> {
             // importera en fil
-            multipleFilesLauncher.launch(new String[]{"text/plain"});
+            importMultipleFileLauncher.launch(new String[]{"text/plain"});
+        });
+
+        Button exportFolder = Library.addExtraButton("Export folder", -500, density, layout, buttonCount, this);
+        exportFolder.setOnClickListener(view -> {
+            // importera mappen
+            Intent exportIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+
+            exportFolderLauncher.launch(exportIntent);
         });
 
         buttonCount++;

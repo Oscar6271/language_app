@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
@@ -19,15 +22,37 @@ import com.example.ordapp.databinding.ActivityChooseFileModeBinding;
 import com.example.ordapp.databinding.ActivitySelectFileBinding;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class ChooseFileMode extends AppCompatActivity {
 
-    Button Translation, Original, EditWordset, DeleteWordset;
+    Button Translation, Original, EditWordset, ExportFile, DeleteWordset;
     ConstraintLayout layout;
-    String fileNameWOextension, folder;
+    String fileNameWOextension, folder, filePathWOextension;
     static {
         System.loadLibrary("ordapp");
     }
+
+    private final ActivityResultLauncher<Intent> ExportFileLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+
+                        if (result.getResultCode() == RESULT_OK &&
+                                result.getData() != null) {
+
+                            Uri uri = result.getData().getData();
+
+                            try (OutputStream os = getContentResolver().openOutputStream(uri)) {
+                                String fileContent = Library.printFile(filePathWOextension);
+                                os.write(fileContent.getBytes(StandardCharsets.UTF_8));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
 
     private void createButtons()
     {
@@ -43,6 +68,9 @@ public class ChooseFileMode extends AppCompatActivity {
         buttonCount++;
 
         EditWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Edit wordset", false);
+        buttonCount++;
+
+        ExportFile = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Export wordset", false);
         buttonCount++;
 
         DeleteWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Delete wordset", false);
@@ -68,9 +96,6 @@ public class ChooseFileMode extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("SelectFile", MODE_PRIVATE);
         Library.setNextColor(currentValue, maxValue, prefs, folder + "_" + fileNameWOextension);
-        Log.d("SAVE",
-                folder + "_" + fileNameWOextension + "=" +
-                        prefs.getString(folder + "_" + fileNameWOextension, null));
     }
 
     private void createUI()
@@ -81,7 +106,7 @@ public class ChooseFileMode extends AppCompatActivity {
         fileNameWOextension = fileName.substring(0, fileName.length() - 4);
 
         String filePath = new File(getFilesDir(), folder + "/" + fileName).getAbsolutePath();
-        String filePathWOextension = filePath.substring(0, filePath.length() - 4);
+        filePathWOextension = filePath.substring(0, filePath.length() - 4);
 
         createButtons();
 
@@ -109,6 +134,16 @@ public class ChooseFileMode extends AppCompatActivity {
             editIntent.putExtra("APPEND", false);
             editIntent.putExtra("FOLDER_NAME", folder);
             startActivity(editIntent);
+        });
+
+        ExportFile.setOnClickListener(view -> {
+            // Exportera en fil
+            Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            exportIntent.setType("text/plain");
+            exportIntent.putExtra(Intent.EXTRA_TITLE, fileName);
+
+            ExportFileLauncher.launch(exportIntent);
         });
 
         DeleteWordset.setOnClickListener(view -> {
@@ -145,7 +180,6 @@ public class ChooseFileMode extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         layout.removeAllViews();
-        Log.d("LIFECYCLE", "ChooseFileMode onResume");
         createUI();
     }
 }

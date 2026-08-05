@@ -13,7 +13,7 @@
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_ordapp_Library_writeToFile(
         JNIEnv* env,
-        jobject,
+        jclass,
         jstring fileNameFromJava,
         jstring contentToWriteFromJava,
         jboolean append) {
@@ -34,8 +34,10 @@ Java_com_example_ordapp_Library_writeToFile(
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_ordapp_Library_printFile(
         JNIEnv* env,
-        jobject,
+        jclass,
         jstring fileNameJava) {
+
+
     const char* fileName = env->GetStringUTFChars(fileNameJava, nullptr);
     std::string fileNameParameter(fileName);
 
@@ -48,7 +50,7 @@ Java_com_example_ordapp_Library_printFile(
 extern "C" JNIEXPORT int JNICALL
 Java_com_example_ordapp_Library_readFile(
         JNIEnv* env,
-        jobject /* this */,
+        jclass /* this */,
         jstring fileNameJava,
         jstring languageJava) {
     const char* fileName = env->GetStringUTFChars(fileNameJava, nullptr);
@@ -66,7 +68,7 @@ Java_com_example_ordapp_Library_readFile(
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_ordapp_Library_pickWord(
         JNIEnv* env,
-        jobject) {
+        jclass) {
     std::string word = pickWord();
     return env->NewStringUTF(word.c_str());
 }
@@ -74,7 +76,7 @@ Java_com_example_ordapp_Library_pickWord(
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_ordapp_Library_compare(
         JNIEnv* env,
-        jobject,
+        jclass,
         jstring userInputJava) {
     const char* userInput = env->GetStringUTFChars(userInputJava, nullptr);
     std::string userInputParameter(userInput);
@@ -88,21 +90,21 @@ Java_com_example_ordapp_Library_compare(
 extern "C" JNIEXPORT int JNICALL
 Java_com_example_ordapp_Library_checkEmpty(
         JNIEnv* env,
-        jobject) {
+        jclass) {
     return check_empty();
 }
 
 extern "C" JNIEXPORT int JNICALL
 Java_com_example_ordapp_Library_checkSize(
         JNIEnv* env,
-        jobject) {
+        jclass) {
     return check_size();
 }
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_ordapp_Library_addAlternative(
         JNIEnv* env,
-        jobject,
+        jclass,
         jstring newAlternative,
         jstring correctWord) {
     const char* alt = env->GetStringUTFChars(newAlternative, nullptr);
@@ -119,7 +121,7 @@ Java_com_example_ordapp_Library_addAlternative(
 extern "C" JNIEXPORT jboolean JNICALL
 Java_com_example_ordapp_Library_rewriteFile(
         JNIEnv* env,
-        jobject,
+        jclass,
         jstring fileName) {
     const char* file_name = env->GetStringUTFChars(fileName, nullptr);
     std::string file_name_parameter(file_name);
@@ -131,20 +133,20 @@ Java_com_example_ordapp_Library_rewriteFile(
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_ordapp_Library_clean_1wrong_1lists(
         JNIEnv* env,
-        jobject) {
+        jclass) {
     clean_wrong_lists();
 }
 
 extern "C" JNIEXPORT int JNICALL
 Java_com_example_ordapp_Library_wordsLeft(
         JNIEnv* env,
-        jobject) {
+        jclass) {
     return wordsLeft();
 }
 
 extern "C" JNIEXPORT int JNICALL
 Java_com_example_ordapp_Library_mistakes(
         JNIEnv* env,
-        jobject) {
+        jclass) {
     return mistakes();
 }

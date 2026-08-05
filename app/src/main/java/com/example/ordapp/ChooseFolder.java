@@ -20,6 +20,9 @@ import java.io.File;
 import java.time.LocalDate;
 
 public class ChooseFolder extends AppCompatActivity {
+    static {
+        System.loadLibrary("ordapp");
+    }
     ActivityChooseFolderBinding binding;
     float density;
     int buttonCount = 0;
@@ -93,9 +96,6 @@ public class ChooseFolder extends AppCompatActivity {
         daysPassedPref.edit().putLong(folder + "_daysPassed", daysPassed).apply();
         daysPassedPref.edit().putString(folder + "_date", savedDate).apply();
 
-        Log.d("DATE_FOLDER", folder + savedDate);
-
-
         if(daysPassed < 7 )
         {
             return;
@@ -138,7 +138,6 @@ public class ChooseFolder extends AppCompatActivity {
         // eller bara skriva ut vad som finns i mappen
         for (DocumentFile file : folder.listFiles()) {
             if (file.isFile()) {
-                Log.d("FILE", file.getName());
                 Library.importFile(file, targetFolder, this);
             }
         }

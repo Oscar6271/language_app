@@ -1,13 +1,11 @@
 package com.example.ordapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.ordapp.databinding.ActivitySimpleInputBinding;
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,9 +17,8 @@ public class SimpleInput extends AppCompatActivity {
         System.loadLibrary("ordapp");
     }
     private ActivitySimpleInputBinding binding;
-    private TextView errormessage, folderText;
+    private TextView folderText;
     private TextInputEditText fileEdit, contentEdit;
-
     private String fileName, folderName, content;
     private boolean append;
 
@@ -40,8 +37,6 @@ public class SimpleInput extends AppCompatActivity {
         fileEdit    = findViewById(R.id.fileNameInput);
         contentEdit = findViewById(R.id.SimpleInputText);
 
-        errormessage = findViewById(R.id.errorMessageText);
-
         folderText.setText("Folder: " + folderName);
         contentEdit.setText(content);
         fileEdit.setText(fileName);
@@ -53,7 +48,7 @@ public class SimpleInput extends AppCompatActivity {
 
         binding = ActivitySimpleInputBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        ConstraintLayout layout = binding.main;
         GetIntent();
 
         setText();
@@ -73,7 +68,6 @@ public class SimpleInput extends AppCompatActivity {
             File file = new File(folderFile, fileName);
 
             if(!fileName.isEmpty()) {
-                errormessage.setText("");
                 String contentText = contentEdit.getText().toString();
 
                 Library.writeToFile(file.getAbsolutePath(), contentText, append);
@@ -82,7 +76,7 @@ public class SimpleInput extends AppCompatActivity {
                 finish();
 
             } else {
-                errormessage.setText("Input a filename to save wordset");
+                Library.createSnackBar(layout, "Input a filename to save wordset", 2000, 1800);
             }
         });
     }
