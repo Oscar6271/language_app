@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.net.Uri;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +37,7 @@ public final class Library {
     public static native int wordsLeft();
     public static native int mistakes();
 
-    public static final int GREEN = 3, YELLOW = 2, RED = 1, UNASSIGNED = 0;
+    public static final int GREEN = 3, YELLOW = 2, RED = 1, UNASSIGNED = 0, MAX_COMPLETIONS = 3;
 
     public static void createSummaryFile(File FilesDir, String folderName)
     {

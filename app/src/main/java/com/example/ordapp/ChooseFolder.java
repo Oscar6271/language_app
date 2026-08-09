@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -95,12 +94,13 @@ public class ChooseFolder extends AppCompatActivity {
 
         daysPassedPref.edit().putLong(folder + "_daysPassed", daysPassed).apply();
         daysPassedPref.edit().putString(folder + "_date", savedDate).apply();
+        int completions = prefs.getInt(folder + "_COMPLETION_COUNT", 1);
 
-        if(daysPassed < 7 )
+        if(daysPassed < 7L * Math.min(completions, Library.MAX_COMPLETIONS))
         {
             return;
         }
-        else if(daysPassed < 14)
+        else if(daysPassed < 14L * Math.min(completions, Library.MAX_COMPLETIONS))
         {
             Library.setColor(prefs, folder, "yellow");
             setAllFilesColor(folder, "yellow");

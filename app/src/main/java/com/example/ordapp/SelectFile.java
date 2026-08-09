@@ -233,11 +233,12 @@ public class SelectFile extends AppCompatActivity {
         // använd den här SharedPreferences för att kunna uppdatera texten utan att gå till ChooseFolder först
         SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
         String dateString = CompletedPrefs.getString(folder + "_LAST_COMPLETED_DATE", "");
+        int completions = CompletedPrefs.getInt(folder + "_COMPLETION_COUNT", 0);
 
         SharedPreferences daysPassedPref = getSharedPreferences("DAYS_PASSED", MODE_PRIVATE);
         String days = String.valueOf(daysPassedPref.getLong(folder + "_daysPassed", 0));
 
-        String text = "";
+        String text = folder;
 
         if(!dateString.isEmpty())
         {
@@ -245,14 +246,29 @@ public class SelectFile extends AppCompatActivity {
             int day = date.getDayOfMonth();
             String month = date.getMonth().toString().toLowerCase();
             int year = date.getYear();
-            text = folder + " was completed on:\n" + day + " " +
-                    month + " " + year + " (" + days + " days ago)";
+
+            if(completions == 0) {
+                completions = 1;
+            }
+
+            text += " was completed on:\n"
+                    + day + " " + month + " " + year + " (" + days + " days ago)";
         }
         else
         {
-            text = folder + " has not been completed yet";
+            text = folder + " has not been completed yet.";
         }
-        Library.addTextView(layout, this, text);
+
+        String completionsString = "";
+        if(completions == 1) {
+            completionsString = "\nhas been completed " + completions + " time";
+        }
+        else
+        {
+            completionsString = "\nhas been completed " + completions + " times";
+        }
+
+        Library.addTextView(layout, this, text + completionsString);
     }
 
     /**
@@ -354,11 +370,12 @@ public class SelectFile extends AppCompatActivity {
     private void saveDate()
     {
         SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
-        LocalDate today = LocalDate.now();
 
-        CompletedPrefs.edit()
-                .putString(folder + "_LAST_COMPLETED_DATE", today.toString())
-                .apply();
+        LocalDate today = LocalDate.now();
+        CompletedPrefs.edit().putString(folder + "_LAST_COMPLETED_DATE", today.toString()).apply();
+
+        int completions = CompletedPrefs.getInt(folder + "_COMPLETION_COUNT", 0);
+        CompletedPrefs.edit().putInt(folder + "_COMPLETION_COUNT", ++completions).apply();
     }
 
     @Override
