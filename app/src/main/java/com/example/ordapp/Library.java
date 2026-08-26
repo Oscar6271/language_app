@@ -232,6 +232,9 @@ public final class Library {
         prefs.edit().putString(prefsKey, color).apply();
     }
 
+    /**
+     * Läser och sätter den sparade färgen på knappen
+     */
     public static void readPref(SharedPreferences prefs, String prefKey, Button button)
     {
         String color = prefs.getString(prefKey, "");
@@ -258,12 +261,18 @@ public final class Library {
         }
     }
 
+    /**
+     * Tar fram den sparade färgen
+     */
     public static String getColor(SharedPreferences prefs, String prefKey)
     {
         return prefs.getString(prefKey, "");
     }
 
     // stegar vidare till nästa färg röd --> gul --> grön
+    /**
+     * Går vidare till nästa färg: röd --> gul --> grön
+     */
     public static void gotoNextColor(SharedPreferences prefs, String prefKey)
     {
         // om knappen inte har en färg, default till röd och sätt den sen till gul
@@ -285,6 +294,9 @@ public final class Library {
     }
 
     // Sätter nästa färg beroende på hur många rätt man har
+    /**
+     * Sätter nästa färg. Om man har alla rätt stegar den från röd --> gul --> grön
+     */
     public static void setPracticeColor(int totalCorrect, int totalWords, SharedPreferences prefs, String prefKey)
     {
         double ratio = (double) totalCorrect / totalWords;
@@ -302,11 +314,17 @@ public final class Library {
         }
     }
 
+    /**
+     * Resetar datumet då en mapp har klarats av
+     */
     public static void resetDate(SharedPreferences pref, String key)
     {
         pref.edit().putString(key, "").apply();
     }
 
+    /**
+     * Lägger till en textView
+     */
     public static void addTextView(ConstraintLayout layout, Context context, String text)
     {
         TextView textView = new TextView(context);

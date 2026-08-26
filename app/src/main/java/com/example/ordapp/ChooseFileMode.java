@@ -31,10 +31,14 @@ public class ChooseFileMode extends AppCompatActivity {
     Button Translation, Original, EditWordset, ExportFile, DeleteWordset;
     ConstraintLayout layout;
     String fileNameWOextension, folder, filePathWOextension;
+
     static {
         System.loadLibrary("ordapp");
     }
 
+    /**
+     * Launcher för att exportera filen
+     */
     private final ActivityResultLauncher<Intent> ExportFileLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -54,6 +58,10 @@ public class ChooseFileMode extends AppCompatActivity {
                         }
                     });
 
+    /**
+     * Skapar knapparna: Write Spanish, Write Swedish
+     * Edit Wordset, Export Wordset, Delete Wordset
+     */
     private void createButtons()
     {
         SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
@@ -76,6 +84,9 @@ public class ChooseFileMode extends AppCompatActivity {
         DeleteWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Delete wordset", false);
     }
 
+    /**
+     * Sätter färg för 'Write' knapparna. Om en är röd blir den andra gul
+     */
     private void setPreference()
     {
         SharedPreferences currentPrefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
@@ -98,6 +109,9 @@ public class ChooseFileMode extends AppCompatActivity {
         Library.setNextColor(currentValue, maxValue, prefs, folder + "_" + fileNameWOextension);
     }
 
+    /**
+     * Skapar UI:n, sätter ut knapparna och lägger till funktionalitet för dom
+     */
     private void createUI()
     {
         Intent intent = getIntent();

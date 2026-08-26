@@ -22,6 +22,9 @@ public class SimpleInput extends AppCompatActivity {
     private String fileName, folderName, content;
     private boolean append;
 
+    /**
+     * Tar fram det som har lagrats i Intent
+     */
     private void GetIntent()
     {
         Intent intent = getIntent();
@@ -31,6 +34,9 @@ public class SimpleInput extends AppCompatActivity {
         folderName = intent.getStringExtra("FOLDER_NAME");
     }
 
+    /**
+     * Tar fram textView och sätter dit text (mappens namn, filens innehåll och namn)
+     */
     private void setText()
     {
         folderText  = findViewById(R.id.folderInput);

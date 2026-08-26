@@ -130,6 +130,9 @@ public class SelectFile extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Dialog för att välja om en existerande fil ska ersättas med en inkommande fil när man importerar filer
+     */
     private void ConfirmDialog(DocumentFile file) {
             new androidx.appcompat.app.AlertDialog.Builder(SelectFile.this)
                     .setTitle("Import file?")
@@ -170,6 +173,9 @@ public class SelectFile extends AppCompatActivity {
                         }
                     }
             );
+    /**
+     * Launcher för att exportera mappen
+     */
     private final ActivityResultLauncher<Intent> exportFolderLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -254,11 +260,12 @@ public class SelectFile extends AppCompatActivity {
             text += " was completed on:\n"
                     + day + " " + month + " " + year + " (" + days + " days ago)";
         }
-        else
+        else if(dateString.isEmpty() && completions == 0)
         {
             text = folder + " has not been completed yet.";
         }
 
+        // skriv rätt 'times' eller 'time'
         String completionsString = "";
         if(completions == 1) {
             completionsString = "\nhas been completed " + completions + " time";
@@ -365,7 +372,7 @@ public class SelectFile extends AppCompatActivity {
     }
 
     /**
-     * Sparar dagens datum för en mapp
+     * Sparar dagens datum och antal completions för en mapp
      */
     private void saveDate()
     {
@@ -418,7 +425,17 @@ public class SelectFile extends AppCompatActivity {
             if(fileUpdated) {
                 FileChangedprefs.edit().putBoolean(folder + "_any_file", false).apply();
                 SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
-                Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
+
+                // om alla filerna är gröna spara om datumet
+                if(isGreen)
+                {
+                    saveDate();
+                }
+                // om alla filerna inte är gröna reseta datumet
+                else
+                {
+                    Library.resetDate(CompletedPrefs, folder + "_LAST_COMPLETED_DATE");
+                }
             }
         }
 

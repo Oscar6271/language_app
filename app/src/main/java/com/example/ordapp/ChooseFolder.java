@@ -202,8 +202,6 @@ public class ChooseFolder extends AppCompatActivity {
         {
             ConfirmDialog(folder, targetFolder);
         }
-
-
     }
 
     /**

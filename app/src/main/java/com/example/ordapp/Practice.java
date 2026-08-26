@@ -1,20 +1,15 @@
 package com.example.ordapp;
 
-import static com.google.android.material.snackbar.Snackbar.make;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ordapp.databinding.ActivityPracticeBinding;
-import com.google.android.material.snackbar.Snackbar;
 
 public class Practice extends AppCompatActivity {
     public Button compareButtonVariable;
@@ -27,11 +22,17 @@ public class Practice extends AppCompatActivity {
     String filePath;
     public static final int EMPTY = 0, FIRST_TIME_DONE = 2;
 
+    TextView wordToTranslateTextBox;
+
+
     private TextView ResponseTextBox, totalAnsweredBox;
     static {
         System.loadLibrary("ordapp");
     }
 
+    /**
+     * Läser in filen och tar fram det första ordet
+     */
     private void init_file()
     {
         intent = getIntent();
@@ -40,19 +41,24 @@ public class Practice extends AppCompatActivity {
 
         totalWords = Library.readFile(filePath, language_to_write_in);
         wordToTranslate = Library.pickWord();
-    }
 
-    private void set_text()
-    {
-        TextView wordToTranslateTextBox;
         String file = intent.getStringExtra("FILE_NAME");
-
-        wordToTranslateTextBox = (TextView)findViewById(R.id.WordToTranslateText);
-        wordToTranslateTextBox.setText(wordToTranslate);
         getSupportActionBar().setTitle("Practice " + file);
     }
 
-    private void setupButtons()
+    /**
+     * Skriver ut ordet som ska översätter på en textView
+     */
+    private void set_text()
+    {
+        wordToTranslateTextBox = (TextView)findViewById(R.id.WordToTranslateText);
+        wordToTranslateTextBox.setText(wordToTranslate);
+    }
+
+    /**
+     * Tar fram och sparar knappar och textViews
+     */
+    private void setupButtonsAndTextViews()
     {
         ResponseTextBox = (TextView)findViewById(R.id.responseText);
         ResponseTextBox.setText("");
@@ -61,6 +67,9 @@ public class Practice extends AppCompatActivity {
         totalAnsweredBox.setText("");
     }
 
+    /**
+     * Återställer practice läget och skriver en ny summaryfile om något har ändrats
+     */
     private void resetGame()
     {
         SharedPreferences prefs = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
@@ -78,7 +87,7 @@ public class Practice extends AppCompatActivity {
         // vilken fil som helst kan uppdateras för att nollställa datumet
         FileChangedprefs.edit().putBoolean(folder + "_any_file", true).apply();
 
-        // om setNeen knapp är röd sätts och den andra grön sätt den gröna till gul
+        // Sätt en knapp till gul om den andra är röd
         if(Library.getColor(prefs, key).equals("red"))
         {
             String otherButton = "translation";
@@ -100,6 +109,9 @@ public class Practice extends AppCompatActivity {
         }
     }
 
+    /**
+     * Kollar om man har kört klart
+     */
     private void wordsetCompleted()
     {
         if(!running)
@@ -109,6 +121,9 @@ public class Practice extends AppCompatActivity {
         }
     }
 
+    /**
+     * Tar fram nästa ord och återställer variabler som behövs
+     */
     private void nextWord()
     {
         hasBeenCorrected = false;
@@ -120,6 +135,10 @@ public class Practice extends AppCompatActivity {
         binding.IWasRightButton.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Skriver ut om man har haft rätt eller fel, visar en 'I was right' knapp om man hade fel
+     * och en snackBar med alternativa svar
+     */
     private void setResponse()
     {
         String input = binding.TranslationInputField.getEditText().getText().toString();
@@ -157,6 +176,9 @@ public class Practice extends AppCompatActivity {
         }
     }
 
+    /**
+     * Skriver ut antal och andel ord man har skrivit
+     */
     private void checkWord()
     {
         setResponse();
@@ -174,6 +196,9 @@ public class Practice extends AppCompatActivity {
         }
     }
 
+    /**
+     * Kollar om man har skrivit klart alla ord eller om man ska rätta felskrivna
+     */
     private void checkStatus(int status)
     {
         if(status == EMPTY)
@@ -199,6 +224,10 @@ public class Practice extends AppCompatActivity {
             totalAnsweredBox.setText("Completed: " + totalAnswered + "/" + redoSize + String.format(" (%.1f%%)", percentage));
         }
     }
+
+    /**
+     * Main funktionen för practice läget
+     */
     private void PracticeMain()
     {
         binding.compareButton.setOnClickListener(view -> {
@@ -221,6 +250,10 @@ public class Practice extends AppCompatActivity {
         });
     }
 
+    /**
+     * 'I was right' knappen om man har skrivit fel men tycker att man har haft rätt.
+     * Visas bara när man har skrivit fel
+     */
     private void IwasRightButton(String input)
     {
         binding.IWasRightButton.setOnClickListener(view -> {
@@ -256,7 +289,7 @@ public class Practice extends AppCompatActivity {
         binding = ActivityPracticeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setupButtons();
+        setupButtonsAndTextViews();
 
         init_file();
         set_text();
