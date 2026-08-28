@@ -311,6 +311,8 @@ public class ChooseFolder extends AppCompatActivity {
     private void createUI()
     {
         buttonCount = 0;
+        getSupportActionBar().setTitle("Choose a folder");
+
         createFolder();
         displayFolders();
     }

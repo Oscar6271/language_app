@@ -2,6 +2,7 @@ package com.example.ordapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,8 +18,8 @@ public class SimpleInput extends AppCompatActivity {
         System.loadLibrary("ordapp");
     }
     private ActivitySimpleInputBinding binding;
-    private TextView folderText;
-    private TextInputEditText fileEdit, contentEdit;
+    private TextView extraMessageText;
+    private TextInputEditText fileEdit, contentEdit, folderText;
     private String fileName, folderName, content;
     private boolean append;
 
@@ -39,13 +40,21 @@ public class SimpleInput extends AppCompatActivity {
      */
     private void setText()
     {
-        folderText  = findViewById(R.id.folderInput);
+        extraMessageText = findViewById(R.id.extraMessage);
+        folderText  = findViewById(R.id.folderNameInput);
         fileEdit    = findViewById(R.id.fileNameInput);
         contentEdit = findViewById(R.id.SimpleInputText);
 
-        folderText.setText("Folder: " + folderName);
+        if(fileName.equalsIgnoreCase("summary"))
+        {
+            extraMessageText.setText("EDITING NOT POSSIBLE in summary file");
+        }
+
+        folderText.setText(folderName);
         contentEdit.setText(content);
         fileEdit.setText(fileName);
+
+        getSupportActionBar().setTitle("Edit file: " + fileName);
     }
 
     @Override
@@ -60,7 +69,7 @@ public class SimpleInput extends AppCompatActivity {
         setText();
 
         binding.createSimpleFileButton.setOnClickListener(v -> {
-            folderName = folderText.getText().toString().substring(8).trim();
+            folderName = folderText.getText().toString().trim();
             fileName   = fileEdit.getText().toString().trim();
 
             File folderFile = new File(getFilesDir(), folderName);

@@ -329,7 +329,7 @@ public class SelectFile extends AppCompatActivity {
 
         addFileButtons();
 
-        getSupportActionBar().setTitle("Choose file from " + folder);
+        getSupportActionBar().setTitle("Choose a file from " + folder);
 
         addDateText();
     }
@@ -373,16 +373,21 @@ public class SelectFile extends AppCompatActivity {
 
     /**
      * Sparar dagens datum och antal completions för en mapp
+     *
+     * @param increaseCompletions om man ska öka antalet completions (false om alla filerna redan var gröna men man bara
+     *                            ska spara om datumet)
      */
-    private void saveDate()
+    private void saveDate(boolean increaseCompletions)
     {
         SharedPreferences CompletedPrefs = getSharedPreferences("ChooseFolder", MODE_PRIVATE);
 
         LocalDate today = LocalDate.now();
         CompletedPrefs.edit().putString(folder + "_LAST_COMPLETED_DATE", today.toString()).apply();
 
-        int completions = CompletedPrefs.getInt(folder + "_COMPLETION_COUNT", 0);
-        CompletedPrefs.edit().putInt(folder + "_COMPLETION_COUNT", ++completions).apply();
+        if(increaseCompletions) {
+            int completions = CompletedPrefs.getInt(folder + "_COMPLETION_COUNT", 0);
+            CompletedPrefs.edit().putInt(folder + "_COMPLETION_COUNT", ++completions).apply();
+        }
     }
 
     @Override
@@ -413,9 +418,11 @@ public class SelectFile extends AppCompatActivity {
         // annars kollar man om en fil har uppdaterats och nollställer då datumet
         boolean isGreen = isAllFilesGreen();
 
+        // om alla filer precis har blivit gröna
         if(!wasGreen && isGreen) {
-            saveDate();
+            saveDate(true);
         }
+        // om alla filerna inte var gröna eller om dom inte är gröna nu
         else if(!(wasGreen && isGreen))
         {
             SharedPreferences FileChangedprefs = getSharedPreferences("file_updated", MODE_PRIVATE);
@@ -429,7 +436,7 @@ public class SelectFile extends AppCompatActivity {
                 // om alla filerna är gröna spara om datumet
                 if(isGreen)
                 {
-                    saveDate();
+                    saveDate(false);
                 }
                 // om alla filerna inte är gröna reseta datumet
                 else

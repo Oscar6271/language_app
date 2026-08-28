@@ -75,13 +75,16 @@ public class ChooseFileMode extends AppCompatActivity {
         Original = Library.createButton(prefs, folder + "_" + fileNameWOextension + "_original", this, density, layout, buttonSize, buttonCount, "Write swedish", true);
         buttonCount++;
 
-        EditWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Edit wordset", false);
-        buttonCount++;
-
         ExportFile = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Export wordset", false);
         buttonCount++;
 
-        DeleteWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Delete wordset", false);
+        EditWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Edit wordset", false);
+        buttonCount++;
+
+        if(!fileNameWOextension.equalsIgnoreCase("summary"))
+        {
+            DeleteWordset = Library.createButton(prefs, "", this, density, layout, buttonSize, buttonCount, "Delete wordset", false);
+        }
     }
 
     /**
@@ -110,6 +113,68 @@ public class ChooseFileMode extends AppCompatActivity {
     }
 
     /**
+     * Sätter funktionalitet för knapparna
+     *
+     * @param fileName filnamn för att kunna exportera filen
+     * @param filePath filsökväg som behövs för att kunna ta bort filen
+     */
+    private void setButtonActions(String fileName, String filePath)
+    {
+        Intent practiceIntent = new Intent(ChooseFileMode.this, Practice.class);
+        practiceIntent.putExtra("FILE_PATH", filePathWOextension);
+        practiceIntent.putExtra("FILE_NAME", fileNameWOextension);
+        practiceIntent.putExtra("FOLDER", folder);
+
+        Translation.setOnClickListener(view -> {
+            practiceIntent.putExtra("LANGUAGE", "translation");
+            startActivity(practiceIntent);
+        });
+
+        Original.setOnClickListener(view -> {
+            practiceIntent.putExtra("LANGUAGE", "original");
+            startActivity(practiceIntent);
+        });
+
+        ExportFile.setOnClickListener(view -> {
+            // Exportera en fil
+            Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            exportIntent.setType("text/plain");
+            exportIntent.putExtra(Intent.EXTRA_TITLE, fileName);
+
+            ExportFileLauncher.launch(exportIntent);
+        });
+
+        EditWordset.setOnClickListener(view -> {
+            Intent editIntent = new Intent(ChooseFileMode.this, SimpleInput.class);
+            editIntent.putExtra("FILE_NAME", fileNameWOextension);
+            editIntent.putExtra("CONTENT", Library.printFile(filePathWOextension));
+            editIntent.putExtra("APPEND", false);
+            editIntent.putExtra("FOLDER_NAME", folder);
+            startActivity(editIntent);
+        });
+
+        if(!fileNameWOextension.equalsIgnoreCase("summary"))
+        {
+            DeleteWordset.setOnClickListener(view -> {
+                new androidx.appcompat.app.AlertDialog.Builder(ChooseFileMode.this)
+                        .setTitle("Delete wordset")
+                        .setMessage("Are you sure you want to delete this wordset?")
+                        .setPositiveButton("Delete", (dialog, which) -> {
+                            SharedPreferences filePref = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
+                            Library.DeleteFile(new File(filePath), filePref, fileNameWOextension, folder);
+                            Library.createSummaryFile(getFilesDir(), folder);
+                            finish();
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            });
+        }
+    }
+
+    /**
      * Skapar UI:n, sätter ut knapparna och lägger till funktionalitet för dom
      */
     private void createUI()
@@ -126,57 +191,9 @@ public class ChooseFileMode extends AppCompatActivity {
 
         setPreference();
 
-        Intent practiceIntent = new Intent(ChooseFileMode.this, Practice.class);
-        practiceIntent.putExtra("FILE_PATH", filePathWOextension);
-        practiceIntent.putExtra("FILE_NAME", fileNameWOextension);
-        practiceIntent.putExtra("FOLDER", folder);
+        setButtonActions(fileName, filePath);
 
-        Translation.setOnClickListener(view -> {
-            practiceIntent.putExtra("LANGUAGE", "translation");
-            startActivity(practiceIntent);
-        });
-
-        Original.setOnClickListener(view -> {
-            practiceIntent.putExtra("LANGUAGE", "original");
-            startActivity(practiceIntent);
-        });
-
-        EditWordset.setOnClickListener(view -> {
-            Intent editIntent = new Intent(ChooseFileMode.this, SimpleInput.class);
-            editIntent.putExtra("FILE_NAME", fileNameWOextension);
-            editIntent.putExtra("CONTENT", Library.printFile(filePathWOextension));
-            editIntent.putExtra("APPEND", false);
-            editIntent.putExtra("FOLDER_NAME", folder);
-            startActivity(editIntent);
-        });
-
-        ExportFile.setOnClickListener(view -> {
-            // Exportera en fil
-            Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-            exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
-            exportIntent.setType("text/plain");
-            exportIntent.putExtra(Intent.EXTRA_TITLE, fileName);
-
-            ExportFileLauncher.launch(exportIntent);
-        });
-
-        DeleteWordset.setOnClickListener(view -> {
-            new androidx.appcompat.app.AlertDialog.Builder(ChooseFileMode.this)
-                    .setTitle("Delete wordset")
-                    .setMessage("Are you sure you want to delete this wordset?")
-                    .setPositiveButton("Delete", (dialog, which) -> {
-                        SharedPreferences filePref = getSharedPreferences("ChooseFileMode", MODE_PRIVATE);
-                        Library.DeleteFile(new File(filePath), filePref, fileNameWOextension, folder);
-                        Library.createSummaryFile(getFilesDir(), folder);
-                        finish();
-                    })
-                    .setNegativeButton("Cancel", (dialog, which) -> {
-                        dialog.dismiss();
-                    })
-                    .show();
-        });
-
-        getSupportActionBar().setTitle("Choose action in " + fileNameWOextension);
+        getSupportActionBar().setTitle("Choose an action in " + fileNameWOextension);
     }
 
     @Override
